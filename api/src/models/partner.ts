@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { IPartner } from "../utils/types";
 
 const partnerSchema = new Schema({
     id: {
