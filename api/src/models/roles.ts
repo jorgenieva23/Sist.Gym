@@ -1,15 +1,29 @@
-import mongoose from "mongoose";
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { IRoles } from "../utils/types";
 
-const rolesSchema = new Schema({
-  id: {
-    type: String,
-    primaryKey: true,
-    autoIncrement: true,
+const rolesSchema = new Schema<IRoles>(
+  {
+    id: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
   },
-  name: {
-    type: String,
-    require: true,
+  { timestamps: true }
+);
+rolesSchema.set("toJSON", {
+  virtuals: true,
+  transform: (_, ret) => {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    return ret;
   },
-  userId: {},
 });
+
+const Roles = mongoose.model<IRoles>("Roles", rolesSchema);
+export default Roles;

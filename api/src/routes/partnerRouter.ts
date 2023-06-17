@@ -1,5 +1,5 @@
 import {Router, Request, Response} from "express"
-import { getPartnerHandler } from "../handlers/partnerHandler"
+import { getPartnerHandler,getPartnerId,postPartner,upDatePartnerById,deletePartner } from "../handlers/partnerHandler"
 
 const partnerRouter = Router()
 
@@ -8,5 +8,10 @@ interface IpartnerHandler{
 }
 
 partnerRouter.get("/", getPartnerHandler as IpartnerHandler)
+partnerRouter.get("/:id", getPartnerId as IpartnerHandler)
+partnerRouter.post("/", postPartner as IpartnerHandler)
+partnerRouter.put("/:id", upDatePartnerById as IpartnerHandler)
+partnerRouter.delete("/:id", deletePartner as IpartnerHandler)
 
-export default partnerRouter 
+
+export default partnerRouter  

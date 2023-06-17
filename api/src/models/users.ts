@@ -1,7 +1,7 @@
-import mongoose, { trusted } from "mongoose";
-import { Schema } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
+import { IUser } from "../utils/types";
 
-const userSchema = new Schema({
+const userSchema = new Schema<IUser>({
   id: {
     type: String,
     primaryKey: true,
@@ -9,40 +9,54 @@ const userSchema = new Schema({
   },
   name: {
     type: String,
-    require: true,
+    required: true,
   },
   email: {
     type: String,
-    require: true,
+    required: true,
+    unique: true,
   },
   emailVerifiedAt: {
     type: String,
-    require: true,
+    required: false,
   },
   password: {
     type: String,
-    require: true,
+    required: true,
   },
-  deleted: {
-    type: Boolean,
-    require: true,
+  token: {
+    type: String,
+    default: null,
   },
   estateId: {
     type: Number,
-    require: true,
+    required: false,
+  },
+  deleted: {
+    type: Boolean,
+    required: false,
   },
   creatorId: {
-    type: Number,
-    require: true,
+    type: Date,
+    required: false,
   },
   lastConnectoin: {
     type: Date,
-    require: false,
+    required: false,
   },
-    partners: {
-    type: [Schema.Types.ObjectId],
-    ref: "Partner",
+  partners: {
+    type: [{type: Schema.Types.ObjectId,
+    ref: "Partner"}],
     default: [],
+  },
+  rol: {
+    type: [{type: Schema.Types.ObjectId,
+      ref: "Partner"}],
+      default: [],
+  },
+  active: {
+    type: Boolean,
+    default: false,
   },
   createdAt: {
     type: Date,
@@ -54,5 +68,5 @@ const userSchema = new Schema({
   },
 });
 
-const Users = mongoose.model("Users", userSchema);
-export default Users
+const Users = mongoose.model<IUser>("Users", userSchema);
+export default Users;

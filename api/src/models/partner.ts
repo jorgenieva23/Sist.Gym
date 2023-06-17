@@ -2,18 +2,18 @@ import mongoose from "mongoose";
 import { Schema } from "mongoose";
 
 const partnerSchema = new Schema({
-    id:{
-        type:String,
+    id: {
+        type: String,
         primaryKey: true,
         autoIncrement: true,
-    },
+      },
     firstName:{
         type: String,
         required: true,
     },
     lastName:{
         type: String,
-        require: true,
+        required: true,
     },
     dni:{
         type: Number,
@@ -21,56 +21,62 @@ const partnerSchema = new Schema({
     },
     address:{
         type: String,
-        require:true,
+        required :true,
     },
     phone:{
         type: Number,
-        require:true,
+        required:true,
     },
     email:{
         type: String,
-        require:false,
+        required:false,
     },
     picture:{
         type: String,
-        require:true,
+        required:true,
     },
     deleted:{
         type: Boolean,
-        require: true,
+        required: true,
     },
     date:{
         type:Date,
-        require: false,
+        required: false,
     },
     datePhysicalAttitude:{
         type: Date,
-        require: false,
+        required: false,
     },
     medicalCoverage:{
         type: String,
-        require: false,
+        required: false,
     },
     phoneEmergency:{
         type: Number,
-        require: false,
+        required: false,
     },
     phoneEmergencyName:{
         type: String,
-        require: false,
+        required: false,
     },
     estateId:{
-        // type: Number,
-        // require: true,
+        type: Number,
+        enum: ["active", "no active"],
+        default : "active"
     },
     userId:{
-        type:mongoose.SchemaTypes.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref:"Users",
-        require:true
+        required:true
+    },
+    role: {
+        type: mongoose.SchemaTypes.ObjectId, 
+        ref: 'Roles',
+        required:true
     },
     creatorId:{
         type: Number,
-        require:true,
+        required:true,
     },
     createdAt: {
         type: Date,
