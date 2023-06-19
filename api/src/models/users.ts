@@ -29,8 +29,9 @@ const userSchema = new Schema<IUser>({
     default: null,
   },
   estateId: {
-    type: Number,
-    required: false,
+    type: [{type: Schema.Types.ObjectId,
+      ref: "StateUser"}],
+      default: [],
   },
   deleted: {
     type: Boolean,
@@ -51,7 +52,7 @@ const userSchema = new Schema<IUser>({
   },
   rol: {
     type: [{type: Schema.Types.ObjectId,
-      ref: "Partner"}],
+      ref: "Roles"}],
       default: [],
   },
   active: {
