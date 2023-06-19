@@ -8,24 +8,27 @@ const incomeSchema = new Schema<IIncome>({
     unique: true,
   },
   partnerId: {
-    type: String,
-    required: true
+    type: [{type: Schema.Types.ObjectId,
+      ref: "Users"}],
+      default: [],
   },
   dateOfAdmission: {
     type: Date,
     required: true
   },
   estateId: {
-    type: String,
-    required: true
+    type: [{type: Schema.Types.ObjectId,
+    ref: "StateIncome"}],
+    default:[]
   },
   deleted: {
     type: Number,
     required: false
   },
   creatorId: {
-    type: String,
-    required: false
+    type: [{type: Schema.Types.ObjectId,
+      ref: "Users"}],
+      default: [],
   },
   createdAt: {
     type: Date,
