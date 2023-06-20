@@ -16,7 +16,7 @@ const incomeSchema = new Schema<IIncome>({
     type: Date,
     required: true
   },
-  estateId: {
+  stateId: {
     type: [{type: Schema.Types.ObjectId,
     ref: "StateIncome"}],
     default:[]
