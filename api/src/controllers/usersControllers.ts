@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import jwt from "jsonwebtoken";
 import { IUser } from "../utils/types";
 import Users from "../models/users";
+import { Roles } from "../models/roles";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
@@ -30,33 +31,63 @@ export const searchUserByName = async (name: any) => {
   }
 };
 // corregir***
-export const createdUser = async (user: IUser) => {
-  const {
-    name,
-    email,
-    emailVerifiedAt,
-    password,
-    deleted,
-    estateId,
-    creatorId,
-    lastConnectoin,
-    partners,
-    rol,
-    active,
-  } = user;
-  return await Users.create({
-    name,
-    email,
-    emailVerifiedAt,
-    password,
-    deleted,
-    estateId,
-    creatorId,
-    lastConnectoin,
-    partners,
-    rol,
-    active,
-  });
+// export const createdUser = async (user: IUser) => {
+//   const {
+//     name,
+//     email,
+//     emailVerifiedAt,
+//     password,
+//     deleted,
+//     stateId,
+//     creatorId,
+//     lastConnectoin,
+//     partners,
+//     rol,
+//     active,
+//   } = user;
+//   return await Users.create({
+//     name,
+//     email,
+//     emailVerifiedAt,
+//     password,
+//     deleted,
+//     stateId,
+//     creatorId,
+//     lastConnectoin,
+//     partners,
+//     rol,
+//     active,
+//   });
+// };
+
+export const createdUser = async (user: IUser): Promise<IUser> => {
+  try {
+    const {
+      name,
+      email,
+      emailVerifiedAt,
+      password,
+      deleted,
+      stateId,
+      creatorId,
+      lastConnectoin,
+      partners,
+      active,
+      rol: roleNames,
+    } = user;
+    const roles = await Roles.find({name: {$in:roleNames}})
+    if(roles.length !== roleNames.length){
+      throw new Error(`Failed to find`)
+    }
+    // user.rol = roles.map((role)=> role._id) agrega el id del rol pero se tiene que modificar el modelo (type: Schema.Types.ObjectId por type: Schema.Types.String) y el type (Types.ObjectId[] por String[])
+    const rolNameFound = roles.map(role => role.name)
+    user.rol = rolNameFound
+    const createUser = await Users.create(user)
+    return createUser.toJSON() as IUser
+  } catch (error) {
+    console.log(error);
+    throw new Error(`Ocurrió un error al crear el usuario: ${error}`);
+  }
 };
 
 export const upDateUserControllers = async (

@@ -3,8 +3,9 @@ import { IStateUser } from '../utils/types';
 
 const IStateUserSchema = new Schema<IStateUser>({
     id: {
-        type: Number,
-        required: true
+      type: Number,
+      Required: true,
+      unique: true,
     },
     name: {
         type: String,

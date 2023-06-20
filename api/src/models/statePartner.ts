@@ -4,7 +4,8 @@ import { IStatePartner } from "../utils/types";
 const StatePartenerSchema = new Schema<IStatePartner>({
   id: {
     type: Number,
-    required: true,
+    Required: true,
+    unique: true,
   },
   name: {
     type: String,
