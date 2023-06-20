@@ -12,7 +12,7 @@ import {
 import { IUser } from "../utils/types";
 import dotenv from "dotenv";
 import Users from "../models/users";
-import Roles from "../models/roles";
+import { Roles } from "../models/roles";
 import bcrypt from "bcrypt";
 dotenv.config();
 
@@ -110,6 +110,19 @@ export const upDateUserById = async (
 //     res.status(400).send("Internal server error");
 //   }
 // };
+
+export const postUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const user = req.body as IUser;
+    const createdUsers = await createdUser(user);
+    res.status(200).json(createdUsers);
+  } catch (error: any) {
+    res.status(400).json(error.message);
+  }
+};
 
 export const deleteUsers = async (req: Request, res: Response) => {
   try {

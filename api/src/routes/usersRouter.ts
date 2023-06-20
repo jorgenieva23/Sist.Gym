@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { getUserHandler,  upDateUserById, deleteUsers, handleLogin, handleLogout } from "../handlers/usersHandlers";
+import { getUserHandler, postUser, upDateUserById, deleteUsers, handleLogin, handleLogout } from "../handlers/usersHandlers";
 
 const usersRouter = Router();
 
@@ -9,7 +9,7 @@ interface IusersHandler {
 
 usersRouter.get("/", getUserHandler as IusersHandler);
 // usersRouter.get("/:id", getUserId as IusersHandler);
-// usersRouter.post("/", postUser as IusersHandler);
+usersRouter.post("/", postUser as IusersHandler);
 usersRouter.put("/:id", upDateUserById as IusersHandler);
 usersRouter.delete("/:id", deleteUsers as IusersHandler);
 

@@ -4,7 +4,8 @@ import { IStatePayments } from "../utils/types";
 const StatePaymentsSchema = new Schema<IStatePayments>({
   id: {
     type: Number,
-    required: true,
+    Required: true,
+    unique: true,
   },
   name: {
     type: String,
