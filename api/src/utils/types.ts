@@ -1,7 +1,7 @@
 import { Document, Schema, Types } from "mongoose";
 import { TypeAssertion } from "typescript";
 export interface IPartner {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   dni: number;
@@ -15,7 +15,7 @@ export interface IPartner {
   medicalCoverage: string;
   phoneEmergency: number;
   phoneEmergencyName: string;
-  estateId: number;
+  stateId: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,12 +26,12 @@ export interface IStatePartner {
   updatedAt: Date;
 }
 export interface IUser {
-  id: string;
+  id: number;
   name: string;
   email: string;
   emailVerifiedAt: string;
   password: string;
-  estateId: Types.ObjectId[];
+  stateId: Types.ObjectId[];
   creatorId: Date;
   partners:  Types.ObjectId[];
   rol: Types.ObjectId[];
@@ -56,7 +56,7 @@ export interface IIncome {
   id: Number;
   partnerId: Types.ObjectId[];
   dateOfAdmission: Date;
-  estateId: Types.ObjectId[];
+  stateId: Types.ObjectId[];
   deleted: number;
   creatorId: Types.ObjectId[];
   createdAt: Date;

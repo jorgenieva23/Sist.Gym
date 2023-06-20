@@ -3,9 +3,9 @@ import { IPartner } from "../utils/types";
 
 const partnerSchema = new Schema({
     id: {
-        type: String,
-        primaryKey: true,
-        autoIncrement: true,
+        type: Number,
+        Required: true,
+        unique: true,
       },
     firstName:{
         type: String,
@@ -59,7 +59,7 @@ const partnerSchema = new Schema({
         type: String,
         required: false,
     },
-    estateId:{
+    stateId:{
         type: Number,
         enum: ["active", "no active"],
         default : "active"

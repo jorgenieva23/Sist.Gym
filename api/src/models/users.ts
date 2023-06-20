@@ -3,9 +3,9 @@ import { IUser } from "../utils/types";
 
 const userSchema = new Schema<IUser>({
   id: {
-    type: String,
-    primaryKey: true,
-    autoIncrement: true,
+    type: Number,
+    Required: true,
+    unique: true,
   },
   name: {
     type: String,
@@ -28,7 +28,7 @@ const userSchema = new Schema<IUser>({
     type: String,
     default: null,
   },
-  estateId: {
+  stateId: {
     type: [{type: Schema.Types.ObjectId,
       ref: "StateUser"}],
       default: [],
