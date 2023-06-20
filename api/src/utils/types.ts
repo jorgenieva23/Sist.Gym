@@ -1,5 +1,6 @@
 import { Document, Schema, Types } from "mongoose";
 import { TypeAssertion } from "typescript";
+
 export interface IPartner {
   id: number;
   firstName: string;
@@ -26,7 +27,7 @@ export interface IStatePartner {
   updatedAt: Date;
 }
 export interface IUser {
-  id: number;
+  id: string;
   name: string;
   email: string;
   emailVerifiedAt: string;
@@ -34,7 +35,7 @@ export interface IUser {
   stateId: Types.ObjectId[];
   creatorId: Date;
   partners:  Types.ObjectId[];
-  rol: Types.ObjectId[];
+  rol: String[];
   active: boolean;
   deleted: boolean;
   token:string,
@@ -49,8 +50,9 @@ export interface IStateUser {
   updatedAt: Date;
 }
 export interface IRoles {
-  id: number;
   name: string;
+  created_at: Date;
+  updated_at: Date;
 }
 export interface IIncome {
   id: Number;

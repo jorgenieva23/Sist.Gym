@@ -3,8 +3,9 @@ import { IStateIncome } from '../utils/types';
 
 const StateIncomeSchema = new Schema<IStateIncome>({
     id: {
-        type: Number,
-        required: true
+      type: Number,
+      Required: true,
+      unique: true,
     },
     name: {
         type: String,

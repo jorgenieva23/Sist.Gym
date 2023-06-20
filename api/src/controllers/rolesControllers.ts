@@ -1,12 +1,12 @@
-import  Roles  from "../models/roles";
+import { Roles } from "../models/roles";
 import { IRoles } from "../utils/types";
 
 // FUNCION QUE CREA LOS ROLES
 
-export const createRoles = async (roles: IRoles) => {
+export const createRoles = async (roles: IRoles): Promise<IRoles> => {
   try {
     const { name } = roles;
-    const createdRole = await Roles.create({ name });
+    const createdRole = await Roles.create(roles);
     return createdRole.toJSON() as IRoles;
   } catch (error) {
     throw new Error(`Ocurrió un error al crear el rol: ${error}`);

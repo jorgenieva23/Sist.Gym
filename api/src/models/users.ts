@@ -3,9 +3,9 @@ import { IUser } from "../utils/types";
 
 const userSchema = new Schema<IUser>({
   id: {
-    type: Number,
-    Required: true,
-    unique: true,
+    type: String,
+    primaryKey: true,
+    autoIncrement: true,
   },
   name: {
     type: String,
@@ -27,11 +27,13 @@ const userSchema = new Schema<IUser>({
   token: {
     type: String,
     default: null,
+    required: false
   },
   stateId: {
     type: [{type: Schema.Types.ObjectId,
       ref: "StateUser"}],
       default: [],
+      required: false
   },
   deleted: {
     type: Boolean,
@@ -49,15 +51,17 @@ const userSchema = new Schema<IUser>({
     type: [{type: Schema.Types.ObjectId,
     ref: "Partner"}],
     default: [],
+    required: false
   },
   rol: {
-    type: [{type: Schema.Types.ObjectId,
+    type: [{type: Schema.Types.String,
       ref: "Roles"}],
       default: [],
   },
   active: {
     type: Boolean,
     default: false,
+    required: false
   },
   createdAt: {
     type: Date,
