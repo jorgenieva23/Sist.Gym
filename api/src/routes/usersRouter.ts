@@ -8,10 +8,10 @@ interface IusersHandler {
 }
 
 usersRouter.get("/", getUserHandler as IusersHandler);
-// usersRouter.get("/:id", getUserId as IusersHandler);
 usersRouter.post("/", postUser as IusersHandler);
 usersRouter.put("/:id", upDateUserById as IusersHandler);
 usersRouter.delete("/:id", deleteUsers as IusersHandler);
+// usersRouter.get("/:id", getUserId as IusersHandler);
 
 // Autenticacion
 usersRouter.post("/login", handleLogin as IusersHandler);

@@ -30,9 +30,8 @@ const userSchema = new Schema<IUser>({
     required: false
   },
   stateId: {
-    type: [{type: Schema.Types.ObjectId,
-      ref: "StateUser"}],
-      default: [],
+    type: Schema.Types.String,
+      ref: "StateUser",
       required: false
   },
   deleted: {
@@ -54,9 +53,9 @@ const userSchema = new Schema<IUser>({
     required: false
   },
   rol: {
-    type: [{type: Schema.Types.String,
-      ref: "Roles"}],
-      default: [],
+    type: Schema.Types.String,
+      ref: "Roles",
+      required: true
   },
   active: {
     type: Boolean,

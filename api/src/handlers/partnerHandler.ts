@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import {
-  getPartner,
+  getAllPartner,
+  searchPartnerByName,
   getPartnerById,
   createPartner,
-  // deletePartner,
   updatePartner,
 } from "../controllers/partnerControllers";
 import Partner from "../models/partner";
@@ -16,8 +16,11 @@ export const getPartnerHandler = async (
   res: Response
 ): Promise<void> => {
   try {
-    const response = await getPartner();
-    res.status(200).json(response);
+    const { name } = req.query;
+    const result: any = name
+      ? await searchPartnerByName(name)
+      : await getAllPartner();
+    res.status(200).json(result);
   } catch (error: any) {
     console.log("possible mistake");
     res.status(400).json({ error });
@@ -50,23 +53,23 @@ export const postPartner = async (
     if (existingUserByEmail) {
       throw new Error("There is already a partner with the same email");
     }
-    const user = {...req.body,};
-    const createdUser = await Partner.create(user);
-    res.status(201).json({
-      ...createdUser.toJSON(),
-    });
+    const partner = { ...req.body };
+    const createdPartert = await Partner.create(partner);
+    res.status(201).json(createdPartert);
   } catch (error: any) {
-    res.status(400).json({
-      error: `An error occurred while creating partner: ${error.message}`,
-    });
+    console.log(error);
+    res.status(400).json(error.message);
   }
 };
 
-export const upDatePartnerById = async (req: Request, res: Response): Promise<void> => {
+export const upDatePartnerById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const { id }  = req.params
-    const dataToUpdate = req.body
-    const updata = await updatePartner(id, dataToUpdate)
+    const { id } = req.params;
+    const dataToUpdate = req.body;
+    const updata = await updatePartner(id, dataToUpdate);
     res.status(200).json(updatePartner);
   } catch (error: any) {
     res.status(500).send(error.message);
@@ -74,19 +77,29 @@ export const upDatePartnerById = async (req: Request, res: Response): Promise<vo
 };
 
 export const deletePartner = async (req: Request, res: Response) => {
-  const { id } = req.params; // Obtiene el ID del parámetro de la solicitud
-
+  const { id } = req.params;
   try {
     const user = await Partner.findByIdAndDelete(id);
     if (!user) {
       console.log(`No user found with ID: ${id}`);
       res.status(404).json({ error: `No user found with ID: ${id}` });
     } else {
-      console.log(`partner successfully removed: ${id}`);
+      console.log(`partner successfully removed: ${id} ${user} `);
       res.sendStatus(204); // Envía una respuesta exitosa sin contenido
     }
   } catch (error) {
     console.error(`partner successfully removed ${id}: ${error}`);
     res.status(500).json({ error: `partner successfully removed ${id}` });
+  }
+};
+
+export const deleteAllPartner = async (req: Request, res: Response) => {
+  try {
+    const users = await Partner.deleteMany();
+    // if (!users) return res.status(400).json({ message: "invalid ID" });
+    return res.status(200).json(users);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Server Error");
   }
 };

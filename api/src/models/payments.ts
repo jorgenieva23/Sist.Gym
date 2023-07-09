@@ -3,9 +3,9 @@ import { IPayments } from "../utils/types";
 
 const PaymentsSchema = new Schema<IPayments>({
   id: {
-    type: Number,
-    Required: true,
-    unique: true,
+    type: String,
+    primaryKey: true,
+    autoIncrement: true,
   },
   amount: {
     type: Number,
