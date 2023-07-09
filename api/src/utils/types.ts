@@ -2,7 +2,7 @@ import { Document, Schema, Types } from "mongoose";
 import { TypeAssertion } from "typescript";
 
 export interface IPartner {
-  id: number;
+  id: string
   firstName: string;
   lastName: string;
   dni: number;
@@ -20,34 +20,22 @@ export interface IPartner {
   createdAt: Date;
   updatedAt: Date;
 }
-export interface IStatePartner {
-  id: number;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 export interface IUser {
   id: string;
   name: string;
   email: string;
   emailVerifiedAt: string;
   password: string;
-  stateId: Types.ObjectId[];
+  stateId: string | null;
   creatorId: Date;
-  partners:  Types.ObjectId[];
-  rol: String[];
+  partners: Types.ObjectId[];
+  rol: string | null;
   active: boolean;
   deleted: boolean;
-  token:string,
+  token: string;
   updatedAt: Date;
   createdAt: Date;
   lastConnectoin: Date;
-}
-export interface IStateUser {
-  id: number;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 export interface IRoles {
   name: string;
@@ -55,23 +43,23 @@ export interface IRoles {
   updated_at: Date;
 }
 export interface IIncome {
-  id: Number;
-  partnerId: Types.ObjectId[];
+  id: string
+  partnerId: Types.ObjectId | null;
   dateOfAdmission: Date;
-  stateId: Types.ObjectId[];
+  stateId: Types.ObjectId | null;
   deleted: number;
-  creatorId: Types.ObjectId[];
+  creatorId: Types.ObjectId | null;
   createdAt: Date;
   updatedAt: Date;
 }
-export interface IStateIncome {
-  id: Number;
+export interface IStates {
+  id: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;
 }
 export interface IPayments {
-  id: number;
+  id: string;
   amount: number;
   total: number;
   // promotions: string;
@@ -85,14 +73,9 @@ export interface IPayments {
   createdAt: Date;
   updatedAt: Date;
 }
-export interface IStatePayments {
-  id: Number;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+
 // export interface IPromotion {
-//   id: number;
+// id: string;
 //   name: string;
 //   descuento: number;
 //   counter_reference: number;
@@ -104,14 +87,8 @@ export interface IStatePayments {
 //   createdAt: Date;
 //   updatedAt: Date;
 // }
-// export interface IStatePromotion {
-//   id: Number;
-//   name: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
 
 // export interface movements {
-//   id: number;
+// id: string;
 
 // }

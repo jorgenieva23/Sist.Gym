@@ -22,10 +22,11 @@ export const getUserHandler = async (
 ): Promise<void> => {
   try {
     const { name } = req.query;
-    const result: any = name ? await searchUserByName(name) : getAllUser;
+    const result: any = name
+      ? await searchUserByName(name)
+      : await getAllUser();
     res.status(200).json(result);
   } catch (error: any) {
-    console.log("possible mistake");
     res.status(400).json({ error });
   }
 };
@@ -54,75 +55,20 @@ export const upDateUserById = async (
   }
 };
 
-// export const postUser = async (
-//   req: Request,
-//   res: Response,
-//   user: IUser
-// ): Promise<void> => {
-//   let {
-//     name,
-//     email,
-//     emailVerifiedAt,
-//     password,
-//     deleted,
-//     estateId,
-//     creatorId,
-//     partners,
-//     rol,
-//     active,
-//   } = user;
-//   try {
-//     if (!name || !email || !password || !rol) {
-//       res.status(400).send("Mandatory data missing");
-//       return;
-//     }
-//     let noRepeat = await Users.findOne({
-//       where: {
-//         email: email,
-//       },
-//     });
-//     if (noRepeat) {
-//       res.status(400).send(`There is already a ${email} user registered`);
-//       return;
-//     }
-//     const newUser = await Users.create({
-//       name,
-//       email,
-//       emailVerifiedAt,
-//       password,
-//       deleted,
-//       estateId,
-//       creatorId,
-//       partners,
-//       rol,
-//       active,
-//     });
-//     const roles = await Roles.find({
-//       name: { $in: name },
-//     });
-
-//     newUser.roles = roles;
-
-//     res.status(200).send(newUser);
-//     res.status(200).send(newUser);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).send("Internal server error");
-//   }
-// };
-
-export const postUser = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const postUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = req.body as IUser;
-    const createdUsers = await createdUser(user);
-    res.status(200).json(createdUsers);
+    const { rol: roleNames } = user;
+    const roles = await Roles.find({ name: { $in: roleNames } });
+    const rolNameFound = roles.map((role) => role.name);
+    rolNameFound.length > 0 ? user.rol = rolNameFound[0] : user.rol = null;
+    const createUsers = await createdUser(user);
+    res.status(200).json(createUsers);
   } catch (error: any) {
     res.status(400).json(error.message);
   }
 };
+
 
 export const deleteUsers = async (req: Request, res: Response) => {
   try {
