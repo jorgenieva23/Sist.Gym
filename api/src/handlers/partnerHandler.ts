@@ -8,7 +8,10 @@ import {
 } from "../controllers/partnerControllers";
 import Partner from "../models/partner";
 import { IPartner } from "../utils/types";
+import { Roles } from "../models/roles";
+import States from "../models/states";
 import dotenv from "dotenv";
+import Users from "../models/users";
 dotenv.config();
 
 export const getPartnerHandler = async (
@@ -45,6 +48,8 @@ export const postPartner = async (
   res: Response
 ): Promise<void> => {
   try {
+    const partner = req.body as IPartner;
+    const { role: roleNames, stateId: stateName, userId: userName } = partner;
     const { firstName, lastName, email } = req.body as IPartner;
     if (!email || !firstName || !lastName) {
       throw new Error("Missing data required to create a partner");
@@ -53,7 +58,16 @@ export const postPartner = async (
     if (existingUserByEmail) {
       throw new Error("There is already a partner with the same email");
     }
-    const partner = { ...req.body };
+    // buscar y relaciona la tabla rol
+    const role = await Roles.findOne({ name: { $in: roleNames } });
+    partner.role = role ? role.name : null;
+    // busca y relaciona la tabla estados
+    const state = await States.findOne({ name: { $in: stateName } });
+    partner.stateId = state ? state.name : null;
+    // busca y relaciona la tabla usuarios
+    const user = await Users.findOne({ name: { $in: userName } });
+    partner.userId = user ? user.name : null
+    
     const createdPartert = await Partner.create(partner);
     res.status(201).json(createdPartert);
   } catch (error: any) {

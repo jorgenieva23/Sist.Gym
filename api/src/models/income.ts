@@ -18,7 +18,7 @@ const incomeSchema = new Schema<IIncome>({
   },
   stateId: {
     type: Schema.Types.ObjectId, 
-    ref: "StateIncome",
+    ref: "States",
     default: null,
   },
   deleted: {

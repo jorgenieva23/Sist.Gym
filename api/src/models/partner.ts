@@ -60,19 +60,19 @@ const partnerSchema = new Schema({
     required: false,
   },
   stateId: {
-    type: String,
-    enum: ["active", "no active"],
-    default: "active",
+    type: Schema.Types.String, 
+    ref: "States",
+    default: null,
   },
   userId: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.String,
     ref: "Users",
-    required: false,
+    default: null,
   },
   role: {
     type: mongoose.SchemaTypes.String,
     ref: "Roles",
-    default: "partner",
+    default: null,
   },
   condition: {
     type: String,

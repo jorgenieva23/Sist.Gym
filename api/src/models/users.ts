@@ -31,7 +31,7 @@ const userSchema = new Schema<IUser>({
   },
   stateId: {
     type: Schema.Types.String,
-      ref: "StateUser",
+      ref: "States",
       required: false
   },
   deleted: {
@@ -39,18 +39,18 @@ const userSchema = new Schema<IUser>({
     required: false,
   },
   creatorId: {
-    type: Date,
-    required: false,
-  },
+    type: Schema.Types.String,
+    ref: "Users",
+    required: false
+},
   lastConnectoin: {
     type: Date,
     required: false,
   },
   partners: {
-    type: [{type: Schema.Types.ObjectId,
+    type: [{type: Schema.Types.String,
     ref: "Partner"}],
     default: [],
-    required: false
   },
   rol: {
     type: Schema.Types.String,
@@ -59,7 +59,7 @@ const userSchema = new Schema<IUser>({
   },
   active: {
     type: Boolean,
-    default: false,
+    default: true,
     required: false
   },
   createdAt: {

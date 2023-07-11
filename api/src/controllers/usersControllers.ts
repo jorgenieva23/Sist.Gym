@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import jwt from "jsonwebtoken";
 import { IUser } from "../utils/types";
 import Users from "../models/users";
+import Partner from "../models/partner";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
@@ -10,23 +11,30 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
 
 export const getAllUser = async () => {
   try {
-    const user = await Users.find();
-    return user;
+    const users = await Users.find();
+    for (const user of users) {
+      const partners = await Partner.find({ userId: user.name });
+      const partnerName = partners.map((partner) => partner.firstName);
+      user.partners = partnerName;
+    }
+    return users;
   } catch (error: any) {
-    throw new Error("Error when searching for user in the database");
+    throw new Error("Error when searching for users in the database");
   }
 };
 
 export const searchUserByName = async (name: any) => {
   try {
-    const infoDB = await Users.find({ name }).exec();
-    if (infoDB === null) {
-      console.log(`No user found with name: ${name}`);
+    const users = await Users.find({ name: name as string }).exec();
+    for (const user of users) {
+      const partners = await Partner.find({ userId: user.name });
+      const partnerName = partners.map((partner) => partner.firstName);
+      user.partners = partnerName;
     }
-    return infoDB;
+    return users;
   } catch (error: any) {
     console.log(error);
-    throw new Error(`Failed to find user with name: ${name}`);
+    throw new Error(`Failed to find users with name: ${name}`);
   }
 };
 
@@ -37,10 +45,10 @@ export const createdUser = async (user: IUser) => {
     emailVerifiedAt,
     password,
     deleted,
-    stateId,
-    creatorId,
+    stateId: stateName,
+    creatorId: creatorName,
     lastConnectoin,
-    partners,
+    partners: partnerName,
     rol: roleNames,
     active,
   } = user;
@@ -50,15 +58,14 @@ export const createdUser = async (user: IUser) => {
     emailVerifiedAt,
     password,
     deleted,
-    stateId,
-    creatorId,
+    stateId: stateName,
+    creatorId: creatorName,
     lastConnectoin,
-    partners,
+    partners: partnerName,
     rol: roleNames,
     active,
   });
 };
-
 
 export const upDateUserControllers = async (
   id: any,
@@ -70,7 +77,17 @@ export const upDateUserControllers = async (
       console.log(`No se encontró ningún usuario con ID ${id}`);
       return null;
     }
-    const { name, email } = updatedData;
+    const {
+      name,
+      email,
+      deleted,
+      stateId,
+      creatorId,
+      lastConnectoin,
+      partners,
+      rol,
+      active,
+    } = updatedData;
 
     if (email) {
       const existingUserByEmail = await Users.findOne({ email });
@@ -84,7 +101,7 @@ export const upDateUserControllers = async (
         throw new Error("Ya existe un usuario con el mismo nickname");
       }
     }
-    const updatedUser = await Users.findByIdAndUpdate(id, updatedData, {
+    const updatedUser = await Users.findByIdAndUpdate( updatedData, {
       new: true,
     });
     return updatedUser;
@@ -94,7 +111,6 @@ export const upDateUserControllers = async (
     );
   }
 };
-
 
 export const deleteById = async (id: any) => {
   try {

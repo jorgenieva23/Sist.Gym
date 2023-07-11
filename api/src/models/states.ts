@@ -21,5 +21,5 @@ const StatesSchema = new Schema<IStates>({
       },
 })
 
-const StateIncome = mongoose.model("StateIncome", StatesSchema )
-export default StateIncome
+const States = mongoose.model("States", StatesSchema )
+export default States

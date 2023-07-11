@@ -2,7 +2,7 @@ import { Document, Schema, Types } from "mongoose";
 import { TypeAssertion } from "typescript";
 
 export interface IPartner {
-  id: string
+  id: string;
   firstName: string;
   lastName: string;
   dni: number;
@@ -16,7 +16,9 @@ export interface IPartner {
   medicalCoverage: string;
   phoneEmergency: number;
   phoneEmergencyName: string;
-  stateId: number;
+  stateId: string | null;
+  userId: string | null;
+  role: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,9 +28,9 @@ export interface IUser {
   email: string;
   emailVerifiedAt: string;
   password: string;
-  stateId: string | null;
-  creatorId: Date;
-  partners: Types.ObjectId[];
+  stateId: Types.ObjectId | string | null;
+  creatorId: Types.ObjectId | string | null;
+  partners: string[]
   rol: string | null;
   active: boolean;
   deleted: boolean;
@@ -43,7 +45,7 @@ export interface IRoles {
   updated_at: Date;
 }
 export interface IIncome {
-  id: string
+  id: string;
   partnerId: Types.ObjectId | null;
   dateOfAdmission: Date;
   stateId: Types.ObjectId | null;
@@ -62,14 +64,12 @@ export interface IPayments {
   id: string;
   amount: number;
   total: number;
-  // promotions: string;
   dateFrom: Date;
   dateTo: Date;
-  stateId: Types.ObjectId[];
+  stateId: Types.ObjectId | null;
   deleted: boolean;
-  creatorId: Types.ObjectId[];
-  partnerId: Types.ObjectId[];
-  // secondariId: string;
+  creatorId: Types.ObjectId | null;
+  partnerId: Types.ObjectId | null;
   createdAt: Date;
   updatedAt: Date;
 }
