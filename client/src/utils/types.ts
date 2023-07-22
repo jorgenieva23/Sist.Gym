@@ -1,4 +1,3 @@
-import { Document, Schema, Types } from "mongoose";
 
 export interface IPartner {
   id: string;
@@ -21,14 +20,15 @@ export interface IPartner {
   createdAt: Date;
   updatedAt: Date;
 }
+
 export interface IUser {
   id: string;
   name: string;
   email: string;
   emailVerifiedAt: string;
   password: string;
-  stateId: Types.ObjectId | string | null;
-  creatorId: Types.ObjectId | string | null;
+  stateId: string | null;
+  creatorId: string | null;
   partners: string[]
   rol: string | null;
   active: boolean;
@@ -38,18 +38,20 @@ export interface IUser {
   createdAt: Date;
   lastConnectoin: Date;
 }
+
 export interface IRoles {
   name: string;
   created_at: Date;
   updated_at: Date;
 }
+
 export interface IIncome {
   id: string;
-  partnerId: Types.ObjectId | null;
+  partnerId: string | null;
   dateOfAdmission: Date;
-  stateId: Types.ObjectId | null;
+  stateId: string | null;
   deleted: number;
-  creatorId: Types.ObjectId | null;
+  creatorId: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -65,10 +67,10 @@ export interface IPayments {
   total: number;
   dateFrom: Date;
   dateTo: Date;
-  stateId: Types.ObjectId | null;
+  stateId: string | null;
   deleted: boolean;
-  creatorId: Types.ObjectId | null;
-  partnerId: Types.ObjectId | null;
+  creatorId: string | null;
+  partnerId: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
