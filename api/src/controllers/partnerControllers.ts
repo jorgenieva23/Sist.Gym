@@ -15,12 +15,12 @@ export const searchPartnerByName = async (name: any) => {
   try {
     const infoDB = await Partner.find({ name }).exec();
     if (infoDB === null) {
-      console.log(`No user found with name: ${name}`);
+      console.log(`No Partner found with name: ${name}`);
     }
     return infoDB;
   } catch (error: any) {
     console.log(error);
-    throw new Error(`Failed to find user with name: ${name}`);
+    throw new Error(`Failed to find Partner with name: ${name}`);
   }
 };
 
@@ -38,7 +38,18 @@ export const getPartnerById = async (id: any) => {
 };
 
 export const createPartner = async (partner: IPartner) => {
-  const { firstName, lastName, dni, address, phone, email, phoneEmergency } =
+  const { 
+    firstName, 
+    lastName, 
+    dni, 
+    address, 
+    phone, 
+    email, 
+    phoneEmergency,
+    stateId: stateName,
+    userId: userName,
+    role: roleNames
+  } =
     partner;
   return await Partner.create({
     firstName,
@@ -48,6 +59,9 @@ export const createPartner = async (partner: IPartner) => {
     phone,
     email,
     phoneEmergency,
+    stateId: stateName,
+    userId: userName,
+    role: roleNames
   });
 };
 
