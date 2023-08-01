@@ -14,6 +14,7 @@ import {
   FaMoneyBillAlt,
   FaUserCog,
 } from "react-icons/fa";
+import { Footer } from "..";
 
 const Sidebar: React.FC = (): JSX.Element => {
   const [open, setOpen] = useState(true);
@@ -47,15 +48,15 @@ const Sidebar: React.FC = (): JSX.Element => {
     { name: "Roles", link: "/roles", icon: FaUserCog },
   ];
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <div
         className={`${
           open ? "w-64" : "w-20"
-        } duration-300 p-5 pt-8 bg-dark-purple flex-1 relative`}
+        } duration-300 p-5 pt-5 py-10 bg-gray-800 relative`}
       >
         <img
           src={controlImage}
-          className={`absolute cursor-pointer -right-3 top-9 w-7 border-2 border-dark-purple rounded-full ${
+          className={`absolute cursor-pointer -right-3 top-9 w-7 border-2 border-silver rounded-full ${
             !open && "rotate-180"
           }`}
           onClick={() => setOpen(!open)}
@@ -93,7 +94,7 @@ const Sidebar: React.FC = (): JSX.Element => {
               <h2
                 className={`${
                   open && "hidden"
-                } absolute left-48 bg-dark-purple font-semibold whitespace-pre rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-16 group-hover:duration-300 group-hover:w-fit  `}
+                } absolute left-48 bg-gray-800 font-semibold whitespace-pre rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-16 group-hover:duration-300 group-hover:w-fit  `}
               >
                 {Menu?.name}
               </h2>

@@ -3,7 +3,7 @@ import logoGym from "../../assets/logo.png";
 
 const Navbar: React.FC = (): JSX.Element => {
   return (
-    <nav className="flex justify-between items-center bg-gray-800 border-gray-700 border py-1 px-5">
+    <nav className="flex justify-between items-center bg-gray-800 border-gray-700 border-t w-full py-1 px-5">
       <div className="flex items-center">
         <img src={logoGym} alt="Logo" className="w-10 h-10" />
         <p className="ml-3 text-white font-bold">hola</p>
