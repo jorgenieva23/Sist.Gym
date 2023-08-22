@@ -25,7 +25,6 @@ const App: React.FC = (): JSX.Element => {
         <Route path="/movements" element={<Movements />} />
         <Route path="/monthlyPayment" element={<MonthlyPayment />} />
         <Route path="/roles" element={<Roles />} />
-       
       </Routes>
     </div>
   );

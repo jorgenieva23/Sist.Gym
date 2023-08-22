@@ -4,11 +4,9 @@ import { backLOCAL } from "../main";
 import { IUser } from "../utils/types";
 
 interface UserState {
-    users: IUser[]
+  users: IUser[];
 }
 
 const initialState: UserState = {
-    users: [],
-}
-
-
+  users: [],
+};

@@ -1,7 +1,15 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { useAppDispatch } from "../../redux/hooks"
+import {getPartner} from "../../redux/partnerSlice"
 import { Footer, Navbar, Sidebar } from "../../components";
 
 export const Home: React.FC = (): JSX.Element => {
+  const dispatch = useAppDispatch();
+
+  useEffect (()=>{
+    dispatch(getPartner())
+  }, [])
+
   return (
     <section className="">
       <div>
