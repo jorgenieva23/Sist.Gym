@@ -3,9 +3,9 @@ import { IPayments } from "../utils/types";
 
 const PaymentsSchema = new Schema<IPayments>({
   id: {
-    type: Number,
-    Required: true,
-    unique: true,
+    type: String,
+    primaryKey: true,
+    autoIncrement: true,
   },
   amount: {
     type: Number,
@@ -24,22 +24,22 @@ const PaymentsSchema = new Schema<IPayments>({
     required: false
   },
   stateId: {
-    type: [{type: Schema.Types.ObjectId,
-    ref: "StatePayments"}],
-    default:[]
+    type: Schema.Types.ObjectId,
+    ref: "StatePayments",
+    default: null
   },
   deleted: {
     type: Boolean,
     required: false
   },
   creatorId: {
-    type: [{type: Schema.Types.ObjectId,
-      ref: "Users"}],
-      default: [],
+    type: Schema.Types.ObjectId,
+      ref: "Users",
+      default: null,
   },
   partnerId: {
-    type: [{type: Schema.Types.ObjectId,
-      ref: "Partner"}],
+    type: Schema.Types.ObjectId,
+      ref: "Partner",
       default: [],
   },
   createdAt: {

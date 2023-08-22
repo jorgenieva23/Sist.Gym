@@ -2,7 +2,7 @@ import { Response, Request } from "express";
 import jwt from "jsonwebtoken";
 import { IUser } from "../utils/types";
 import Users from "../models/users";
-import { Roles } from "../models/roles";
+import Partner from "../models/partner";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
@@ -11,83 +11,60 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
 
 export const getAllUser = async () => {
   try {
-    const user = await Users.find();
-    return user;
+    const users = await Users.find();
+    for (const user of users) {
+      const partners = await Partner.find({ userId: user.name });
+      const partnerName = partners.map((partner) => partner.firstName);
+      user.partners = partnerName;
+    }
+    return users;
   } catch (error: any) {
-    throw new Error("Error when searching for user in the database");
+    throw new Error("Error when searching for users in the database");
   }
 };
 
 export const searchUserByName = async (name: any) => {
   try {
-    const infoDB = await Users.find(name).exec();
-    if (infoDB === null) {
-      console.log(`No user ID found ${name}`);
+    const users = await Users.find({ name: name as string }).exec();
+    for (const user of users) {
+      const partners = await Partner.find({ userId: user.name });
+      const partnerName = partners.map((partner) => partner.firstName);
+      user.partners = partnerName;
     }
-    return infoDB;
+    return users;
   } catch (error: any) {
     console.log(error);
-    throw new Error(`Failed to find user with ID ${name}`);
+    throw new Error(`Failed to find users with name: ${name}`);
   }
 };
-// corregir***
-// export const createdUser = async (user: IUser) => {
-//   const {
-//     name,
-//     email,
-//     emailVerifiedAt,
-//     password,
-//     deleted,
-//     stateId,
-//     creatorId,
-//     lastConnectoin,
-//     partners,
-//     rol,
-//     active,
-//   } = user;
-//   return await Users.create({
-//     name,
-//     email,
-//     emailVerifiedAt,
-//     password,
-//     deleted,
-//     stateId,
-//     creatorId,
-//     lastConnectoin,
-//     partners,
-//     rol,
-//     active,
-//   });
-// };
 
-export const createdUser = async (user: IUser): Promise<IUser> => {
-  try {
-    const {
-      name,
-      email,
-      emailVerifiedAt,
-      password,
-      deleted,
-      stateId,
-      creatorId,
-      lastConnectoin,
-      partners,
-      active,
-      rol: roleNames,
-    } = user;
-    const roles = await Roles.find({name: {$in:roleNames}})
-    if(roles.length !== roleNames.length){
-      throw new Error(`Failed to find`)
-    }
-    // user.rol = roles.map((role)=> role._id) agrega el id del rol pero se tiene que modificar el modelo (type: Schema.Types.ObjectId por type: Schema.Types.String) y el type (Types.ObjectId[] por String[])
-    const rolNameFound = roles.map(role => role.name)
-    user.rol = rolNameFound
-    const createUser = await Users.create(user)
-    return createUser.toJSON() as IUser
-  } catch (error) {
-    console.log(error);
-    throw new Error(`Ocurrió un error al crear el usuario: ${error}`);
-  }
+export const createdUser = async (user: IUser) => {
+  const {
+    name,
+    email,
+    emailVerifiedAt,
+    password,
+    deleted,
+    stateId: stateName,
+    creatorId: creatorName,
+    lastConnectoin,
+    partners: partnerName,
+    rol: roleNames,
+    active,
+  } = user;
+  return await Users.create({
+    name,
+    email,
+    emailVerifiedAt,
+    password,
+    deleted,
+    stateId: stateName,
+    creatorId: creatorName,
+    lastConnectoin,
+    partners: partnerName,
+    rol: roleNames,
+    active,
+  });
 };
 
 export const upDateUserControllers = async (
@@ -100,7 +77,17 @@ export const upDateUserControllers = async (
       console.log(`No se encontró ningún usuario con ID ${id}`);
       return null;
     }
-    const { name, email } = updatedData;
+    const {
+      name,
+      email,
+      deleted,
+      stateId,
+      creatorId,
+      lastConnectoin,
+      partners,
+      rol,
+      active,
+    } = updatedData;
 
     if (email) {
       const existingUserByEmail = await Users.findOne({ email });
@@ -114,7 +101,7 @@ export const upDateUserControllers = async (
         throw new Error("Ya existe un usuario con el mismo nickname");
       }
     }
-    const updatedUser = await Users.findByIdAndUpdate(id, updatedData, {
+    const updatedUser = await Users.findByIdAndUpdate( updatedData, {
       new: true,
     });
     return updatedUser;

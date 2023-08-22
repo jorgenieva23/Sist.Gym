@@ -1,12 +1,12 @@
 import mongoose, { Schema } from 'mongoose';
-import { IStateUser } from '../utils/types';
+import { IStates } from '../utils/types';
 
-const IStateUserSchema = new Schema<IStateUser>({
-    id: {
-      type: Number,
-      Required: true,
-      unique: true,
-    },
+const StatesSchema = new Schema<IStates>({
+  id: {
+    type: String,
+    primaryKey: true,
+    autoIncrement: true,
+  },
     name: {
         type: String,
         required: true
@@ -21,4 +21,5 @@ const IStateUserSchema = new Schema<IStateUser>({
       },
 })
 
-export const StateUser = mongoose.model<IStateUser>("StateUser", IStateUserSchema )
+const States = mongoose.model("States", StatesSchema )
+export default States

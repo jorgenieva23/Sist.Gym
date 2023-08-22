@@ -3,32 +3,32 @@ import { IIncome } from "../utils/types";
 
 const incomeSchema = new Schema<IIncome>({
   id: {
-    type: Number,
-    Required: true,
-    unique: true,
+    type: String,
+    primaryKey: true,
+    autoIncrement: true,
   },
   partnerId: {
-    type: [{type: Schema.Types.ObjectId,
-      ref: "Users"}],
-      default: [],
+    type: Schema.Types.ObjectId, 
+    ref: "Partner",
+    default: null,
   },
   dateOfAdmission: {
     type: Date,
-    required: true
+    required: true,
   },
   stateId: {
-    type: [{type: Schema.Types.ObjectId,
-    ref: "StateIncome"}],
-    default:[]
+    type: Schema.Types.ObjectId, 
+    ref: "States",
+    default: null,
   },
   deleted: {
     type: Number,
-    required: false
+    required: false,
   },
   creatorId: {
-    type: [{type: Schema.Types.ObjectId,
-      ref: "Users"}],
-      default: [],
+    type: Schema.Types.ObjectId,
+    ref: "Users",
+    default: null,
   },
   createdAt: {
     type: Date,
@@ -40,5 +40,5 @@ const incomeSchema = new Schema<IIncome>({
   },
 });
 
-const Income = mongoose.model("Income", incomeSchema)
-export default Income
+const Income = mongoose.model("Income", incomeSchema);
+export default Income;

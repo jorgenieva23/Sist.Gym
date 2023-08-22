@@ -2,12 +2,25 @@ import { Request, Response } from "express";
 import { IPartner } from "../utils/types";
 import Partner from "../models/partner";
 
-export const getPartner = async () => {
+export const getAllPartner = async () => {
   try {
     const partner = await Partner.find();
     return partner;
-  } catch (error) {
-    throw new Error("Error when searching for partner in the database");
+  } catch (error: any) {
+    throw new Error("Error when searching for user in the database");
+  }
+};
+
+export const searchPartnerByName = async (name: any) => {
+  try {
+    const infoDB = await Partner.find({ name }).exec();
+    if (infoDB === null) {
+      console.log(`No Partner found with name: ${name}`);
+    }
+    return infoDB;
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(`Failed to find Partner with name: ${name}`);
   }
 };
 
@@ -24,44 +37,33 @@ export const getPartnerById = async (id: any) => {
   }
 };
 
-export const createPartner = async (partner: IPartner): Promise<IPartner> => {
-  try {
-    const { firstName, lastName, dni, address, phone, email, picture } =
-      partner;
-
-    if (
-      !firstName ||
-      !lastName ||
-      !dni ||
-      !address ||
-      !phone ||
-      !email ||
-      !picture
-    )
-      throw new Error("Missing data required to create a partner");
-
-    const existingPartnerByEmail = await Partner.findOne({ email });
-    if (existingPartnerByEmail) {
-      throw new Error("There is already a partner with the same email");
-    }
-
-    const createPartner = await Partner.create(partner);
-    return createPartner.toJSON() as IPartner;
-  } catch (error: any) {
-    throw new Error(`Ocurrió un error al crear el usuario: ${error.message}`);
-  }
+export const createPartner = async (partner: IPartner) => {
+  const { 
+    firstName, 
+    lastName, 
+    dni, 
+    address, 
+    phone, 
+    email, 
+    phoneEmergency,
+    stateId: stateName,
+    userId: userName,
+    role: roleNames
+  } =
+    partner;
+  return await Partner.create({
+    firstName,
+    lastName,
+    dni,
+    address,
+    phone,
+    email,
+    phoneEmergency,
+    stateId: stateName,
+    userId: userName,
+    role: roleNames
+  });
 };
-
-// export const deletePartner = async (req: Request, res: Response, id: any) => {
-//   try {
-//     const infoDB = await Partner.findByIdAndDelete(id);
-//     if (!infoDB) {
-//       console.log(`no such partner id: ${id}`);
-//     }
-//   } catch (error) {
-//     throw new Error(`error deleting partner ${id}`);
-//   }
-// };
 
 export const updatePartner = async (
   id: any,
@@ -94,15 +96,3 @@ export const updatePartner = async (
     throw new Error(`error updating partner ${error.message}`);
   }
 };
-
-export const findUserController = async (email: string) => {
-  try {
-    const partner = await Partner.findOne({ email: email });
-    console.log(partner);
-    return partner;
-  } catch (error: any) {
-    throw new Error(`${error.message}`);
-  }
-};
-
-
