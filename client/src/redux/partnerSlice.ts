@@ -10,6 +10,8 @@ interface partnerState {
   partnerIMG: string;
   partners: IPartner[];
   filteredPartners: IPartner[];
+  registeredBy: string;
+  registrationDate: Date;
 }
 
 const localStorageState = getItem("partnerState");
@@ -20,6 +22,8 @@ const initialState: partnerState = localStorageState
       partnerIMG: "",
       partners: [],
       filteredPartners: [],
+      registeredBy: "",
+      registrationDate: ""
     };
 
 export const partnerSlice = createSlice({
