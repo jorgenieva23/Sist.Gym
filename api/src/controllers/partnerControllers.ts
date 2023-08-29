@@ -38,19 +38,18 @@ export const getPartnerById = async (id: any) => {
 };
 
 export const createPartner = async (partner: IPartner) => {
-  const { 
-    firstName, 
-    lastName, 
-    dni, 
-    address, 
-    phone, 
-    email, 
+  const {
+    firstName,
+    lastName,
+    dni,
+    address,
+    phone,
+    email,
     phoneEmergency,
     stateId: stateName,
     userId: userName,
-    role: roleNames
-  } =
-    partner;
+    role: roleNames,
+  } = partner;
   return await Partner.create({
     firstName,
     lastName,
@@ -61,7 +60,7 @@ export const createPartner = async (partner: IPartner) => {
     phoneEmergency,
     stateId: stateName,
     userId: userName,
-    role: roleNames
+    role: roleNames,
   });
 };
 
