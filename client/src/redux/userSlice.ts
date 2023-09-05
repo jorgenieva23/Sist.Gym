@@ -12,7 +12,7 @@ export interface userState {
   rol: string;
   token: string | null;
   registerStatus: string;
-  registerError: string | null; // Cambio en el tipo de registerError
+  registerError: string | null;
   loginStatus: string;
   loginError: string;
   userLoader: boolean;
@@ -54,29 +54,29 @@ const initialState: userState = {
   password: "",
   image: "",
   rol: "",
-  token:  localStorage.getItem("token"),
+  token: localStorage.getItem("token"),
   registerStatus: "",
   registerError: null,
   loginStatus: "",
   loginError: "",
   userLoader: false,
-}
+};
 
 const authSlice = createSlice({
-  name:"auth",
+  name: "auth",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(registerUser.pending, (state) => {
-      state.registerStatus ="pending";
-    })
-    builder.addCase(registerUser.fulfilled, (state, { payload }) =>{
-      state.registerStatus ="fulfilled";
+      state.registerStatus = "pending";
+    });
+    builder.addCase(registerUser.fulfilled, (state, { payload }) => {
+      state.registerStatus = "fulfilled";
       state.token = payload;
-    })
-    builder.addCase(registerUser.fulfilled, (state, { payload }) =>{
-      state.registerStatus ="rejeted";
-      state.registerError = payload ?? state.registerError
+    });
+    builder.addCase(registerUser.rejected, (state, { payload }) => {
+      state.registerStatus = "rejeted";
+      state.registerError = payload ?? state.registerError;
     });
   },
 });

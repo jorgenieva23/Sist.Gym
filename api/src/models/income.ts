@@ -8,7 +8,7 @@ const incomeSchema = new Schema<IIncome>({
     autoIncrement: true,
   },
   partnerId: {
-    type: Schema.Types.ObjectId, 
+    type: Schema.Types.ObjectId,
     ref: "Partner",
     default: null,
   },
@@ -17,7 +17,7 @@ const incomeSchema = new Schema<IIncome>({
     required: true,
   },
   stateId: {
-    type: Schema.Types.ObjectId, 
+    type: Schema.Types.ObjectId,
     ref: "States",
     default: null,
   },

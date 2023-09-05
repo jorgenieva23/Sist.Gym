@@ -66,8 +66,8 @@ export const postPartner = async (
     partner.stateId = state ? state.name : null;
     // busca y relaciona la tabla usuarios
     const user = await Users.findOne({ name: { $in: userName } });
-    partner.userId = user ? user.name : null
-    
+    partner.userId = user ? user.name : null;
+
     const createdPartert = await Partner.create(partner);
     res.status(201).json(createdPartert);
   } catch (error: any) {
