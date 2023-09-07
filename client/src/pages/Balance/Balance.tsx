@@ -3,7 +3,7 @@ import { Footer, Navbar, Sidebar } from "../../components";
 
 export const Balance: React.FC = (): JSX.Element => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="">
       <Navbar />
       <div className="flex flex-grow">
         <Sidebar />
