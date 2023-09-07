@@ -23,7 +23,7 @@ const initialState: partnerState = localStorageState
       partners: [],
       filteredPartners: [],
       registeredBy: "",
-      registrationDate: ""
+      registrationDate: "",
     };
 
 export const partnerSlice = createSlice({
@@ -68,14 +68,15 @@ export const getPartner = (): AppThunk => {
   };
 };
 
-export const getPartnerByName = (name: string): AppThunk => {
+export const getPartnerByNameOrDni = (name: string | undefined, dni: number | undefined): AppThunk => {
   return async (dispatch) => {
     try {
-      const rawData = await axios.get(
-        `${backLOCAL}/partner?name=${name}`
-      );
-      const response = rawData.data;
-      dispatch(fetchPartner(response));
+      let response;
+      if (name) response = await axios.get(`${backLOCAL}/partner?name=${name}`);
+      else if (dni)
+        response = await axios.get(`${backLOCAL}/partner?dni=${dni}`);
+      if (response) dispatch(fetchPartner(response.data));
+      else console.error("No name or DNI provided.");
     } catch (error) {
       console.error("Error fetching partner data:", error);
     }
