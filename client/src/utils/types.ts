@@ -10,7 +10,7 @@ export interface IPartner {
   picture: string;
   deleted: boolean;
   date: number;
-  datePhysicalAttitude: Date;
+  // datePhysicalAttitude: number;
   medicalCoverage: string;
   phoneEmergency: number;
   phoneEmergencyName: string;

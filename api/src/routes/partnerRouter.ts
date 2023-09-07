@@ -15,4 +15,4 @@ partnerRouter.delete("/:id", deletePartner as IpartnerHandler)
 partnerRouter.delete("/", deleteAllPartner as IpartnerHandler)
 
 
-export default partnerRouter  
+export default partnerRouter
