@@ -11,7 +11,7 @@ const Container: React.FC<{ currentPartner: IPartner[] }> = ({
   return (
     <>
       {currentPartner.length ? (
-        <div>
+        <div className="flex flex-wrap justify-around">
           {currentPartner.map((partner: IPartner) => (
             <Cart
               firstName={partner.firstName}

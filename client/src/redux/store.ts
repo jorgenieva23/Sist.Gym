@@ -1,9 +1,11 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import partnerReducer from "./partnerSlice";
+import incomereducer from "./incomeState"
 
 export const store = configureStore({
   reducer: {
     partner: partnerReducer,
+    income: incomereducer,
   },
 });
 
