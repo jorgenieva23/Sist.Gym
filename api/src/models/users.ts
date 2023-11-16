@@ -2,11 +2,6 @@ import mongoose, { Schema, Types } from "mongoose";
 import { IUser } from "../utils/types";
 
 const userSchema = new Schema<IUser>({
-  id: {
-    type: String,
-    primaryKey: true,
-    autoIncrement: true,
-  },
   name: {
     type: String,
     required: true,

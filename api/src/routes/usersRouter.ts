@@ -1,5 +1,13 @@
 import { Router, Request, Response } from "express";
-import { getUserHandler, postUser, upDateUserById, deleteUsers, handleLogin, handleLogout } from "../handlers/usersHandlers";
+import {
+  getUserHandler,
+  postUser,
+  upDateUserById,
+  deleteUsers,
+  getUserId,
+  loginUser,
+  logoutUser,
+} from "../handlers/usersHandlers";
 
 const usersRouter = Router();
 
@@ -11,10 +19,10 @@ usersRouter.get("/", getUserHandler as IusersHandler);
 usersRouter.post("/", postUser as IusersHandler);
 usersRouter.put("/:id", upDateUserById as IusersHandler);
 usersRouter.delete("/:id", deleteUsers as IusersHandler);
-// usersRouter.get("/:id", getUserId as IusersHandler);
+usersRouter.get("/:id", getUserId as IusersHandler);
 
 // Autenticacion
-usersRouter.post("/login", handleLogin as IusersHandler);
-usersRouter.post("/logout", handleLogout as IusersHandler);
+usersRouter.post("/login", loginUser as IusersHandler);
+usersRouter.post("/logout", logoutUser as IusersHandler);
 
 export default usersRouter;

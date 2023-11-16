@@ -1,9 +1,6 @@
-import { Response, Request } from "express";
-import jwt from "jsonwebtoken";
 import { IUser } from "../utils/types";
 import Users from "../models/users";
 import Partner from "../models/partner";
-import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -23,7 +20,19 @@ export const getAllUser = async () => {
   }
 };
 
-export const searchUserByName = async (name: any) => {
+export async function getUserById(id: any) {
+  try {
+    let user = await Users.findOne({ id });
+    if (!user) user = await Users.findOne({ _id: id });
+    if (!user) return { error: true };
+    return user;
+  } catch (error:any) {
+    console.error("ERROR getUserById controller: ", error.message);
+    return { error: true };
+  }
+}
+
+export const searchUserByName = async (name: string) => {
   try {
     const users = await Users.find({ name: name as string }).exec();
     for (const user of users) {
@@ -101,7 +110,7 @@ export const upDateUserControllers = async (
         throw new Error("Ya existe un usuario con el mismo nickname");
       }
     }
-    const updatedUser = await Users.findByIdAndUpdate( updatedData, {
+    const updatedUser = await Users.findByIdAndUpdate(updatedData, {
       new: true,
     });
     return updatedUser;
@@ -112,7 +121,7 @@ export const upDateUserControllers = async (
   }
 };
 
-export const deleteById = async (id: any) => {
+export const deleteByIdControllers = async (id: any) => {
   try {
     const infoDB = await Users.findByIdAndDelete(id);
     if (!infoDB) {
@@ -121,69 +130,5 @@ export const deleteById = async (id: any) => {
     return infoDB;
   } catch (error) {
     throw new Error(`Ocurrió un error al eliminar usuario: ${error}`);
-  }
-};
-
-export const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  try {
-    const user = await Users.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: "Invalid email" });
-    }
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) {
-      return res.status(400).json({ error: "Invalid password" });
-    }
-    const accessToken = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
-      expiresIn: "3h",
-    });
-    const refreshToken = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
-      expiresIn: "7d",
-    });
-    user.token = accessToken;
-    user.active = true;
-    await user.save();
-    res.status(200).json({ accessToken, refreshToken, user });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Server error" });
-  }
-};
-
-export const logoutUser = async (req: Request, res: Response) => {
-  const { userId } = req.body;
-  try {
-    const user = await Users.findById(userId);
-    if (!user) {
-      return res.status(400).json({ error: "Invalid user ID" });
-    }
-    user.token = "";
-    await user.save();
-    res.status(200).json({ message: "User logged out successfully" });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Server error" });
-  }
-};
-
-export const refreshAccessToken = async (req: Request, res: Response) => {
-  const { refreshToken } = req.body;
-  try {
-    const decoded = jwt.verify(refreshToken, JWT_SECRET_KEY) as {
-      userId: string;
-    };
-    const user = await Users.findById(decoded.userId);
-    // If user doesn't exist, return error
-    if (!user) {
-      return res.status(400).json({ error: "Invalid refresh token" });
-    }
-    const accessToken = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
-      expiresIn: "3h",
-    });
-    res.status(200).json({ accessToken });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Server error" });
   }
 };

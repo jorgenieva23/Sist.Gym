@@ -3,20 +3,20 @@ import {
   getAllUser,
   searchUserByName,
   createdUser,
+  getUserById,
   upDateUserControllers,
-  deleteById,
-  refreshAccessToken,
-  loginUser,
-  logoutUser,
+  deleteByIdControllers,
 } from "../controllers/usersControllers";
-import { IUser } from "../utils/types";
-import dotenv from "dotenv";
 import Users from "../models/users";
+import { IUser } from "../utils/types";
 import { Roles } from "../models/roles";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import States from "../models/states";
-import Partner from "../models/partner";
+import dotenv from "dotenv";
 dotenv.config();
+
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
 
 export const getUserHandler = async (
   req: Request,
@@ -33,15 +33,15 @@ export const getUserHandler = async (
   }
 };
 
-// export const getUserId = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const id = req.params.id;
-//     const response = await getUserById(id);
-//     res.status(200).send(response);
-//   } catch (error: any) {
-//     res.status(500).send(error.message);
-//   }
-// };
+export const getUserId = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const response = await getUserById(id);
+    res.status(200).send(response);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+};
 
 export const upDateUserById = async (
   req: Request,
@@ -116,38 +116,75 @@ export const deleteUsers = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const users = await Users.findById(id);
-    const deleteCourse = await deleteById(id);
+    const deleteUser = await deleteByIdControllers(id);
     if (!users) {
       return res.status(400).json({ message: "ID invalidate" });
     }
-    return res.status(200).json(deleteCourse);
+    return res.status(200).json(deleteUser);
   } catch (err) {
     console.error(err);
     return res.status(500).send("Server Error");
   }
 };
 
-export const handleLogin = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
   try {
-    await loginUser(req, res);
+    const user = await Users.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ error: "Invalid email" });
+    }
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      return res.status(400).json({ error: "Invalid password" });
+    }
+    const accessToken = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
+      expiresIn: "3h",
+    });
+    const refreshToken = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
+      expiresIn: "7d",
+    });
+    user.token = accessToken;
+    user.active = true;
+    await user.save();
+    res.status(200).json({ accessToken, refreshToken, user });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error" });
   }
 };
 
-export const handleLogout = async (req: Request, res: Response) => {
+export const logoutUser = async (req: Request, res: Response) => {
+  const { userId } = req.body;
   try {
-    await logoutUser(req, res);
+    const user = await Users.findById(userId);
+    if (!user) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+    user.token = "";
+    await user.save();
+    res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error" });
   }
 };
 
-export const handleRefreshAccessToken = async (req: Request, res: Response) => {
+export const refreshAccessToken = async (req: Request, res: Response) => {
+  const { refreshToken } = req.body;
   try {
-    await refreshAccessToken(req, res);
+    const decoded = jwt.verify(refreshToken, JWT_SECRET_KEY) as {
+      userId: string;
+    };
+    const user = await Users.findById(decoded.userId);
+    // If user doesn't exist, return error
+    if (!user) {
+      return res.status(400).json({ error: "Invalid refresh token" });
+    }
+    const accessToken = jwt.sign({ userId: user._id }, JWT_SECRET_KEY, {
+      expiresIn: "3h",
+    });
+    res.status(200).json({ accessToken });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Server error" });

@@ -1,7 +1,6 @@
-import { Document, Schema, Types } from "mongoose";
+import { Types } from "mongoose";
 
 export interface IPartner {
-  id: string;
   firstName: string;
   lastName: string;
   dni: number;
@@ -22,14 +21,13 @@ export interface IPartner {
   updatedAt: Date;
 }
 export interface IUser {
-  id: string;
   name: string;
   email: string;
   emailVerifiedAt: string;
   password: string;
   stateId: Types.ObjectId | string | null;
   creatorId: Types.ObjectId | string | null;
-  partners: string[]
+  partners: string[];
   rol: string | null;
   active: boolean;
   deleted: boolean;
