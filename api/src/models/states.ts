@@ -2,11 +2,6 @@ import mongoose, { Schema } from 'mongoose';
 import { IStates } from '../utils/types';
 
 const StatesSchema = new Schema<IStates>({
-  id: {
-    type: String,
-    primaryKey: true,
-    autoIncrement: true,
-  },
     name: {
         type: String,
         required: true

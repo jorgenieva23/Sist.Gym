@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { backLOCAL } from "../main";
 // import { IUser } from "../utils/types";
 
 export interface userState {
@@ -32,7 +31,7 @@ export const registerUser = createAsyncThunk<
   { rejectValue: string }
 >("auth/registerUser", async (value, { rejectWithValue }) => {
   try {
-    const token = await axios.post<string>(`${backLOCAL}/register`, {
+    const token = await axios.post<string>(`/register`, {
       name: value.name,
       email: value.email,
       password: value.password,

@@ -22,12 +22,12 @@ const userSchema = new Schema<IUser>({
   token: {
     type: String,
     default: null,
-    required: false
+    required: false,
   },
   stateId: {
-    type: Schema.Types.String,
-      ref: "States",
-      required: false
+    type: String,
+    ref: "States",
+    required: false,
   },
   deleted: {
     type: Boolean,
@@ -36,26 +36,25 @@ const userSchema = new Schema<IUser>({
   creatorId: {
     type: Schema.Types.String,
     ref: "Users",
-    required: false
-},
+    required: false,
+  },
   lastConnectoin: {
     type: Date,
     required: false,
   },
   partners: {
-    type: [{type: Schema.Types.String,
-    ref: "Partner"}],
+    type: [{ type: Schema.Types.String, ref: "Partner" }],
     default: [],
   },
   rol: {
     type: Schema.Types.String,
-      ref: "Roles",
-      required: true
+    ref: "Roles",
+    required: true,
   },
   active: {
     type: Boolean,
     default: true,
-    required: false
+    required: false,
   },
   createdAt: {
     type: Date,

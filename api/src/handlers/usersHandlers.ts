@@ -57,7 +57,10 @@ export const upDateUserById = async (
   }
 };
 
-export const postUser = async (req: Request, res: Response): Promise<void> => {
+export const postUserHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const {
       rol: roleNames,
@@ -85,32 +88,6 @@ export const postUser = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json(error.message);
   }
 };
-
-// export const postUser = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const user = req.body as IUser;
-//     const { rol: roleNames, stateId: stateName, creatorId: creatorName } = user;
-//     // buscar y relaciona la tabla rol
-//     const role = await Roles.findOne({ name: { $in: roleNames } });
-//     user.rol = role ? role.name : null;
-//     // busca y relaciona la tabla estados
-//     const state = await States.findOne({ name: { $in: stateName } });
-//     user.stateId = state ? state.name : null;
-//     // busca y relaciona la tabla usuarios
-//     const admin = await Users.findOne({ name: { $in: creatorName } });
-//     const countUser = await Users.countDocuments({ creatorId: admin?.name });
-//     // condiciona la cantidad de usuarios registrados
-//     if (countUser >= 5) {
-//       throw new Error("has 5 users to his name");
-//     } else {
-//       user.creatorId = admin ? admin.name : null;
-//     }
-//     const createUsers = await createdUser(user);
-//     res.status(200).json(createUsers);
-//   } catch (error: any) {
-//     res.status(400).json(error.message);
-//   }
-// };
 
 export const deleteUsers = async (req: Request, res: Response) => {
   try {

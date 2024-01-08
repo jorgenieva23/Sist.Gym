@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import {
   getUserHandler,
-  postUser,
+  postUserHandler,
   upDateUserById,
   deleteUsers,
   getUserId,
@@ -15,11 +15,11 @@ interface IusersHandler {
   (req: Request, res: Response): void;
 }
 
-usersRouter.get("/", getUserHandler as IusersHandler);
-usersRouter.post("/", postUser as IusersHandler);
-usersRouter.put("/:id", upDateUserById as IusersHandler);
-usersRouter.delete("/:id", deleteUsers as IusersHandler);
-usersRouter.get("/:id", getUserId as IusersHandler);
+usersRouter.get("/getUser", getUserHandler as IusersHandler);
+usersRouter.post("/createUser", postUserHandler as IusersHandler);
+usersRouter.put("/upDateUser/:id", upDateUserById as IusersHandler);
+usersRouter.delete("/deleteUser/:id", deleteUsers as IusersHandler);
+usersRouter.get("/getUserId/:id", getUserId as IusersHandler);
 
 // Autenticacion
 usersRouter.post("/login", loginUser as IusersHandler);

@@ -2,31 +2,22 @@ import mongoose, { Schema } from "mongoose";
 import { IIncome } from "../utils/types";
 
 const incomeSchema = new Schema<IIncome>({
-  id: {
-    type: String,
-    primaryKey: true,
-    autoIncrement: true,
-  },
   partnerId: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.String,
     ref: "Partner",
     default: null,
   },
   dateOfAdmission: {
     type: Date,
-    required: true,
+    default: new Date(),
   },
   stateId: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.String,
     ref: "States",
     default: null,
   },
-  deleted: {
-    type: Number,
-    required: false,
-  },
   creatorId: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.String,
     ref: "Users",
     default: null,
   },

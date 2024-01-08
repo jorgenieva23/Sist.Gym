@@ -70,7 +70,7 @@ const partnerSchema = new Schema({
     default: null,
   },
   role: {
-    type: mongoose.SchemaTypes.String,
+    type: Schema.Types.String,
     ref: "Roles",
     default: null,
   },

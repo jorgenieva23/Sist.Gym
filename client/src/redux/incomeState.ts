@@ -3,7 +3,6 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { AppThunk } from "./store";
 import { getItem, setItem } from "../components/localStorage/localStorage";
 import { IIncome } from "../utils/types";
-import { backLOCAL } from "../main";
 import axios from "axios";
 
 interface incomeState {
@@ -27,28 +26,28 @@ export const incomeSlice = createSlice({
   initialState,
   reducers: {
     fetchIncome: (state, action: PayloadAction<IIncome[]>) => {
-        const newState = {
-          ...state,
-          incomes: action.payload,
-          filteredIncomes: action.payload,
-        };
-        setItem("incomeState", newState);
-        return newState;
-      },
+      const newState = {
+        ...state,
+        incomes: action.payload,
+        filteredIncomes: action.payload,
+      };
+      setItem("incomeState", newState);
+      return newState;
+    },
   },
 });
 
 export const getIncome = (): AppThunk => {
   return async (dispatch) => {
     try {
-      const rawData = await axios.get(`${backLOCAL}/income`);
+      const rawData = await axios.get(`/income`);
       const response = rawData.data;
-      dispatch(fetchIncome(response))
+      dispatch(fetchIncome(response));
     } catch (error) {
-        console.error("Error fetching income data:", error);
+      console.error("Error fetching income data:", error);
     }
   };
 };
 
-export const { fetchIncome } = incomeSlice.actions
-export default incomeSlice.reducer
+export const { fetchIncome } = incomeSlice.actions;
+export default incomeSlice.reducer;

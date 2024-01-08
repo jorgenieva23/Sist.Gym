@@ -42,31 +42,28 @@ export interface IRoles {
   updated_at: Date;
 }
 export interface IIncome {
-  id: string;
-  partnerId: Types.ObjectId | null;
+  partnerId: Types.ObjectId | string | null;
   dateOfAdmission: Date;
-  stateId: Types.ObjectId | null;
+  stateId: Types.ObjectId | string | null;
   deleted: number;
-  creatorId: Types.ObjectId | null;
+  creatorId: Types.ObjectId | string | null;
   createdAt: Date;
   updatedAt: Date;
 }
 export interface IStates {
-  id: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;
 }
 export interface IPayments {
-  id: string;
   amount: number;
   total: number;
   dateFrom: Date;
   dateTo: Date;
-  stateId: Types.ObjectId | null;
+  stateId: Types.ObjectId | string | null;
   deleted: boolean;
-  creatorId: Types.ObjectId | null;
-  partnerId: Types.ObjectId | null;
+  creatorId: Types.ObjectId | string | null;
+  partnerId: Types.ObjectId | string | null;
   createdAt: Date;
   updatedAt: Date;
 }

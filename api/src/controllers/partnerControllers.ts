@@ -18,8 +18,8 @@ export const searchPartnerByName = async (name: any) => {
       console.log(`No Partner found with name: ${name}`);
     }
     return infoDB;
-  } catch (error: any) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
     throw new Error(`Failed to find Partner with name: ${name}`);
   }
 };

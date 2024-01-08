@@ -5,9 +5,10 @@ import "./index.css";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
 import { BrowserRouter } from "react-router-dom";
+import axios from "axios";
 
-export const frontLOCAL= `http://localhost:3000`
-export const backLOCAL= `http://localhost:3001`
+axios.defaults.baseURL = "http://localhost:3001";
+export const frontLOCAL = `http://localhost:3000`;
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <Provider store={store}>

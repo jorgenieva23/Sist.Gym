@@ -1,4 +1,3 @@
-
 export interface IPartner {
   id: string;
   firstName: string;
@@ -16,6 +15,7 @@ export interface IPartner {
   phoneEmergencyName: string;
   stateId: string | null;
   userId: string | null;
+  condition: string | null;
   role: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -29,7 +29,7 @@ export interface IUser {
   password: string;
   stateId: string | null;
   creatorId: string | null;
-  partners: string[]
+  partners: string[];
   rol: string | null;
   active: boolean;
   deleted: boolean;

@@ -1,6 +1,7 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import partnerReducer from "./partnerSlice";
-import incomereducer from "./incomeState"
+import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
+import partnerReducer from "./Slices/partnerSlice";
+import incomereducer from "./incomeState";
 
 export const store = configureStore({
   reducer: {
@@ -9,6 +10,8 @@ export const store = configureStore({
   },
 });
 
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export type AppThunk<ReturnType = void> = ThunkAction<

@@ -14,7 +14,6 @@ import {
   FaMoneyBillAlt,
   FaUserCog,
 } from "react-icons/fa";
-import { Footer } from "..";
 
 const Sidebar: React.FC = (): JSX.Element => {
   const [open, setOpen] = useState(true);
@@ -56,7 +55,7 @@ const Sidebar: React.FC = (): JSX.Element => {
       >
         <img
           src={controlImage}
-          className={`absolute cursor-pointer -right-3 top-9 w-7 border-2 border-silver rounded-full ${
+          className={`absolute cursor-pointer -right-3 top-7 w-7 border-2 border-silver rounded-full ${
             !open && "rotate-180"
           }`}
           onClick={() => setOpen(!open)}
@@ -71,14 +70,14 @@ const Sidebar: React.FC = (): JSX.Element => {
             Designer
           </h1>
         </div>
-        <div className="mt-4 flex flex-col gap-4 relative">
+        <div className="mt-10 flex flex-col gap-4 relative">
           {Menu?.map((Menu, i) => (
             <Link
               to={Menu?.link}
               key={i}
               className={`${
                 Menu?.margin && "mt-5"
-              } group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md text-white`}
+              } group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md text-white`}
             >
               <div>{React.createElement(Menu?.icon, { size: "20" })}</div>
               <h2
