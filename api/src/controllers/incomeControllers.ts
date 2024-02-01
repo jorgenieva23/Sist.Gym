@@ -7,38 +7,33 @@ import Users from "../models/users";
 export const registerUserIncome = async (income: IIncome) => {
   try {
     const { partnerId, stateId, creatorId } = income;
+    const [partner, state, creator] = await Promise.all([
+      Partner.findOne({ firstName: partnerId }).exec(),
+      States.findOne({ name: stateId }).exec(),
+      Users.findOne({ name: creatorId }).exec(),
+    ]);
 
-    const partner = await Partner.findById(partnerId).exec();
-    const partnerIdFound = partner ? partner._id : null;
-
-    const state = await States.findById(stateId).exec();
-    const stateIdFound = state ? state._id : null;
-
-    const creator = await Users.findById(creatorId).exec();
-    const creatorIdFound = creator ? creator._id : null;
-
-    income.partnerId = partnerIdFound;
-    income.stateId = stateIdFound;
-    income.creatorId = creatorIdFound;
-
-    const existingIncome = await Income.findOne({
-      partnerId: partnerIdFound,
-      dateOfAdmission: {
-        gte: new Date().setHours(0, 0, 0, 0),
-        lte: new Date().setHours(23, 59, 59, 999),
-      },
-    }).exec();
-
-    if (existingIncome) {
-      throw new Error("The user already has a login registered for today");
+    if (!partner || !state || !creator) {
+      throw new Error("Invalid partner, state, or creator");
     }
 
-    return await Income.create({
-      ...income,
-      dateOfAdmission: new Date(),
-    });
-  } catch (error) {
-    throw new Error("Error when searching for income in the database");
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return await Income.findOneAndUpdate(
+      {
+        partnerId: partner._id,
+        dateOfAdmission: {
+          $gte: today,
+          $lte: new Date(today.getTime() + 86400000 - 1),
+        },
+      },
+      { ...income, dateOfAdmission: today },
+      { upsert: true, new: true }
+    );
+  } catch (error: any) {
+    console.error(error, "error");
+    throw new Error(`Error: ${error.message}`);
   }
 };
 

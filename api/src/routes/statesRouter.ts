@@ -7,7 +7,7 @@ interface IStatesHandler{
     (req: Request, res: Response):void
 }
 
-statesRouter.post("/", postState as IStatesHandler)
-statesRouter.get("/", getAllStates as IStatesHandler)
+statesRouter.post("/createState", postState as IStatesHandler)
+statesRouter.get("/getAll", getAllStates as IStatesHandler)
 
 export default statesRouter

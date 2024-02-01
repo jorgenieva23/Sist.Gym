@@ -48,27 +48,35 @@ export const postPartner = async (
   res: Response
 ): Promise<void> => {
   try {
-    const partner = req.body as IPartner;
-    const { role: roleNames, stateId: stateName, userId: userName } = partner;
-    const { firstName, lastName, email } = req.body as IPartner;
+    const {
+      firstName,
+      lastName,
+      email,
+      rol: roleNames,
+      stateId: stateName,
+      userId: userName,
+    } = req.body as IPartner;
+    const [role, state, admin] = await Promise.all([
+      Roles.findOne({ name: { $in: roleNames } }),
+      States.findOne({ name: { $in: stateName } }),
+      Users.findOne({ name: { $in: userName } }),
+    ]);
     if (!email || !firstName || !lastName) {
       throw new Error("Missing data required to create a partner");
     }
-    const existingUserByEmail = await Partner.findOne({ email });
-    if (existingUserByEmail) {
+    if (await Partner.findOne({ email })) {
       throw new Error("There is already a partner with the same email");
     }
-    // buscar y relaciona la tabla rol
-    const role = await Roles.findOne({ name: { $in: roleNames } });
-    partner.role = role ? role.name : null;
-    // busca y relaciona la tabla estados
-    const state = await States.findOne({ name: { $in: stateName } });
-    partner.stateId = state ? state.name : null;
-    // busca y relaciona la tabla usuarios
-    const user = await Users.findOne({ name: { $in: userName } });
-    partner.userId = user ? user.name : null;
-
-    const createdPartert = await Partner.create(partner);
+    if (!role || !state || !admin) {
+      throw new Error("Role, state, or admin not found");
+    }
+    const partner: IPartner = {
+      ...req.body,
+      rol: role?.name || null,
+      stateId: state?.name || null,
+      creatorId: admin?.name || null,
+    };
+    const createdPartert = createPartner(partner);
     res.status(201).json(createdPartert);
   } catch (error: any) {
     console.log(error);

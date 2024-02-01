@@ -1,7 +1,7 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import partnerReducer from "./Slices/partnerSlice";
-import incomereducer from "./incomeState";
+import incomereducer from "./Slices/incomeSlice";
 
 export const store = configureStore({
   reducer: {

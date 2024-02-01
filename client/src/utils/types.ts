@@ -1,24 +1,23 @@
 export interface IPartner {
-  id: string;
+  _id?: string | null;
   firstName: string;
   lastName: string;
-  dni: number;
+  dni: string | number;
   address: string;
   phone: number;
   email: string;
   picture: string;
-  deleted: boolean;
+  deleted?: boolean | null;
   date: number;
-  // datePhysicalAttitude: number;
+  datePhysicalAttitude: number;
   medicalCoverage: string;
   phoneEmergency: number;
   phoneEmergencyName: string;
-  stateId: string | null;
-  userId: string | null;
-  condition: string | null;
-  role: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  stateId?: string | null;
+  userId?: string | null;
+  condition?: string | null;
+  rol?: string | null;
+  createdAt?: Date
 }
 
 export interface IUser {

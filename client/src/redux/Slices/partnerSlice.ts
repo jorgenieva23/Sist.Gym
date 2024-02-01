@@ -4,14 +4,14 @@ import { IPartner } from "../../utils/types";
 
 interface partnerState {
   partners: IPartner[];
-  filteredPartners: IPartner[];
+  specificPartner: IPartner | null;
   registeredBy: string;
   // registrationDate: Date;
 }
 
 const initialState: partnerState = {
   partners: [],
-  filteredPartners: [],
+  specificPartner: null,
   registeredBy: "",
   // registrationDate: "",
 };
@@ -20,28 +20,51 @@ export const partnerSlice = createSlice({
   name: "partner",
   initialState,
   reducers: {
-    updateImage: (state, action: PayloadAction<string>) => {
-      return {
-        ...state,
-        partnerIMG: action.payload,
-      };
-    },
     getPartner: (state, action: PayloadAction<IPartner[]>) => {
       return {
         ...state,
         partners: action.payload,
-        filteredPartners: action.payload,
       };
     },
-    updateFilteredPartner: (state, action: PayloadAction<IPartner[]>) => {
+    getSpecificPartner: (state, action: PayloadAction<IPartner>) => {
       return {
         ...state,
-        filteredPartners: action.payload,
+        specificPartner: action.payload,
+      };
+    },
+    createPartner: (state, action: PayloadAction<IPartner>) => {
+      return {
+        ...state,
+        partners: [...state.partners, action.payload],
+      };
+    },
+    searchPartners: (state, action: PayloadAction<IPartner[]>) => {
+      return {
+        ...state,
+        partners: action.payload,
+      };
+    },
+    editPartner: (state, action: PayloadAction<IPartner[]>) => {
+      return {
+        ...state,
+        partners: action.payload,
+      };
+    },
+    deletePartners: (state, action: PayloadAction<IPartner[]>) => {
+      return {
+        ...state,
+        partners: action.payload,
       };
     },
   },
 });
 
-export const { getPartner, updateFilteredPartner, updateImage } =
-  partnerSlice.actions;
+export const {
+  getPartner,
+  getSpecificPartner,
+  createPartner,
+  searchPartners,
+  editPartner,
+  deletePartners,
+} = partnerSlice.actions;
 export default partnerSlice.reducer;

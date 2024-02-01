@@ -2,10 +2,10 @@ import mongoose, { Schema } from "mongoose";
 import { IPayments } from "../utils/types";
 
 const PaymentsSchema = new Schema<IPayments>({
-  id: {
-    type: String,
-    primaryKey: true,
-    autoIncrement: true,
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    auto: true,
+    required: true,
   },
   amount: {
     type: Number,

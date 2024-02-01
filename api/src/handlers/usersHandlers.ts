@@ -78,9 +78,9 @@ export const postUserHandler = async (
     }
     const user: IUser = {
       ...req.body,
-      rol: role ? role.name : null,
-      stateId: state ? state.name : null,
-      creatorId: admin ? admin.name : null,
+      rol: role?.name || null,
+      stateId: state?.name || null,
+      creatorId: admin?.name || null,
     };
     const createUsers = await createdUser(user);
     res.status(200).json(createUsers);

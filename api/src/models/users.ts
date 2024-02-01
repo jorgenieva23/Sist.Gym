@@ -1,7 +1,12 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IUser } from "../utils/types";
 
 const userSchema = new Schema<IUser>({
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    auto: true,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -10,10 +15,13 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
     unique: true,
+    validate: {
+      validator: (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+      message: "Invalid email format",
+    },
   },
   emailVerifiedAt: {
     type: String,
-    required: false,
   },
   password: {
     type: String,
@@ -22,30 +30,28 @@ const userSchema = new Schema<IUser>({
   token: {
     type: String,
     default: null,
-    required: false,
   },
   stateId: {
     type: String,
     ref: "States",
-    required: false,
   },
   deleted: {
     type: Boolean,
-    required: false,
+    default: false,
   },
   creatorId: {
     type: Schema.Types.String,
     ref: "Users",
-    required: false,
   },
-  lastConnectoin: {
+  lastConnection: {
     type: Date,
-    required: false,
   },
-  partners: {
-    type: [{ type: Schema.Types.String, ref: "Partner" }],
-    default: [],
-  },
+  partners: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Partner",
+    },
+  ],
   rol: {
     type: Schema.Types.String,
     ref: "Roles",
@@ -54,7 +60,6 @@ const userSchema = new Schema<IUser>({
   active: {
     type: Boolean,
     default: true,
-    required: false,
   },
   createdAt: {
     type: Date,
@@ -66,5 +71,5 @@ const userSchema = new Schema<IUser>({
   },
 });
 
-const Users = mongoose.model<IUser>("Users", userSchema);
-export default Users;
+const User = mongoose.model<IUser>("User", userSchema);
+export default User;

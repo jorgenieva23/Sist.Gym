@@ -2,10 +2,9 @@ import { Request, Response } from "express";
 import {
   getAllIncome,
   registerUserIncome,
+  getUserIncome,
+  searchIncomeByUser,
 } from "../controllers/incomeControllers";
-import Partner from "../models/partner";
-import States from "../models/states";
-import Users from "../models/users";
 
 import { IIncome, IPartner } from "../utils/types";
 
