@@ -10,14 +10,14 @@ interface UserCredentials {
   rol: string;
 }
 
-interface AuthState {
+interface userState {
   users: IUser[];
   registerStatus: "idle" | "pending" | "fulfilled" | "rejected";
   token?: string;
   registerError?: string;
 }
 
-const initialState: AuthState = {
+const initialState: userState = {
   users: [],
   registerStatus: "idle",
 };
@@ -43,8 +43,8 @@ export const registerUser = createAsyncThunk<
   }
 });
 
-const authSlice = createSlice({
-  name: "auth",
+const userSlice = createSlice({
+  name: "user",
   initialState,
   reducers: {
     getUser: (state, action: PayloadAction<IUser[]>) => {
@@ -106,5 +106,5 @@ export const {
   searchUser,
   editUser,
   deleteUser,
-} = authSlice.actions;
-export default authSlice.reducer;
+} = userSlice.actions;
+export default userSlice.reducer;

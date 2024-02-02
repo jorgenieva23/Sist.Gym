@@ -1,12 +1,14 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import partnerReducer from "./Slices/partnerSlice";
-import incomereducer from "./Slices/incomeSlice";
+import incomeReducer from "./Slices/incomeSlice";
+import userReducer from "./Slices/userSlice";
 
 export const store = configureStore({
   reducer: {
     partner: partnerReducer,
-    income: incomereducer,
+    income: incomeReducer,
+    user: userReducer,
   },
 });
 

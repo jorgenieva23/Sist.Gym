@@ -273,7 +273,7 @@ const FormPartners: React.FC<FormProps> = ({
                   onChange={(e) => handleChange(e)}
                 />
               </div>
-              {/* {errors.phone && <div className="error">{errors.phone}</div>} */}
+              {errors.phone && <div className="error">{errors.phone}</div>}
             </div>
 
             <div className="flex flex-col">
