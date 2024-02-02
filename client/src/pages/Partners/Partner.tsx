@@ -27,14 +27,16 @@ export const Partner: React.FC = (): JSX.Element => {
       <Navbar />
       <div className="flex flex-grow">
         <Sidebar />
-        <div className="flex-grow">
-          <div className="flex justify-between">
-            <div className="text-3xl text-blue-600 ml-7">Socios</div>
+        <div className="mt-10 flex-grow">
+          <div className="flex border-2 border-t-purple-900 justify-between">
+            <div className="text-3xl mt-2 text-blue-600 border-t-purple-900 ml-7">
+              Socios
+            </div>
             <button
-              className="border border-neutral-300 rounded-lg py-2 px-10 my-2 mr-6 bg-green-500 hover:bg-green-700 text-white"
+              className="border border-neutral-300 rounded-lg py-2 px-5 my-2 mr-6 bg-green-500 hover:bg-green-700 text-white"
               onClick={() => setOpenModal(true)}
             >
-              registro
+              Registro
             </button>
           </div>
           {openModal &&

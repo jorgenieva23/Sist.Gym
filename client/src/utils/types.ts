@@ -6,7 +6,7 @@ export interface IPartner {
   address: string;
   phone: number;
   email: string;
-  picture: string;
+  picture: string | null;
   deleted?: boolean | null;
   date: number;
   datePhysicalAttitude: number;

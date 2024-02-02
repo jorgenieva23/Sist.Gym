@@ -2,7 +2,18 @@ import React, { useState } from "react";
 import { useAppSelector } from "../../../redux/store";
 import { usePartnerAction } from "../../../redux/Actions/partnerAction";
 import { IPartner } from "../../../utils/types";
-import { PiUserCirclePlusLight } from "react-icons/pi";
+import { ClipLoader } from "react-spinners";
+import resizeImage from "../../../utils/resizeImage";
+import {
+  PiUserCirclePlusLight,
+  PiCalendarBold,
+  PiUserFocus,
+  PiMapPinBold,
+  PiPhoneCallBold,
+  PiIdentificationCardBold,
+  PiFirstAidKitBold,
+  PiHeartbeatBold,
+} from "react-icons/pi";
 
 interface FormProps {
   partnerToEdit?: IPartner;
@@ -29,7 +40,7 @@ const FormPartners: React.FC<FormProps> = ({
     address: isEditing ? partnerToEdit?.address : "",
     phone: isEditing ? partnerToEdit?.phone : 0,
     email: isEditing ? partnerToEdit?.email : "",
-    picture: isEditing ? partnerToEdit?.picture : "",
+    picture: isEditing ? partnerToEdit?.picture : null,
     // deleted: isEditing ? partnerToEdit?.deleted : null,
     date: isEditing ? partnerToEdit?.date : 0,
     datePhysicalAttitude: isEditing ? partnerToEdit?.datePhysicalAttitude : 0,
@@ -177,7 +188,7 @@ const FormPartners: React.FC<FormProps> = ({
         address: "",
         phone: 0,
         email: "",
-        picture: "",
+        picture: null,
         // deleted: null,
         date: 0,
         datePhysicalAttitude: 0,
@@ -198,33 +209,281 @@ const FormPartners: React.FC<FormProps> = ({
         {!isEditing ? "Crear un nuevo socio" : "Editar banco"}
       </h2>
       <form onSubmit={handleFormSubmit} className="max-w-sm mx-auto">
-        <label
-          htmlFor="website-admin"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >
-          Nombre
-        </label>
-        <div className="flex">
-          <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-            <svg
-              className="w-4 h-4 text-gray-500 dark:text-gray-400"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 20 20"
+        <div className="mb-4">
+          <div className="my-4 items-center grid gap-4 grid-cols-2">
+            <div className="flex flex-col">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Nombre
+              </label>
+              <div className="flex">
+                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                  <PiUserCirclePlusLight className="w-7 h-7 text-black" />
+                </span>
+                <input
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="text"
+                  name="firstName"
+                  value={form.firstName}
+                  placeholder="Nombre"
+                  onChange={(e) => handleChange(e)}
+                  required
+                />
+              </div>
+              {/* {errors.firstName && (
+                <div className="error fl">{errors.firstName}</div>
+              )} */}
+            </div>
+
+            <div className="flex flex-col">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Apellido
+              </label>
+              <div className="flex">
+                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                  <PiUserCirclePlusLight className="w-7 h-7 text-black" />
+                </span>
+                <input
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="text"
+                  name="lastName"
+                  value={form.lastName}
+                  placeholder="Apellido del Socio"
+                  onChange={(e) => handleChange(e)}
+                />
+              </div>
+              {/* {errors.lastName && (
+                <div className="error">{errors.lastName}</div>
+              )} */}
+            </div>
+
+            <div className="flex flex-col">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Telefono
+              </label>
+              <div className="flex">
+                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                  <PiPhoneCallBold className="w-7 h-7 text-black" />
+                </span>
+                <input
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="numb"
+                  name="phone"
+                  value={form.phone}
+                  placeholder="Telefono"
+                  onChange={(e) => handleChange(e)}
+                />
+              </div>
+              {/* {errors.phone && <div className="error">{errors.phone}</div>} */}
+            </div>
+
+            <div className="flex flex-col">
+              <label
+                htmlFor="lastName"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                DNI
+              </label>
+              <div className="flex">
+                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                  <PiIdentificationCardBold className="w-7 h-7 text-black" />
+                </span>
+                <input
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  maxLength={8}
+                  type="numb"
+                  name="dni"
+                  value={form.dni}
+                  placeholder="Apellido del Socio"
+                  onChange={(e) => handleChange(e)}
+                />
+              </div>
+              {/* {errors.dni && <div className="error">{errors.dni}</div>} */}
+            </div>
+          </div>
+
+          <div className="my-4 flex items-center gap-4">
+            <div className="flex flex-col">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Fecha de nacimiento
+              </label>
+              <div className="flex">
+                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                  <PiCalendarBold className="w-7 h-7 text-black" />
+                </span>
+                <input
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="date"
+                  name="date"
+                  value={form.date}
+                  placeholder="Segundo Nombre"
+                  onChange={(e) => handleChange(e)}
+                />
+              </div>
+              {/* {errors.date && <div className="error">{errors.date}</div>} */}
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Direccion
+          </label>
+          <div className="flex">
+            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+              <PiMapPinBold className="w-7 h-7 text-black" />
+            </span>
+            <input
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              type="string"
+              name="address"
+              value={form.address}
+              placeholder="Direccion del usuario"
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+          {/* {errors.date && <div className="error">{errors.address}</div>} */}
+        </div>
+        <div className="flex flex-col">
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Foto
+          </label>
+          <div className="flex">
+            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+              <PiUserFocus className="w-7 h-7 text-black" />
+            </span>
+            <input
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              type="file"
+              name="imageFileOrder"
+              accept=".jpeg, .jpg, .png, .webp, .svg"
+              onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
+                if (event.target.files && event.target.files[0]) {
+                  try {
+                    const resizedImage = await resizeImage(
+                      event.target.files[0]
+                    );
+                    setForm({
+                      ...form,
+                      picture: resizedImage,
+                    });
+                  } catch (error) {
+                    console.error("Error resizing image:", error);
+                  }
+                }
+                handleChange(event);
+              }}
+            />
+          </div>
+          {/* {errors.date && (
+                  <div className="error">{errors.date}</div>
+                )} */}
+        </div>
+
+        <hr className="bg-gray-400 w-full h-0.5 mx-auto mt-8 border-0"></hr>
+        <h1 className="text-2xl">Datos Medicos</h1>
+        <div className="my-4 items-center grid gap-4 grid-cols-2">
+          <div className="flex flex-col">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Vencimiento Ap.M.
+            </label>
+            <div className="flex">
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                <PiHeartbeatBold className="w-7 h-7 text-black" />
+              </span>
+              <input
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                type="date"
+                name="date"
+                value={form.datePhysicalAttitude}
+                placeholder="Segundo Nombre"
+                onChange={(e) => handleChange(e)}
+              />
+            </div>
+            {/* {errors.date && (
+              <div className="error">{errors.datePhysicalAttitude}</div>
+            )} */}
+          </div>
+
+          <div className="flex flex-col">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Obra Social
+            </label>
+            <div className="flex">
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                <PiFirstAidKitBold className="w-7 h-7 text-black" />
+              </span>
+              <input
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                type="text"
+                name="medicalCoverage"
+                value={form.medicalCoverage}
+                placeholder="Obra social"
+                onChange={(e) => handleChange(e)}
+              />
+            </div>
+            {/* {errors.lastName && (
+              <div className="error">{errors.medicalCoverage}</div>
+            )} */}
+          </div>
+          <div className="flex flex-col">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Telefono de Emergencia
+            </label>
+            <div className="flex">
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                <PiPhoneCallBold className="w-7 h-7 text-black" />
+              </span>
+              <input
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                type="numb"
+                name="phoneEmergency"
+                value={form.phoneEmergency}
+                placeholder="Telefono"
+                onChange={(e) => handleChange(e)}
+              />
+            </div>
+            {/* {errors.firstName && (
+              <div className="error">{errors.phoneEmergency}</div>
+            )} */}
+          </div>
+
+          <div className="flex flex-col">
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Nombre de contacto
+            </label>
+            <div className="flex">
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                <PiUserCirclePlusLight className="w-7 h-7 text-black" />
+              </span>
+              <input
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                type="text"
+                name="phoneEmergencyName"
+                value={form.phoneEmergencyName}
+                placeholder="Nombre de contacto"
+                onChange={(e) => handleChange(e)}
+              />
+            </div>
+            {/* {errors.lastName && (
+              <div className="error">{errors.phoneEmergencyName}</div>
+            )} */}
+          </div>
+        </div>
+        <div className="flex justify-center mt-4">
+          {!loadingSubmit ? (
+            <button
+              className="px-4 py-2 rounded-none rounded-e-lg text-sm font-semibold text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md hover:bg-gray-400"
+              type="submit"
             >
-              <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
-            </svg>
-          </span>
-          <input
-            className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            type="text"
-            name="firstName"
-            value={form.firstName}
-            placeholder="Nombre del Socio"
-            onChange={(e) => handleChange(e)}
-          />
-          {errors.firstName && <div className="error">{errors.firstName}</div>}
+              {!isEditing ? " Añadir socio" : "Guardar cambios"}
+            </button>
+          ) : (
+            <button
+              className="px-4 py-2 rounded-none rounded-e-lg text-sm font-semibold text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md hover:bg-gray-400"
+              type="submit"
+            >
+              <ClipLoader className="block mx-auto mt-1" size={20} />
+            </button>
+          )}
         </div>
       </form>
     </div>

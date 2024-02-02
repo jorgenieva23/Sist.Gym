@@ -59,7 +59,7 @@ const authSlice = createSlice({
         specificUser: action.payload,
       };
     },
-    createNewUser: (state, action: PayloadAction<IUser>) => {
+    createUser: (state, action: PayloadAction<IUser>) => {
       return {
         ...state,
         users: [...state.users, action.payload],
@@ -102,7 +102,7 @@ const authSlice = createSlice({
 export const {
   getUser,
   getSpecificUser,
-  createNewUser,
+  createUser,
   searchUser,
   editUser,
   deleteUser,
