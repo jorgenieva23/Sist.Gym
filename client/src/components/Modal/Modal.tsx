@@ -10,7 +10,7 @@ const Modal: React.FC<propTypes> = ({ open, onClose, children }) => {
   return (
     <div
       className={`fixed inset-0 flex justify-center items-center transition-colors ${
-        open ? "visible bg-black/20" : "invisible"
+        open ? "visible bg-black/50" : "invisible"
       }`}
       onClick={onClose}
     >

@@ -9,10 +9,11 @@ import {
   PiCalendarBold,
   PiUserFocus,
   PiMapPinBold,
-  PiPhoneCallBold,
+  PiWhatsappLogo,
   PiIdentificationCardBold,
   PiFirstAidKitBold,
   PiHeartbeatBold,
+  PiEnvelope,
 } from "react-icons/pi";
 
 interface FormProps {
@@ -206,21 +207,21 @@ const FormPartners: React.FC<FormProps> = ({
   return (
     <div>
       <h2 className="text-2xl font-semibold mb-4">
-        {!isEditing ? "Crear un nuevo socio" : "Editar banco"}
+        {!isEditing ? "Crear un nuevo socio" : "Editar socio"}
       </h2>
-      <form onSubmit={handleFormSubmit} className="max-w-sm mx-auto">
+      <form onSubmit={handleFormSubmit} className="max-w mx-auto">
         <div className="mb-4">
           <div className="my-4 items-center grid gap-4 grid-cols-2">
             <div className="flex flex-col">
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
                 Nombre
               </label>
               <div className="flex">
-                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
                   <PiUserCirclePlusLight className="w-7 h-7 text-black" />
                 </span>
                 <input
-                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5  "
                   type="text"
                   name="firstName"
                   value={form.firstName}
@@ -235,15 +236,15 @@ const FormPartners: React.FC<FormProps> = ({
             </div>
 
             <div className="flex flex-col">
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
                 Apellido
               </label>
               <div className="flex">
-                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
                   <PiUserCirclePlusLight className="w-7 h-7 text-black" />
                 </span>
                 <input
-                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-90 block flex-1 min-w-0 w-full text-sm p-2.5 "
                   type="text"
                   name="lastName"
                   value={form.lastName}
@@ -261,11 +262,11 @@ const FormPartners: React.FC<FormProps> = ({
                 Telefono
               </label>
               <div className="flex">
-                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                  <PiPhoneCallBold className="w-7 h-7 text-black" />
+                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+                  <PiWhatsappLogo className="w-7 h-7 text-black" />
                 </span>
                 <input
-                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
                   type="numb"
                   name="phone"
                   value={form.phone}
@@ -273,22 +274,22 @@ const FormPartners: React.FC<FormProps> = ({
                   onChange={(e) => handleChange(e)}
                 />
               </div>
-              {errors.phone && <div className="error">{errors.phone}</div>}
+              {/* {errors.phone && <div className="error">{errors.phone}</div>} */}
             </div>
 
             <div className="flex flex-col">
               <label
                 htmlFor="lastName"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-gray-900"
               >
                 DNI
               </label>
               <div className="flex">
-                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
                   <PiIdentificationCardBold className="w-7 h-7 text-black" />
                 </span>
                 <input
-                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 flex-1 min-w-0 w-full text-sm p-2.5 "
                   maxLength={8}
                   type="numb"
                   name="dni"
@@ -299,19 +300,23 @@ const FormPartners: React.FC<FormProps> = ({
               </div>
               {/* {errors.dni && <div className="error">{errors.dni}</div>} */}
             </div>
-          </div>
+            {/* </div>
 
-          <div className="my-4 flex items-center gap-4">
+          <div className="my-4 flex items-center gap-4"> */}
             <div className="flex flex-col">
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
                 Fecha de nacimiento
               </label>
               <div className="flex">
-                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                <span
+                  className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md
+                "
+                >
                   <PiCalendarBold className="w-7 h-7 text-black" />
                 </span>
                 <input
-                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5
+                   "
                   type="date"
                   name="date"
                   value={form.date}
@@ -321,18 +326,40 @@ const FormPartners: React.FC<FormProps> = ({
               </div>
               {/* {errors.date && <div className="error">{errors.date}</div>} */}
             </div>
+            <div className="flex flex-col">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
+                Correo Electrónico
+              </label>
+              <div className="flex">
+                <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+                  <PiEnvelope className="w-7 h-7 text-black" />
+                </span>
+                <input
+                  className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900
+                   block flex-1 min-w-0 w-full text-sm p-2.5 
+                 "
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  placeholder="Correo Electrónico"
+                  onChange={(e) => handleChange(e)}
+                  required
+                />
+              </div>
+              {errors.email && <div className="error fl">{errors.email}</div>}
+            </div>
           </div>
         </div>
         <div className="flex flex-col">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          <label className="block mb-2 text-sm font-medium text-gray-900">
             Direccion
           </label>
           <div className="flex">
-            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
               <PiMapPinBold className="w-7 h-7 text-black" />
             </span>
             <input
-              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
               type="string"
               name="address"
               value={form.address}
@@ -342,16 +369,17 @@ const FormPartners: React.FC<FormProps> = ({
           </div>
           {/* {errors.date && <div className="error">{errors.address}</div>} */}
         </div>
+
         <div className="flex flex-col">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          <label className="block mb-2 text-sm font-medium text-gray-900">
             Foto
           </label>
           <div className="flex">
-            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
               <PiUserFocus className="w-7 h-7 text-black" />
             </span>
             <input
-              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
               type="file"
               name="imageFileOrder"
               accept=".jpeg, .jpg, .png, .webp, .svg"
@@ -382,15 +410,15 @@ const FormPartners: React.FC<FormProps> = ({
         <h1 className="text-2xl">Datos Medicos</h1>
         <div className="my-4 items-center grid gap-4 grid-cols-2">
           <div className="flex flex-col">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
               Vencimiento Ap.M.
             </label>
             <div className="flex">
-              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
                 <PiHeartbeatBold className="w-7 h-7 text-black" />
               </span>
               <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
                 type="date"
                 name="date"
                 value={form.datePhysicalAttitude}
@@ -404,15 +432,15 @@ const FormPartners: React.FC<FormProps> = ({
           </div>
 
           <div className="flex flex-col">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
               Obra Social
             </label>
             <div className="flex">
-              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md ">
                 <PiFirstAidKitBold className="w-7 h-7 text-black" />
               </span>
               <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
                 type="text"
                 name="medicalCoverage"
                 value={form.medicalCoverage}
@@ -425,15 +453,15 @@ const FormPartners: React.FC<FormProps> = ({
             )} */}
           </div>
           <div className="flex flex-col">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
               Telefono de Emergencia
             </label>
             <div className="flex">
-              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                <PiPhoneCallBold className="w-7 h-7 text-black" />
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md ">
+                <PiWhatsappLogo className="w-7 h-7 text-black" />
               </span>
               <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
                 type="numb"
                 name="phoneEmergency"
                 value={form.phoneEmergency}
@@ -447,15 +475,18 @@ const FormPartners: React.FC<FormProps> = ({
           </div>
 
           <div className="flex flex-col">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
               Nombre de contacto
             </label>
             <div className="flex">
-              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+              <span
+                className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md
+               dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600"
+              >
                 <PiUserCirclePlusLight className="w-7 h-7 text-black" />
               </span>
               <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
                 type="text"
                 name="phoneEmergencyName"
                 value={form.phoneEmergencyName}

@@ -21,21 +21,21 @@ export interface IPartner {
 }
 
 export interface IUser {
-  id: string;
+  _id?: string;
   name: string;
   email: string;
-  emailVerifiedAt: string;
+  emailVerifiedAt?: string;
   password: string;
-  stateId: string | null;
-  creatorId: string | null;
-  partners: string[];
+  stateId?: string | null;
+  creatorId?: string | null;
+  partners?: string[];
   rol: string | null;
-  active: boolean;
-  deleted: boolean;
-  token: string;
-  updatedAt: Date;
-  createdAt: Date;
-  lastConnectoin: Date;
+  active?: boolean;
+  deleted?: boolean;
+  token?: string;
+  updatedAt?: Date;
+  createdAt?: Date;
+  lastConnectoin?: Date;
 }
 
 export interface IRoles {
