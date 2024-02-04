@@ -3,10 +3,12 @@ import { useAppSelector } from "../../../redux/store";
 import { useUserAction } from "../../../redux/Actions/userAction";
 import { IUser } from "../../../utils/types";
 import { ClipLoader } from "react-spinners";
+
 import {
   PiUserCirclePlusLight,
   PiPasswordBold,
   PiEnvelope,
+  PiUserSwitchBold,
 } from "react-icons/pi";
 
 interface FormProps {
@@ -19,13 +21,14 @@ const FormUsers: React.FC<FormProps> = ({
   setEditingUser,
 }: FormProps): JSX.Element => {
   const { createNewUser, updateUser } = useUserAction();
-  const users = useAppSelector((state) => state.user.users);
-
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const isEditing = !!userToEdit;
+
+  const users = useAppSelector((state) => state.user.users);
+  const roles = useAppSelector((state) => state.roles.roles);
+
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const [form, setForm] = useState<IUser>({
     name: isEditing ? userToEdit?.name : "",
@@ -90,7 +93,9 @@ const FormUsers: React.FC<FormProps> = ({
     return errorMessage;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const fieldName = e.target.name;
     const fieldValue = e.target.value;
     const errorMessage = validateField(fieldName, fieldValue);
@@ -190,6 +195,31 @@ const FormUsers: React.FC<FormProps> = ({
                 onBlur={(e) => handleBlur(e)}
                 required
               />
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Selecciones el rol
+            </label>
+            <div className="flex">
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+                <PiUserSwitchBold className="w-7 h-7 text-black" />
+              </span>
+              <select
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+                name="rol"
+                value={form.rol}
+                onChange={(e) => handleChange(e)}
+                required
+              >
+                <option value="">Selecciona el metodo de pago</option>
+                {roles.map((rol) => (
+                  <option key={rol.name} value={rol.name}>
+                    {rol.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>

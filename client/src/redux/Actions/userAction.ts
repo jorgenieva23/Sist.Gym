@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useAppDispatch } from "../store";
-import { getUser, createUser, editUser } from "../Slices/userSlice";
+import { getUser, createUser } from "../Slices/userSlice";
 import { IUser } from "../../utils/types";
 
 export const useUserAction = () => {
@@ -8,7 +8,7 @@ export const useUserAction = () => {
 
   const getAllUser = async () => {
     try {
-      const rawData = await axios.get(`/user`);
+      const rawData = await axios.get(`/user/all`);
       const response = rawData.data;
       dispatch(getUser(response));
     } catch (error: any) {
@@ -17,7 +17,7 @@ export const useUserAction = () => {
   };
   const createNewUser = async (user: IUser) => {
     try {
-      const rawData = await axios.post(`/users/`, {
+      const rawData = await axios.post(`/user/create`, {
         name: user.name,
         email: user.email,
         password: user.password,
@@ -36,7 +36,7 @@ export const useUserAction = () => {
     updatedData: IUser;
   }) => {
     try {
-      const updatedUser = await axios.put(`/users/update/${_id}`, {
+      const updatedUser = await axios.put(`/user/update/${_id}`, {
         updatedData,
       });
       return dispatch(getUser(updatedUser.data));

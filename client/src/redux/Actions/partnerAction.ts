@@ -8,7 +8,7 @@ export const usePartnerAction = () => {
 
   const getAllPartner = async () => {
     try {
-      const rawData = await axios.get(`/partner`);
+      const rawData = await axios.get(`/partner/all`);
       const response = rawData.data;
       dispatch(getPartner(response));
     } catch (error: any) {
@@ -17,7 +17,7 @@ export const usePartnerAction = () => {
   };
   const createNewPartner = async (partner: IPartner) => {
     try {
-      const rawData = await axios.post(`/partners/`, {
+      const rawData = await axios.post(`/partner/create`, {
         firstName: partner.firstName,
         lastName: partner.lastName,
         dni: 0,
@@ -44,7 +44,7 @@ export const usePartnerAction = () => {
     updatedData: IPartner;
   }) => {
     try {
-      const updatedPartner = await axios.put(`/partners/update/${_id}`, {
+      const updatedPartner = await axios.put(`/partner/update/${_id}`, {
         updatedData,
       });
       return dispatch(getPartner(updatedPartner.data));

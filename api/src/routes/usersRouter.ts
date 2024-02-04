@@ -15,11 +15,11 @@ interface IusersHandler {
   (req: Request, res: Response): void;
 }
 
-usersRouter.get("/getUser", getUserHandler as IusersHandler);
-usersRouter.post("/createUser", postUserHandler as IusersHandler);
-usersRouter.put("/upDateUser/:id", upDateUserById as IusersHandler);
-usersRouter.delete("/deleteUser/:id", deleteUsers as IusersHandler);
+usersRouter.get("/all", getUserHandler as IusersHandler);
 usersRouter.get("/getUserId/:id", getUserId as IusersHandler);
+usersRouter.post("/create", postUserHandler as IusersHandler);
+usersRouter.put("/update/:id", upDateUserById as IusersHandler);
+usersRouter.delete("/delete/:id", deleteUsers as IusersHandler);
 
 // Autenticacion
 usersRouter.post("/login", loginUser as IusersHandler);

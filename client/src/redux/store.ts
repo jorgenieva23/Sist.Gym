@@ -3,12 +3,14 @@ import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import partnerReducer from "./Slices/partnerSlice";
 import incomeReducer from "./Slices/incomeSlice";
 import userReducer from "./Slices/userSlice";
+import rolesReducers from "./Slices/rolesSlice";
 
 export const store = configureStore({
   reducer: {
     partner: partnerReducer,
     income: incomeReducer,
     user: userReducer,
+    roles: rolesReducers,
   },
 });
 

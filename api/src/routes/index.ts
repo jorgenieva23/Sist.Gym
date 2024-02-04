@@ -11,9 +11,9 @@ const router = Router();
 router.use(express.json());
 
 router.use("/partner", partnerRouter);
-router.use("/users", usersRouter);
-router.use("/roles", rolesRouter);
+router.use("/user", usersRouter);
+router.use("/role", rolesRouter);
 router.use("/income", incomeRouter)
-router.use("/states", statesRouter)
+router.use("/state", statesRouter)
 
 export default router;

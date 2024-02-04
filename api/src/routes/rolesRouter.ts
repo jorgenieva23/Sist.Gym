@@ -2,19 +2,18 @@ import { Router, Request, Response } from "express";
 import {
   getRolHandlers,
   postRolesHandler,
-  deleteRol
+  deleteRol,
 } from "../handlers/rolesHandler";
 
-const rolesRouter = Router()
+const rolesRouter = Router();
 
 interface IRolesHandler {
   (req: Request, res: Response): void;
 }
 
-rolesRouter.post("/", postRolesHandler as IRolesHandler)
-rolesRouter.get("/", getRolHandlers as IRolesHandler)
-rolesRouter.get("/:id", getRolHandlers as IRolesHandler)
-rolesRouter.delete("/:id", deleteRol as IRolesHandler);
+rolesRouter.get("/all", getRolHandlers as IRolesHandler);
+rolesRouter.get("/getById/:id", getRolHandlers as IRolesHandler);
+rolesRouter.post("/create", postRolesHandler as IRolesHandler);
+rolesRouter.delete("/delete/:id", deleteRol as IRolesHandler);
 
-
-export default rolesRouter
+export default rolesRouter;

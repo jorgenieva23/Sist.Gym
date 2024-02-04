@@ -29,7 +29,7 @@ export interface IUser {
   stateId?: string | null;
   creatorId?: string | null;
   partners?: string[];
-  rol: string | null;
+  rol: string;
   active?: boolean;
   deleted?: boolean;
   token?: string;

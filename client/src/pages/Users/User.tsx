@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import { useAppSelector } from "../../redux/store";
 import { useUserAction } from "../../redux/Actions/userAction";
+import { useRolesAction } from "../../redux/Actions/rolesAction";
 import { Footer, Navbar, Sidebar } from "../../components";
 import Modal from "../../components/Modal/Modal";
 import ReactDOM from "react-dom";
@@ -8,13 +9,18 @@ import FormUsers from "../../components/Forms/Users/FormUsers";
 
 export const User: React.FC = (): JSX.Element => {
   const { getAllUser } = useUserAction();
-  // const users = useAppSelector((state) => state.user.users);
+  const { getAllRoles } = useRolesAction();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   useEffect(() => {
     getAllUser();
   }, []);
+
+  useEffect(() => {
+    getAllRoles();
+  }, []);
+
   return (
     <div className="flex flex-col h-screen">
       <Navbar />
