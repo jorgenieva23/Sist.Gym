@@ -4,8 +4,6 @@ import Partner from "../models/partner";
 import dotenv from "dotenv";
 dotenv.config();
 
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
-
 export const getAllUser = async () => {
   try {
     const users = await Users.find();
@@ -26,7 +24,7 @@ export async function getUserById(id: any) {
     if (!user) user = await Users.findOne({ _id: id });
     if (!user) return { error: true };
     return user;
-  } catch (error:any) {
+  } catch (error: any) {
     console.error("ERROR getUserById controller: ", error.message);
     return { error: true };
   }
@@ -48,32 +46,37 @@ export const searchUserByName = async (name: string) => {
 };
 
 export const createdUser = async (user: IUser) => {
-  const {
-    name,
-    email,
-    emailVerifiedAt,
-    password,
-    deleted,
-    stateId: stateName,
-    creatorId: creatorName,
-    lastConnectoin,
-    partners: partnerName,
-    rol: roleNames,
-    active,
-  } = user;
-  return await Users.create({
-    name,
-    email,
-    emailVerifiedAt,
-    password,
-    deleted,
-    stateId: stateName,
-    creatorId: creatorName,
-    lastConnectoin,
-    partners: partnerName,
-    rol: roleNames,
-    active,
-  });
+  try {
+    const {
+      name,
+      email,
+      emailVerifiedAt,
+      password,
+      deleted,
+      stateId: stateName,
+      creatorId: creatorName,
+      lastConnection,
+      partners: partnerName,
+      rol: roleNames,
+      active,
+    } = user;
+    return await Users.create({
+      name,
+      email,
+      emailVerifiedAt,
+      password,
+      deleted,
+      stateId: stateName,
+      creatorId: creatorName,
+      lastConnection,
+      partners: partnerName,
+      rol: roleNames,
+      active,
+    });
+  } catch (error) {
+    console.error("ERROR createBank controller: ", error);
+    throw error;
+  }
 };
 
 export const upDateUserControllers = async (
@@ -92,27 +95,29 @@ export const upDateUserControllers = async (
       deleted,
       stateId,
       creatorId,
-      lastConnectoin,
+      lastConnection,
       partners,
       rol,
       active,
     } = updatedData;
 
-    if (email) {
-      const existingUserByEmail = await Users.findOne({ email });
-      if (existingUserByEmail && existingUserByEmail._id != id) {
-        throw new Error("Ya existe un usuario con el mismo email");
-      }
-    }
     if (name) {
       const existingUserByName = await Users.findOne({ name });
       if (existingUserByName && existingUserByName._id != id) {
         throw new Error("Ya existe un usuario con el mismo nickname");
       }
     }
-    const updatedUser = await Users.findByIdAndUpdate(updatedData, {
-      new: true,
-    });
+    if (email) {
+      const existingUserByEmail = await Users.findOne({ email });
+      if (existingUserByEmail && existingUserByEmail._id != id) {
+        throw new Error("Ya existe un usuario con el mismo email");
+      }
+    }
+    const updatedUser = await Users.findByIdAndUpdate(
+      id,
+      { $set: updatedData },
+      { new: true }
+    );
     return updatedUser;
   } catch (error: any) {
     throw new Error(

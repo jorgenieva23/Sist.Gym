@@ -18,22 +18,22 @@ export const searchPartnerByName = async (name: any) => {
       console.log(`No Partner found with name: ${name}`);
     }
     return infoDB;
-  } catch (error: any) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
     throw new Error(`Failed to find Partner with name: ${name}`);
   }
 };
 
-export const getPartnerById = async (id: any) => {
+export const getPartnerById = async (_id: any) => {
   try {
-    const infoDB = await Partner.findById(id).exec();
+    const infoDB = await Partner.findById(_id).exec();
     if (infoDB === null) {
-      console.log(`No partner ID found ${id}`);
+      console.log(`No partner ID found ${_id}`);
     }
     return infoDB;
   } catch (error) {
     console.log(error);
-    throw new Error(`Failed to find user with ID ${id}`);
+    throw new Error(`Failed to find user with ID ${_id}`);
   }
 };
 
@@ -48,7 +48,7 @@ export const createPartner = async (partner: IPartner) => {
     phoneEmergency,
     stateId: stateName,
     userId: userName,
-    role: roleNames,
+    rol: roleNames,
   } = partner;
   return await Partner.create({
     firstName,
@@ -60,7 +60,7 @@ export const createPartner = async (partner: IPartner) => {
     phoneEmergency,
     stateId: stateName,
     userId: userName,
-    role: roleNames,
+    rol: roleNames,
   });
 };
 

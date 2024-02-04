@@ -1,19 +1,10 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import morgan from "morgan";
 import router from "./routes";
 import cors from "cors";
-import cookieParser from "cookie-parser"
+import cookieParser from "cookie-parser";
 
 const app = express();
-
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
 
 app.use(cors());
 app.use(express.json());

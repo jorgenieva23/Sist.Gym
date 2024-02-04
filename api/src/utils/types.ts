@@ -1,6 +1,8 @@
 import { Types } from "mongoose";
+import { Schema, Document } from "mongoose";
 
-export interface IPartner {
+export interface IPartner extends Document {
+  _id: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
   dni: number;
@@ -9,18 +11,20 @@ export interface IPartner {
   email: string;
   picture: string;
   deleted: boolean;
-  date: number;
+  date: Date;
   datePhysicalAttitude: Date;
   medicalCoverage: string;
   phoneEmergency: number;
   phoneEmergencyName: string;
   stateId: string | null;
   userId: string | null;
-  role: string | null;
+  rol: string | null;
+  condition: "fit" | "unfit";
   createdAt: Date;
   updatedAt: Date;
 }
-export interface IUser {
+export interface IUser extends Document {
+  _id: Schema.Types.ObjectId;
   name: string;
   email: string;
   emailVerifiedAt: string;
@@ -34,58 +38,40 @@ export interface IUser {
   token: string;
   updatedAt: Date;
   createdAt: Date;
-  lastConnectoin: Date;
+  lastConnection: Date;
 }
 export interface IRoles {
+  _id: Schema.Types.ObjectId;
   name: string;
   created_at: Date;
   updated_at: Date;
 }
 export interface IIncome {
-  id: string;
-  partnerId: Types.ObjectId | null;
+  _id: Schema.Types.ObjectId;
+  partnerId: Schema.Types.ObjectId | string | null;
   dateOfAdmission: Date;
-  stateId: Types.ObjectId | null;
+  stateId: Schema.Types.ObjectId | string | null;
   deleted: number;
-  creatorId: Types.ObjectId | null;
+  creatorId: Schema.Types.ObjectId | string | null;
   createdAt: Date;
   updatedAt: Date;
 }
 export interface IStates {
-  id: string;
+  _id: Schema.Types.ObjectId;
   name: string;
   createdAt: Date;
   updatedAt: Date;
 }
 export interface IPayments {
-  id: string;
+  _id: Schema.Types.ObjectId;
   amount: number;
   total: number;
   dateFrom: Date;
   dateTo: Date;
-  stateId: Types.ObjectId | null;
+  stateId: Types.ObjectId | string | null;
   deleted: boolean;
-  creatorId: Types.ObjectId | null;
-  partnerId: Types.ObjectId | null;
+  creatorId: Types.ObjectId | string | null;
+  partnerId: Types.ObjectId | string | null;
   createdAt: Date;
   updatedAt: Date;
 }
-
-// export interface IPromotion {
-// id: string;
-//   name: string;
-//   descuento: number;
-//   counter_reference: number;
-//   description: string;
-//   stateId: Types.ObjectId[];
-//   deleted: boolean;
-//   creatorId: Types.ObjectId[];
-//   secondariId: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// export interface movements {
-// id: string;
-
-// }

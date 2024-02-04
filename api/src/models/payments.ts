@@ -2,45 +2,45 @@ import mongoose, { Schema } from "mongoose";
 import { IPayments } from "../utils/types";
 
 const PaymentsSchema = new Schema<IPayments>({
-  id: {
-    type: String,
-    primaryKey: true,
-    autoIncrement: true,
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    auto: true,
+    required: true,
   },
   amount: {
     type: Number,
-    required: true
+    required: true,
   },
   total: {
     type: Number,
-    required: false
+    required: false,
   },
   dateFrom: {
     type: Date,
-    required: false
+    required: false,
   },
   dateTo: {
     type: Date,
-    required: false
+    required: false,
   },
   stateId: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.String,
     ref: "StatePayments",
-    default: null
+    default: null,
   },
   deleted: {
     type: Boolean,
-    required: false
+    required: false,
   },
   creatorId: {
-    type: Schema.Types.ObjectId,
-      ref: "Users",
-      default: null,
+    type: Schema.Types.String,
+    ref: "Users",
+    default: null,
   },
   partnerId: {
-    type: Schema.Types.ObjectId,
-      ref: "Partner",
-      default: [],
+    type: Schema.Types.String,
+    ref: "Partner",
+    default: [],
   },
   createdAt: {
     type: Date,
@@ -52,5 +52,5 @@ const PaymentsSchema = new Schema<IPayments>({
   },
 });
 
-const Payments = mongoose.model<IPayments>("Payments", PaymentsSchema)
-export default Payments
+const Payments = mongoose.model<IPayments>("Payments", PaymentsSchema);
+export default Payments;

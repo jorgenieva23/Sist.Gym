@@ -1,11 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 import { IPartner } from "../utils/types";
 
-const partnerSchema = new Schema({
-  id: {
-    type: String,
-    primaryKey: true,
-    autoIncrement: true,
+const partnerSchema = new Schema<IPartner>({
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    auto: true,
+    required: true,
   },
   firstName: {
     type: String,
@@ -26,30 +26,34 @@ const partnerSchema = new Schema({
   phone: {
     type: Number,
     required: true,
+    validate: {
+      validator: (value: number) => /^\d{10}$/.test(value.toString()),
+      message: "Invalid phone number format",
+    },
   },
   email: {
     type: String,
     required: true,
+    unique: true,
+    validate: {
+      validator: (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+      message: "Invalid email format",
+    },
   },
   picture: {
     type: String,
-    required: false,
   },
   deleted: {
     type: Boolean,
-    required: false,
   },
   date: {
     type: Date,
-    required: false,
   },
   datePhysicalAttitude: {
     type: Date,
-    required: false,
   },
   medicalCoverage: {
     type: String,
-    required: false,
   },
   phoneEmergency: {
     type: Number,
@@ -57,10 +61,9 @@ const partnerSchema = new Schema({
   },
   phoneEmergencyName: {
     type: String,
-    required: false,
   },
   stateId: {
-    type: Schema.Types.String, 
+    type: Schema.Types.String,
     ref: "States",
     default: null,
   },
@@ -69,10 +72,10 @@ const partnerSchema = new Schema({
     ref: "Users",
     default: null,
   },
-  role: {
-    type: mongoose.SchemaTypes.String,
+  rol: {
+    type: Schema.Types.String,
     ref: "Roles",
-    default: null,
+    default: "partner",
   },
   condition: {
     type: String,
@@ -89,5 +92,5 @@ const partnerSchema = new Schema({
   },
 });
 
-const Partner = mongoose.model("Partner", partnerSchema);
+const Partner = mongoose.model<IPartner>("Partner", partnerSchema);
 export default Partner;

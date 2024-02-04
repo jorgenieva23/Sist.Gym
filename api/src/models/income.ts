@@ -2,31 +2,34 @@ import mongoose, { Schema } from "mongoose";
 import { IIncome } from "../utils/types";
 
 const incomeSchema = new Schema<IIncome>({
-  id: {
-    type: String,
-    primaryKey: true,
-    autoIncrement: true,
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    auto: true,
+    required: true,
   },
   partnerId: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.String,
     ref: "Partner",
     default: null,
+    index: true,
   },
   dateOfAdmission: {
     type: Date,
-    required: true,
+    default: new Date(),
+    index: true,
+    validate: {
+      validator: (value: Date) =>
+        value instanceof Date && !isNaN(value.getTime()),
+      message: "Invalid date format",
+    },
   },
   stateId: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.String,
     ref: "States",
     default: null,
   },
-  deleted: {
-    type: Number,
-    required: false,
-  },
   creatorId: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.String,
     ref: "Users",
     default: null,
   },

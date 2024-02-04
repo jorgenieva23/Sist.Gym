@@ -1,42 +1,41 @@
-
 export interface IPartner {
-  id: string;
+  _id?: string | null;
   firstName: string;
   lastName: string;
-  dni: number;
+  dni: string | number;
   address: string;
   phone: number;
   email: string;
-  picture: string;
-  deleted: boolean;
+  picture: string | null;
+  deleted?: boolean | null;
   date: number;
-  // datePhysicalAttitude: number;
+  datePhysicalAttitude: number;
   medicalCoverage: string;
   phoneEmergency: number;
   phoneEmergencyName: string;
-  stateId: string | null;
-  userId: string | null;
-  role: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  stateId?: string | null;
+  userId?: string | null;
+  condition?: string | null;
+  rol?: string | null;
+  createdAt?: Date
 }
 
 export interface IUser {
-  id: string;
+  _id?: string;
   name: string;
   email: string;
-  emailVerifiedAt: string;
+  emailVerifiedAt?: string;
   password: string;
-  stateId: string | null;
-  creatorId: string | null;
-  partners: string[]
-  rol: string | null;
-  active: boolean;
-  deleted: boolean;
-  token: string;
-  updatedAt: Date;
-  createdAt: Date;
-  lastConnectoin: Date;
+  stateId?: string | null;
+  creatorId?: string | null;
+  partners?: string[];
+  rol: string;
+  active?: boolean;
+  deleted?: boolean;
+  token?: string;
+  updatedAt?: Date;
+  createdAt?: Date;
+  lastConnectoin?: Date;
 }
 
 export interface IRoles {
