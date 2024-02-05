@@ -7,7 +7,7 @@ export const useIncomeAction = () => {
 
   const getAllIncome = async () => {
     try {
-      const rawData = await axios.get(`/income`);
+      const rawData = await axios.get(`/income/all`);
       const response = rawData.data;
       dispatch(getIncome(response));
     } catch (error: any) {

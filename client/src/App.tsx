@@ -8,6 +8,8 @@ import {
   Partner,
   Roles,
   User,
+  Promotion,
+  Payment,
 } from "./pages";
 import { Route, Routes } from "react-router-dom";
 
@@ -17,8 +19,8 @@ const App: React.FC = (): JSX.Element => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/partner" element={<Partner />} />
-        <Route path="/payment" element={<Roles />} />
-        <Route path="/promotions" element={<User />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/promotions" element={<Promotion />} />
         <Route path="/income" element={<Income />} />
         <Route path="/user" element={<User />} />
         <Route path="/balance" element={<Balance />} />

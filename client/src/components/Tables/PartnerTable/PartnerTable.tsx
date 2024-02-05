@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
-import { IPartner } from "../../utils/types";
-import corazonRoto from "../../Images/corazonRoto.png";
-import corazonSano from "../../Images/corazonSano.png";
+import { IPartner } from "../../../utils/types";
+import corazonRoto from "../../../Images/corazonRoto.png";
+import corazonSano from "../../../Images/corazonSano.png";
 import { format } from "date-fns";
 
 const TABLE_HEAD = [
@@ -19,35 +19,12 @@ const TABLE_HEAD = [
 export const PartnerTable: React.FC<{
   currentPartner: IPartner[];
 }> = ({ currentPartner }): JSX.Element => {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const usersPerPage = 2;
-
   console.log(currentPartner);
-
-  const indexOfLastUser = currentPage * usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentDataToShow = currentPartner.slice(
-    indexOfFirstUser,
-    indexOfLastUser
-  );
-
-  const nextPage = () => {
-    if (currentPage < Math.ceil(currentDataToShow.length / usersPerPage)) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
           <tr>
             {TABLE_HEAD.map((head) => (
               <th key={head} className="border-b border border-slate-300 p-4">
@@ -68,20 +45,21 @@ export const PartnerTable: React.FC<{
               { firstName, dni, phone, stateId, condition, createdAt },
               index
             ) => {
-              const isLast = index === currentPartner.length - 1;
-              const classes = isLast
-                ? "p-3 border border-slate-300"
-                : "p-3 border border-slate-300";
-
-              const RowClass =
-                index % 2 === 0 ? "bg-silver dark:bg-[#676768]" : "";
+              const isLast = index % 2 === 0;
+              const rowClass = isLast ? "bg-silver dark:bg-[#676768]" : "";
 
               const formattedDate = createdAt
                 ? format(new Date(createdAt), "yyyy-MM-dd HH:mm:ss")
                 : "";
 
+              const isActive = stateId === "active";
+
+              const classes = isLast
+                ? "p-3 border border-slate-300"
+                : "p-3 border border-slate-300";
+
               return (
-                <tr key={index} className={RowClass}>
+                <tr key={index} className={rowClass}>
                   <td className={classes}>
                     <Typography
                       color="blue-gray"
@@ -132,13 +110,18 @@ export const PartnerTable: React.FC<{
                       {phone}
                     </Typography>
                   </td>
-                  <td className={classes}>
-                    <Typography
-                      color="blue-gray"
-                      className="p-2 text-sm text-center font-medium uppercase tracking-wider text-white bg-green-900 rounded-lg"
-                    >
-                      {stateId}
-                    </Typography>
+                  <td className="p-3 border border-slate-300">
+                    <div className="flex items-center">
+                      <div
+                        className={` rounded-lg w-20 h-8 mr-2 flex items-center justify-center ${
+                          isActive ? "bg-green-500 text-lg" : "bg-red-500"
+                        }`}
+                      >
+                        <Typography color="white">
+                          {isActive ? "Activo" : "Inactivo"}
+                        </Typography>
+                      </div>
+                    </div>
                   </td>
                   <td className={classes}>
                     <Typography
@@ -161,26 +144,7 @@ export const PartnerTable: React.FC<{
         </tbody>
       </table>
       <div className="pagination justify-center dark:bg-[#27272a]">
-        <button
-          onClick={prevPage}
-          className="text-gray dark:text-white font-normal"
-          disabled={currentPage === 1}
-        >
-          Anterior
-        </button>
-        <span className="text-green font-semibold">
-          Página {currentPage} de{" "}
-          {Math.ceil(currentDataToShow.length / usersPerPage)}
-        </span>
-        <button
-          disabled={
-            currentPage >= Math.ceil(currentDataToShow.length / usersPerPage)
-          }
-          onClick={nextPage}
-          className="text-gray dark:text-white font-normal"
-        >
-          Siguiente
-        </button>
+        Paginacion Prox.
       </div>
     </div>
   );

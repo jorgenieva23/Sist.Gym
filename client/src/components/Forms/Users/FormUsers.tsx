@@ -132,13 +132,13 @@ const FormUsers: React.FC<FormProps> = ({
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-4">
+      <h2 className="text-2xl font-semibold">
         {!isEditing ? "crear un usuario nuevo" : "editar usuario"}
       </h2>
       <form onSubmit={handleFormSubmit} className="max-w mx-auto">
-        <div className="mb-4">
-          <div className="flex flex-col">
-            <label className="block mb-2 text-sm font-medium text-gray-900">
+        <div className="">
+          <div className="flex flex-col mt-4">
+            <label className="block mb-1 text-sm font-medium text-gray-900">
               Nombre
             </label>
             <div className="flex">
@@ -157,8 +157,8 @@ const FormUsers: React.FC<FormProps> = ({
               />
             </div>
           </div>
-          <div className="flex flex-col">
-            <label className="block mb-2 text-sm font-medium text-gray-900">
+          <div className="flex flex-col mt-4">
+            <label className="block mb-1 text-sm font-medium text-gray-900">
               Correo Electrónico
             </label>
             <div className="flex">
@@ -177,8 +177,8 @@ const FormUsers: React.FC<FormProps> = ({
               />
             </div>
           </div>
-          <div className="flex flex-col">
-            <label className="block mb-2 text-sm font-medium text-gray-900">
+          <div className="flex flex-col mt-4">
+            <label className="block mb-1 text-sm font-medium text-gray-900">
               Contraseña
             </label>
             <div className="flex">
@@ -198,9 +198,9 @@ const FormUsers: React.FC<FormProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col">
-            <label className="block mb-2 text-sm font-medium text-gray-900">
-              Selecciones el rol
+          <div className="flex flex-col mt-4">
+            <label className="block mb-1 text-sm font-medium text-gray-900">
+              Rol
             </label>
             <div className="flex">
               <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
@@ -213,7 +213,7 @@ const FormUsers: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
                 required
               >
-                <option value="">Selecciona el metodo de pago</option>
+                <option value="">Selecciona el rol del usuario</option>
                 {roles.map((rol) => (
                   <option key={rol.name} value={rol.name}>
                     {rol.name}

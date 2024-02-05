@@ -1,14 +1,14 @@
 import React from "react";
-import logoGym from "../../assets/logo.png";
+import logoGym from "../../assets/JNG.png";
 
 const Navbar: React.FC = (): JSX.Element => {
   return (
-    <nav className="flex justify-between items-center bg-gray-800 border-gray-700 border-t w-full py-1 px-5">
+    <nav className="flex justify-between border-b-2 border-gray-600 items-center bg-gray-800 w-full py-3 px-5">
       <div className="flex items-center">
-        <img src={logoGym} alt="Logo" className="w-10 h-10" />
-        <p className="ml-3 text-white font-bold">"nombre del usuario"</p>
+        <img src={logoGym} alt="Logo" className="w-10 h-10 rounded-md" />
+        <p className="ml-3 text-white font-bold px-2">JerjesGym</p>
       </div>
-      <p className="px-2 py-1 text-xs font-bold bg-green-700 text-white rounded-md">
+      <p className="px-2 py-1 font-bold bg-green-700 text-white rounded-md">
         Service Active
       </p>
     </nav>

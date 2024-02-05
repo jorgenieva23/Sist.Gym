@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 type propTypes = {
   open: boolean;
@@ -7,6 +7,20 @@ type propTypes = {
 };
 
 const Modal: React.FC<propTypes> = ({ open, onClose, children }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setTimeout(() => {
+        setIsVisible(true);
+      }, 70);
+    } else {
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 200);
+    }
+  }, [open]);
+
   return (
     <div
       className={`fixed inset-0 flex justify-center items-center transition-colors ${
@@ -16,7 +30,7 @@ const Modal: React.FC<propTypes> = ({ open, onClose, children }) => {
     >
       <div
         className={`bg-white rounded-lg shadow p-7 transition-all max-w ${
-          open ? "scale-100 opacity-100" : "scale-110 opacity-0"
+          isVisible ? "scale-100 opacity-100" : "scale-110 opacity-0"
         }`}
         onClick={(e) => e.stopPropagation()}
       >

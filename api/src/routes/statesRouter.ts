@@ -8,6 +8,6 @@ interface IStatesHandler{
 }
 
 statesRouter.post("/createState", postState as IStatesHandler)
-statesRouter.get("/getAll", getAllStates as IStatesHandler)
+statesRouter.get("/all", getAllStates as IStatesHandler)
 
 export default statesRouter

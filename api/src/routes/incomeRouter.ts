@@ -7,7 +7,7 @@ interface IIncomeHandler{
     (req: Request, res: Response):void
 }
 
-incomeRouter.post("/", postIncome as IIncomeHandler)
-incomeRouter.get("/", getIncomeHandler as IIncomeHandler)
+incomeRouter.post("/create", postIncome as IIncomeHandler)
+incomeRouter.get("/all", getIncomeHandler as IIncomeHandler)
 
 export default incomeRouter

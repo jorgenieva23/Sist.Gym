@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-// import { useAppSelector } from "../../redux/store";
+import { useAppSelector } from "../../redux/store";
 import { useUserAction } from "../../redux/Actions/userAction";
 import { useRolesAction } from "../../redux/Actions/rolesAction";
 import { Footer, Navbar, Sidebar } from "../../components";
 import Modal from "../../components/Modal/Modal";
 import ReactDOM from "react-dom";
+import { UserTable } from "../../components/Tables/UserTables/UserTable";
 import FormUsers from "../../components/Forms/Users/FormUsers";
 
 export const User: React.FC = (): JSX.Element => {
   const { getAllUser } = useUserAction();
   const { getAllRoles } = useRolesAction();
+
+  const users = useAppSelector((state) => state.user.users);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
@@ -28,7 +31,7 @@ export const User: React.FC = (): JSX.Element => {
         <Sidebar />
         <div className="mt-10 flex-grow">
           <div className="flex border-2 border-t-purple-900 justify-between">
-            <div className="text-3xl mt-2 text-blue-600 border-t-purple-900 ml-7">
+            <div className="text-3xl mt-2 text-blue-600 ml-7">
               Usuarios
             </div>
             <button
@@ -47,6 +50,9 @@ export const User: React.FC = (): JSX.Element => {
               </Modal>,
               document.body
             )}
+          <div className="overflow-y-auto ml-2">
+            <UserTable currentUser={users} />
+          </div>
         </div>
       </div>
       <Footer />
