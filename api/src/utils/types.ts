@@ -46,12 +46,12 @@ export interface IRoles {
   created_at: Date;
   updated_at: Date;
 }
-export interface IIncome {
+
+export interface IIncome extends Document {
   _id: Schema.Types.ObjectId;
   partnerId: Schema.Types.ObjectId | string | null;
   dateOfAdmission: Date;
   stateId: Schema.Types.ObjectId | string | null;
-  deleted: number;
   creatorId: Schema.Types.ObjectId | string | null;
   createdAt: Date;
   updatedAt: Date;

@@ -17,7 +17,7 @@ export interface IPartner {
   userId?: string | null;
   condition?: string | null;
   rol?: string | null;
-  createdAt?: Date
+  createdAt?: Date;
 }
 
 export interface IUser {
@@ -45,23 +45,23 @@ export interface IRoles {
 }
 
 export interface IIncome {
-  id: string;
+  _id?: string;
   partnerId: string | null;
-  dateOfAdmission: Date;
+  dateOfAdmission: number;
   stateId: string | null;
-  deleted: number;
+  deleted?: boolean;
   creatorId: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 export interface IStates {
-  id: string;
+  _id: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;
 }
 export interface IPayments {
-  id: string;
+  _id: string;
   amount: number;
   total: number;
   dateFrom: Date;
