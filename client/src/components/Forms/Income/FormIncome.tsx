@@ -10,7 +10,7 @@ interface FormProps {
   setEditingIncome?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const FromIncome: React.FC<FormProps> = ({
+const FormIncome: React.FC<FormProps> = ({
   incomeToEdit,
   setEditingIncome,
 }: FormProps): JSX.Element => {
@@ -131,4 +131,4 @@ const FromIncome: React.FC<FormProps> = ({
   );
 };
 
-export default FromIncome;
+export default FormIncome;
