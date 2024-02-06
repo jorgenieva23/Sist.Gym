@@ -50,7 +50,7 @@ export interface IIncome {
   dateOfAdmission: number;
   stateId: string | null;
   deleted?: boolean;
-  creatorId: string | null;
+  creatorId?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
