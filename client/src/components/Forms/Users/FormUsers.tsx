@@ -136,93 +136,92 @@ const FormUsers: React.FC<FormProps> = ({
         {!isEditing ? "crear un usuario nuevo" : "editar usuario"}
       </h2>
       <form onSubmit={handleFormSubmit} className="max-w mx-auto">
-        <div className="">
-          <div className="flex flex-col mt-4">
-            <label className="block mb-1 text-sm font-medium text-gray-900">
-              Nombre
-            </label>
-            <div className="flex">
-              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-                <PiUserCirclePlusLight className="w-7 h-7 text-black" />
-              </span>
-              <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-                type="text"
-                name="name"
-                value={form.name}
-                placeholder="Nombre"
-                onChange={(e) => handleChange(e)}
-                onBlur={(e) => handleBlur(e)}
-                required
-              />
-            </div>
-          </div>
-          <div className="flex flex-col mt-4">
-            <label className="block mb-1 text-sm font-medium text-gray-900">
-              Correo Electrónico
-            </label>
-            <div className="flex">
-              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-                <PiEnvelope className="w-7 h-7 text-black" />
-              </span>
-              <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-                type="email"
-                name="email"
-                value={form.email}
-                placeholder="Correo Electrónico"
-                onChange={(e) => handleChange(e)}
-                onBlur={(e) => handleBlur(e)}
-                required
-              />
-            </div>
-          </div>
-          <div className="flex flex-col mt-4">
-            <label className="block mb-1 text-sm font-medium text-gray-900">
-              Contraseña
-            </label>
-            <div className="flex">
-              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-                <PiPasswordBold className="w-7 h-7 text-black" />
-              </span>
-              <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-                type="password"
-                id="psw"
-                name="psw"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                onChange={(e) => handleChange(e)}
-                onBlur={(e) => handleBlur(e)}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col mt-4">
-            <label className="block mb-1 text-sm font-medium text-gray-900">
-              Rol
-            </label>
-            <div className="flex">
-              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-                <PiUserSwitchBold className="w-7 h-7 text-black" />
-              </span>
-              <select
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-                name="rol"
-                value={form.rol}
-                onChange={(e) => handleChange(e)}
-                required
-              >
-                <option value="">Selecciona el rol del usuario</option>
-                {roles.map((rol) => (
-                  <option key={rol.name} value={rol.name}>
-                    {rol.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+        <div className="flex flex-col mt-4">
+          <label className="block mb-1 text-sm font-medium text-gray-900">
+            Nombre
+          </label>
+          <div className="flex">
+            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+              <PiUserCirclePlusLight className="w-7 h-7 text-black" />
+            </span>
+            <input
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+              type="text"
+              name="name"
+              value={form.name}
+              placeholder="Nombre"
+              onChange={(e) => handleChange(e)}
+              onBlur={(e) => handleBlur(e)}
+              required
+            />
           </div>
         </div>
+        <div className="flex flex-col mt-4">
+          <label className="block mb-1 text-sm font-medium text-gray-900">
+            Correo Electrónico
+          </label>
+          <div className="flex">
+            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+              <PiEnvelope className="w-7 h-7 text-black" />
+            </span>
+            <input
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+              type="email"
+              name="email"
+              value={form.email}
+              placeholder="Correo Electrónico"
+              onChange={(e) => handleChange(e)}
+              onBlur={(e) => handleBlur(e)}
+              required
+            />
+          </div>
+        </div>
+        <div className="flex flex-col mt-4">
+          <label className="block mb-1 text-sm font-medium text-gray-900">
+            Contraseña
+          </label>
+          <div className="flex">
+            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+              <PiPasswordBold className="w-7 h-7 text-black" />
+            </span>
+            <input
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+              type="password"
+              id="psw"
+              name="psw"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              onChange={(e) => handleChange(e)}
+              onBlur={(e) => handleBlur(e)}
+              required
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col mt-4">
+          <label className="block mb-1 text-sm font-medium text-gray-900">
+            Rol
+          </label>
+          <div className="flex">
+            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+              <PiUserSwitchBold className="w-7 h-7 text-black" />
+            </span>
+            <select
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+              name="rol"
+              value={form.rol}
+              onChange={(e) => handleChange(e)}
+              required
+            >
+              <option value="" >Selecciona el rol del usuario</option>
+              {roles.map((rol) => (
+                <option key={rol.name} value={rol.name} className=" text-lg">
+                  {rol.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
         <div className="flex justify-center mt-4">
           {!loadingSubmit ? (
             <button

@@ -319,7 +319,7 @@ const FormPartners: React.FC<FormProps> = ({
                 type="date"
                 name="date"
                 value={form.date}
-                placeholder="Segundo Nombre"
+                placeholder="fecha de hoy"
                 onChange={(e) => handleChange(e)}
               />
             </div>

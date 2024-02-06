@@ -46,9 +46,9 @@ export interface IRoles {
 
 export interface IIncome {
   _id?: string;
-  partnerId: string | null;
+  partnerId: string;
   dateOfAdmission: number;
-  stateId: string | null;
+  stateId?: string | null;
   deleted?: boolean;
   creatorId?: string | null;
   createdAt?: Date;
