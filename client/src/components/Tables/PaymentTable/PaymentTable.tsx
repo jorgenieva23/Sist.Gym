@@ -1,4 +1,3 @@
-import React from "react";
 import { Typography } from "@material-tailwind/react";
 
 const TABLE_HEAD = [
@@ -9,7 +8,7 @@ const TABLE_HEAD = [
   "Opciones",
 ];
 
-function IncomeTable() {
+function PaymentTable() {
   return (
     <div className="relative overflow-x-autosm:rounded-lg">
       <table className="w-full text-sm shadow-md text-left rtl:text-right text-gray-500">
@@ -33,4 +32,4 @@ function IncomeTable() {
   );
 }
 
-export default IncomeTable;
+export default PaymentTable;
