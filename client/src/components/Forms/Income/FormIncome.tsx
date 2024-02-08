@@ -64,29 +64,30 @@ const FormIncome: React.FC<FormProps> = ({
       </h2>
       <form onSubmit={handleFormSubmit} className="max-w mx-auto">
         <div className="flex flex-col mt-4">
-          <div className="my-2 items-center grid gap-4 grid-cols-2">
-            <label className="block mb-1 text-sm font-medium text-gray-900">
-              Socio
-            </label>
-            <div className="flex">
-              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-                <PiUserCirclePlusLight className=" w-7 h-7 text-black" />
-              </span>
-              <select
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-                name="partnerId"
-                value={form.partnerId}
-                onChange={(e) => handleChange(e)}
-                required
-              >
-                <option value="">seleccione al socio</option>
-                {partners.map((part) => (
-                  <option key={part.firstName} value={part.firstName}>
-                    {part.firstName}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <label className="block w-96 mb-1 text-sm font-medium text-gray-900">
+            Socio
+          </label>
+          <div className="flex">
+            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+              <PiUserCirclePlusLight className=" w-7 h-7 text-black" />
+            </span>
+            <select
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+              name="partnerId"
+              value={form.partnerId}
+              onChange={(e) => handleChange(e)}
+              required
+            >
+              <option value="">seleccione al socio</option>
+              {partners.map((part) => (
+                <option
+                  key={part.firstName}
+                  value={`${part.firstName} || ${part.dni}`}
+                >
+                  {part.firstName} || {part.dni}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
@@ -115,7 +116,7 @@ const FormIncome: React.FC<FormProps> = ({
               className="px-4 py-2 rounded-none rounded-e-lg text-sm font-semibold text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md hover:bg-gray-400"
               type="submit"
             >
-              {!isEditing ? " Añadir socio" : "Guardar cambios"}
+              {!isEditing ? "Registrar" : "Guardar cambios"}
             </button>
           ) : (
             <button

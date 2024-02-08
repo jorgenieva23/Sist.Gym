@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+ import { Request, Response } from "express";
 import {
   getAllPartner,
   searchPartnerByName,
@@ -76,7 +76,15 @@ export const postPartner = async (
       stateId: state?.name || null,
       creatorId: admin?.name || null,
     };
-    const createdPartert = createPartner(partner);
+
+    const createdPartert = await createPartner(partner);
+    console.log(createdPartert.email);
+
+    await Users.updateOne(
+      { name: admin?.name },
+      { $push: { partners: createdPartert.email } }
+    );
+
     res.status(201).json(createdPartert);
   } catch (error: any) {
     console.log(error);

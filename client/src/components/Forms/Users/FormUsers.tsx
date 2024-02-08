@@ -116,6 +116,7 @@ const FormUsers: React.FC<FormProps> = ({
       updateUser({ id: userToEdit._id, updatedData: form }).then(() => {
         setLoadingSubmit(false);
         setEditingUser && setEditingUser(false);
+        window.location.reload();
       });
     } else {
       createNewUser(form).then(() => {

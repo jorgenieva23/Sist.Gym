@@ -3,7 +3,7 @@ import { IUser } from "../utils/types";
 
 const userSchema = new Schema<IUser>({
   _id: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     auto: true,
     required: true,
   },
@@ -21,7 +21,7 @@ const userSchema = new Schema<IUser>({
     },
   },
   emailVerifiedAt: {
-    type: String,
+    type: Date,
   },
   password: {
     type: String,
@@ -34,13 +34,14 @@ const userSchema = new Schema<IUser>({
   stateId: {
     type: String,
     ref: "States",
+    default: "active",
   },
   deleted: {
     type: Boolean,
     default: false,
   },
   creatorId: {
-    type: Schema.Types.String,
+    type: String,
     ref: "Users",
   },
   lastConnection: {
@@ -48,12 +49,12 @@ const userSchema = new Schema<IUser>({
   },
   partners: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.String,
       ref: "Partner",
     },
   ],
   rol: {
-    type: Schema.Types.String,
+    type: String,
     ref: "Roles",
     required: true,
   },

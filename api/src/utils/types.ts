@@ -16,9 +16,9 @@ export interface IPartner extends Document {
   medicalCoverage: string;
   phoneEmergency: number;
   phoneEmergencyName: string;
-  stateId: string | null;
-  userId: string | null;
-  rol: string | null;
+  stateId: string;
+  userId: string;
+  rol: string;
   condition: "fit" | "unfit";
   createdAt: Date;
   updatedAt: Date;
@@ -27,7 +27,7 @@ export interface IUser extends Document {
   _id: Schema.Types.ObjectId;
   name: string;
   email: string;
-  emailVerifiedAt: string;
+  emailVerifiedAt: Date;
   password: string;
   stateId: Types.ObjectId | string | null;
   creatorId: Types.ObjectId | string | null;

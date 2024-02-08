@@ -17,15 +17,23 @@ export const useUserAction = () => {
   };
   const createNewUser = async (user: IUser) => {
     try {
-      const rawData = await axios.post(`/user/create`, {
+      const data = {
         name: user.name,
         email: user.email,
         password: user.password,
         rol: user.rol,
-      });
-      return dispatch(createUser(rawData.data));
+        creatorId: user.creatorId, // Puedes obtener estos datos del formulario o de otro lugar en tu aplicación
+      };
+      // Luego, envía la solicitud POST con todos los datos
+      const rawData = await axios.post(`/user/create`, data);
+      // Despacha la acción para actualizar el estado en Redux con el nuevo usuario creado
+      dispatch(createUser(rawData.data));
+      // Devuelve el nuevo usuario creado para que pueda ser utilizado en tu aplicación si es necesario
+      return rawData.data;
     } catch (error: any) {
       console.error(error.message);
+      // Maneja los errores de manera adecuada, ya sea lanzando un error o mostrando un mensaje al usuario
+      throw new Error("Failed to create user. Please try again later.");
     }
   };
   const updateUser = async ({

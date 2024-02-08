@@ -20,17 +20,19 @@ export const usePartnerAction = () => {
       const rawData = await axios.post(`/partner/create`, {
         firstName: partner.firstName,
         lastName: partner.lastName,
-        dni: 0,
+        dni: partner.dni,
         address: partner.address,
-        phone: 0,
+        phone: partner.phone,
         email: partner.email,
         picture: partner.picture,
-        date: 0,
-        datePhysicalAttitude: 0,
+        date: partner.date,
+        datePhysicalAttitude: partner.datePhysicalAttitude,
         medicalCoverage: partner.medicalCoverage,
-        phoneEmergency: 0,
+        phoneEmergency: partner.phoneEmergency,
         phoneEmergencyName: partner.phoneEmergencyName,
       });
+      console.log(rawData, "hola");
+
       return dispatch(createPartner(rawData.data));
     } catch (error: any) {
       console.error(error.message);

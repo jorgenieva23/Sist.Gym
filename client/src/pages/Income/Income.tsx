@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { useAppSelector } from "../../redux/store";
-// import { useIncomeAction } from "../../redux/Actions/incomeAction";
 import { Footer, Navbar, Sidebar } from "../../components";
 import { usePartnerAction } from "../../redux/Actions/partnerAction";
 import Modal from "../../components/Modal/Modal";
@@ -8,8 +6,6 @@ import ReactDOM from "react-dom";
 import FormIncome from "../../components/Forms/Income/FormIncome";
 
 export const Income: React.FC = (): JSX.Element => {
-  // const { getAllIncome } = useIncomeAction();
-  // const partners = useAppSelector((state) => state.partner.partners);
   const { getAllPartner } = usePartnerAction();
 
   const [openModal, setOpenModal] = useState<boolean>(false);

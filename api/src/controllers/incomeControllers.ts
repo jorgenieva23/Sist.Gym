@@ -33,7 +33,7 @@ export const registerUserIncome = async (income: IIncome) => {
     );
   } catch (error: any) {
     console.error(error, "error");
-    throw new Error(`Error: ${error.message}`);
+    throw new Error(`Error: ${error}`);
   }
 };
 

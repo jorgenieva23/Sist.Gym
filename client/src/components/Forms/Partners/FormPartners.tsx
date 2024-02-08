@@ -42,16 +42,11 @@ const FormPartners: React.FC<FormProps> = ({
     phone: isEditing ? partnerToEdit?.phone : 0,
     email: isEditing ? partnerToEdit?.email : "",
     picture: isEditing ? partnerToEdit?.picture : null,
-    // deleted: isEditing ? partnerToEdit?.deleted : null,
     date: isEditing ? partnerToEdit?.date : 0,
     datePhysicalAttitude: isEditing ? partnerToEdit?.datePhysicalAttitude : 0,
     medicalCoverage: isEditing ? partnerToEdit?.medicalCoverage : "",
     phoneEmergency: isEditing ? partnerToEdit?.phoneEmergency : 0,
     phoneEmergencyName: isEditing ? partnerToEdit?.phoneEmergencyName : "",
-    // stateId: isEditing ? partnerToEdit?.stateId : null,
-    // userId: isEditing ? partnerToEdit?.userId : null,
-    // condition: isEditing ? partnerToEdit?.condition : null,
-    // rol: isEditing ? partnerToEdit?.rol : null,
   });
 
   const validate = (form: IPartner): { [key: string]: string } => {
@@ -134,24 +129,6 @@ const FormPartners: React.FC<FormProps> = ({
       errors.phoneEmergencyName = "Nombre inválido";
     }
 
-    // if (!form.stateId) {
-    //   errors.stateId = "El socio debe tener un estado";
-    // }
-
-    // if (!form.userId) {
-    //   errors.userId = "El socio debe tener un usuario asignado";
-    // }
-
-    // if (!form.condition) {
-    //   errors.condition = "El socio debe tener una condición";
-    // } else if (!["fit", "unfit"].includes(form.condition)) {
-    //   errors.condition = "Condición inválida. Debe ser 'fit' o 'unfit'.";
-    // }
-
-    // if (!form.rol) {
-    //   errors.rol = "El socio debe tener un rol asignado";
-    // }
-
     return errors;
   };
 
@@ -176,10 +153,12 @@ const FormPartners: React.FC<FormProps> = ({
       updatePartner({ id: partnerToEdit._id, updatedData: form }).then(() => {
         setLoadingSubmit(false);
         setEditingPartner && setEditingPartner(false);
+        window.location.reload();
       });
     } else {
       createNewPartner(form).then(() => {
         setLoadingSubmit(false);
+        window.location.reload();
       });
 
       setForm({
@@ -190,16 +169,11 @@ const FormPartners: React.FC<FormProps> = ({
         phone: 0,
         email: "",
         picture: null,
-        // deleted: null,
         date: 0,
         datePhysicalAttitude: 0,
         medicalCoverage: "",
         phoneEmergency: 0,
         phoneEmergencyName: "",
-        // stateId: null,
-        // userId: null,
-        // condition: null,
-        // rol: null,
       });
     }
   };
@@ -265,8 +239,8 @@ const FormPartners: React.FC<FormProps> = ({
                 <PiWhatsappLogo className="w-7 h-7 text-black" />
               </span>
               <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-                type="numb"
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5"
+                type="number"
                 name="phone"
                 value={form.phone}
                 placeholder="Telefono"
@@ -288,12 +262,12 @@ const FormPartners: React.FC<FormProps> = ({
                 <PiIdentificationCardLight className="w-7 h-7 text-black" />
               </span>
               <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 flex-1 min-w-0 w-full text-sm p-2.5 "
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 flex-1 min-w-0 w-full text-sm p-2.5"
                 maxLength={8}
-                type="numb"
+                type="dni"
                 name="dni"
                 value={form.dni}
-                placeholder="Apellido del Socio"
+                placeholder="DNI del Socio"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -308,14 +282,12 @@ const FormPartners: React.FC<FormProps> = ({
             </label>
             <div className="flex">
               <span
-                className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md
-                "
+                className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md"
               >
                 <PiCalendarLight className="w-7 h-7 text-black" />
               </span>
               <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5
-                   "
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5"
                 type="date"
                 name="date"
                 value={form.date}
@@ -335,8 +307,7 @@ const FormPartners: React.FC<FormProps> = ({
               </span>
               <input
                 className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900
-                   block flex-1 min-w-0 w-full text-sm p-2.5 
-                 "
+                   block flex-1 min-w-0 w-full text-sm p-2.5"
                 type="email"
                 name="email"
                 value={form.email}
@@ -358,7 +329,7 @@ const FormPartners: React.FC<FormProps> = ({
               <PiMapPinLight className="w-7 h-7 text-black" />
             </span>
             <input
-              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5"
               type="string"
               name="address"
               value={form.address}
@@ -419,7 +390,7 @@ const FormPartners: React.FC<FormProps> = ({
               <input
                 className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
                 type="date"
-                name="date"
+                name="datePhysicalAttitude"
                 value={form.datePhysicalAttitude}
                 placeholder="Segundo Nombre"
                 onChange={(e) => handleChange(e)}
@@ -461,7 +432,7 @@ const FormPartners: React.FC<FormProps> = ({
               </span>
               <input
                 className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-                type="numb"
+                type="number"
                 name="phoneEmergency"
                 value={form.phoneEmergency}
                 placeholder="Telefono"
