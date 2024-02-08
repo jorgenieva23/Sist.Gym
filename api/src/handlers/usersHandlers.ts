@@ -73,11 +73,7 @@ export const postUserHandler = async (
       Users.findOne({ name: { $in: creatorName } }),
     ]);
     const countUser = await Users.count({ creatorId: admin?.name });
-    console.log(admin?.name);
 
-    if (countUser >= 5) {
-      res.status(400).json("has 5 users to his name");
-    }
     const user: IUser = {
       ...req.body,
       rol: role?.name || null,
@@ -85,6 +81,9 @@ export const postUserHandler = async (
       creatorId: admin?.name || null,
     };
     const createUsers = await createdUser(user);
+    // if (admin?.rol === "admin" && countUser >= 5) {
+    //   res.status(400).json("has 5 users to his name");
+    // }
     res.status(200).json(createUsers);
   } catch (error: any) {
     res.status(400).json(error.message);
