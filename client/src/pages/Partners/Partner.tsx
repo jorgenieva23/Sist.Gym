@@ -29,7 +29,7 @@ export const Partner: React.FC = (): JSX.Element => {
               className="border border-neutral-300 rounded-lg py-2 px-5 my-2 mr-6 bg-green-500 hover:bg-green-700 text-white"
               onClick={() => setOpenModal(true)}
             >
-              Register
+              Registers
             </button>
           </div>
           {openModal &&
