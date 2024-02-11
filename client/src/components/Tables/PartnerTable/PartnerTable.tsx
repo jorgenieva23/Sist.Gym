@@ -24,8 +24,9 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
 }): JSX.Element => {
   const partners = useAppSelector((state) => state.partner.partners);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [search, setSearch] = useState("");
 
-  const itemsPerPage = 4;
+  const itemsPerPage = 8;
   const indexOfLastItems = currentPage * itemsPerPage;
   const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
   const currentItems = currentPartner.slice(
@@ -33,8 +34,29 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
     indexOfLastItems
   );
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const filteredItems = currentItems.filter((partner) =>
+    `${partner.firstName} ${partner.lastName}`
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
+
   return (
     <div className="relative overflow-x-auto sm:rounded-lg">
+      <form className="flex items-center">
+        <input
+          value={search}
+          name="search"
+          className="px-4 py-2 border border-blue-400 rounded-md focus:outline-none focus:border-blue-800 "
+          type="text"
+          placeholder="Search for Partners..."
+          onChange={handleSearchChange}
+        />
+      </form>
       <table className="w-full text-sm shadow-md text-left text-gray-500">
         <thead className="text-lg text-gray-700 uppercase bg-gray-50 ">
           <tr>
@@ -52,7 +74,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
           </tr>
         </thead>
         <tbody>
-          {currentItems.map(
+          {filteredItems.map(
             (
               {
                 firstName,
@@ -87,21 +109,23 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
                       <div className="flex items-center ml-2">
                         {condition === "fit" ? (
                           <>
+                            <span className="text-green-600 w-10 font-semibold">
+                              Apto
+                            </span>
                             <img
                               src={corazonSano}
                               alt="Corazón sano"
-                              className="w-9 h-5 mr-1"
+                              className="w-10 h-5 mr-1"
                             />
-                            <span className="text-green font-bold">Apto</span>
                           </>
                         ) : (
                           <>
+                            <span className="text-red-600">No Apto</span>
                             <img
                               src={corazonRoto}
                               alt="Corazón roto"
                               className="w-5 h-5 mr-1"
                             />
-                            <span className="text-red-600">No Apto</span>
                           </>
                         )}
                       </div>

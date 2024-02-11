@@ -38,7 +38,6 @@
 }
 
 .page-link.active {
-  z-index: 2;
   color: #ffffff;
   border-color: #0d6efd;
   background-color: #0d6efd;

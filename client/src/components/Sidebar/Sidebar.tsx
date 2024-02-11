@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import controlImage from "../../assets/control.png";
 import logoImage from "../../assets/logo.png";
@@ -17,32 +17,21 @@ import {
 
 const Sidebar: React.FC = (): JSX.Element => {
   const [open, setOpen] = useState(true);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const handleResize = () => {
-    setWindowWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    setOpen(windowWidth >= 768);
-  }, [windowWidth]);
 
   const Menu = [
     { name: "Panel", link: "/", icon: FaHome },
-    // {name: "Partners", link: "/Partner", icon: FaAddressCard},
     { name: "Partners", link: "/Partner", icon: FaUsers },
     { name: "Payment", link: "/payment", icon: FaFileInvoiceDollar },
     { name: "Promotion", link: "/promotions", icon: FaRegStar },
     { name: "Income", link: "/Income", icon: FaDoorOpen },
     { name: "User", link: "/user", icon: FaAddressCard, margin: true },
     { name: "Baleance", link: "/balance", icon: FaHandHoldingUsd },
-    { name: "Movements",link: "/movements",icon: FaClipboardList,margin: true, },
+    {
+      name: "Movements",
+      link: "/movements",
+      icon: FaClipboardList,
+      margin: true,
+    },
     { name: "MonthlyPayment", link: "/monthlyPayment", icon: FaMoneyBillAlt },
     { name: "Roles", link: "/roles", icon: FaUserCog },
   ];
@@ -51,7 +40,7 @@ const Sidebar: React.FC = (): JSX.Element => {
       <div
         className={`${
           open ? "w-64" : "w-20"
-        } duration-300 p-5 pt-5 py-10 bg-gray-800 relative`}
+        } z-10 duration-300 p-5 pt-5 py-10 bg-gray-800 relative`}
       >
         <img
           src={controlImage}
@@ -79,7 +68,7 @@ const Sidebar: React.FC = (): JSX.Element => {
                 Menu?.margin && "mt-5"
               } group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md text-white`}
             >
-              <div>{React.createElement(Menu?.icon, { size: "20" })}</div>
+              <div>{React.createElement(Menu?.icon, { size: "22.5" })}</div>
               <h2
                 style={{
                   transitionDelay: `${i + 3}00ms`,
