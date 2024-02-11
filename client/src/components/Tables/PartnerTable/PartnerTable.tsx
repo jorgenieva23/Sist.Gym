@@ -40,7 +40,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
   };
 
   const filteredItems = currentItems.filter((partner) =>
-    `${partner.firstName} ${partner.lastName}`
+    `${partner.firstName} ${partner.lastName} ${partner.dni}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );

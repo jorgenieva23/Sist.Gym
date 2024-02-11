@@ -13,14 +13,34 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
   const users = useAppSelector((state) => state.user.users);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [search, setSearch] = useState("");
 
   const itemsPerPage = 4;
   const indexOfLastItems = currentPage * itemsPerPage;
   const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
   const currentItems = currentUser.slice(indexOfFirstCourse, indexOfLastItems);
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const filteredItems = currentItems.filter((user) =>
+    `${user.name} ${user.email}`.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <form className="flex items-center">
+        <input
+          value={search}
+          name="search"
+          className="px-4 py-2 border border-blue-400 rounded-md focus:outline-none focus:border-blue-800 "
+          type="text"
+          placeholder="Search for Partners..."
+          onChange={handleSearchChange}
+        />
+      </form>
       <table className="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
           <tr>
@@ -38,7 +58,7 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
           </tr>
         </thead>
         <tbody>
-          {currentItems.map(
+          {filteredItems.map(
             ({ name, email, rol, stateId, createdAt }, index) => {
               const isEven = index % 2 === 0;
               const rowClass = isEven ? "bg-silver dark:bg-[#676768]" : "";
