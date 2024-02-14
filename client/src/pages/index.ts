@@ -8,8 +8,10 @@ import { Roles } from "./Roles/Roles";
 import { User } from "./Users/User";
 import { Promotion } from "./Promotions/Promotions";
 import { Payment } from "./Payments/Payments";
+import { Login } from "./Login/Login";
 
 export {
+  Login,
   Home,
   Balance,
   Income,

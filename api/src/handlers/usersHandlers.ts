@@ -63,6 +63,8 @@ export const postUserHandler = async (
 ): Promise<void> => {
   try {
     const {
+      email,
+      password,
       rol: roleNames,
       stateId: stateName,
       creatorId: creatorName,
@@ -70,20 +72,28 @@ export const postUserHandler = async (
     const [role, state, admin] = await Promise.all([
       Roles.findOne({ name: { $in: roleNames } }),
       States.findOne({ name: { $in: stateName } }),
-      Users.findOne({ name: { $in: creatorName } }),
+      Users.findOne({ email: { $in: creatorName } }),
     ]);
-    const countUser = await Users.count({ creatorId: admin?.name });
+
+    if (await Users.findOne({ email })) {
+      throw new Error("ya existe un usuario con el mismo mail");
+    }
+
+    const countUser = await Users.count({ creatorId: admin?.email });
+    if (admin?.rol === "admin" && countUser >= 5) {
+      res.status(400).json("has 5 users to his name");
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 5);
 
     const user: IUser = {
       ...req.body,
+      password: hashedPassword,
       rol: role?.name || null,
       stateId: state?.name || null,
-      creatorId: admin?.name || null,
+      creatorId: admin?.email || null,
     };
     const createUsers = await createdUser(user);
-    // if (admin?.rol === "admin" && countUser >= 5) {
-    //   res.status(400).json("has 5 users to his name");
-    // }
     res.status(200).json(createUsers);
   } catch (error: any) {
     res.status(400).json(error.message);

@@ -26,7 +26,15 @@ const userSchema = new Schema<IUser>({
   password: {
     type: String,
     required: true,
+    validate: {
+      validator: (value: string) =>
+        /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,}$/.test(
+          value
+        ),
+      message: "Invalid password format",
+    },
   },
+
   token: {
     type: String,
     default: null,
