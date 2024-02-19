@@ -1,5 +1,5 @@
 import { IStates } from "../utils/types";
-import States from "../models/states";
+import States from "../models/state";
 import { Request, Response } from "express";
 import {createdStates} from "../controllers/statesControllers"
 

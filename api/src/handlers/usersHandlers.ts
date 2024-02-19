@@ -7,12 +7,12 @@ import {
   upDateUserControllers,
   deleteByIdControllers,
 } from "../controllers/usersControllers";
-import Users from "../models/users";
+import Users from "../models/user";
 import { IUser } from "../utils/types";
-import { Roles } from "../models/roles";
+import { Roles } from "../models/rol";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import States from "../models/states";
+import States from "../models/state";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -74,18 +74,14 @@ export const postUserHandler = async (
       States.findOne({ name: { $in: stateName } }),
       Users.findOne({ email: { $in: creatorName } }),
     ]);
-
     if (await Users.findOne({ email })) {
       throw new Error("ya existe un usuario con el mismo mail");
     }
-
     const countUser = await Users.count({ creatorId: admin?.email });
     if (admin?.rol === "admin" && countUser >= 5) {
       res.status(400).json("has 5 users to his name");
     }
-
     const hashedPassword = await bcrypt.hash(password, 5);
-
     const user: IUser = {
       ...req.body,
       password: hashedPassword,

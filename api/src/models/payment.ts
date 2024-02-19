@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { IPayments } from "../utils/types";
+import { IPayment } from "../utils/types";
 
-const PaymentsSchema = new Schema<IPayments>({
+const PaymentsSchema = new Schema<IPayment>({
   _id: {
     type: mongoose.Schema.Types.ObjectId,
     auto: true,
@@ -11,10 +11,10 @@ const PaymentsSchema = new Schema<IPayments>({
     type: Number,
     required: true,
   },
-  total: {
-    type: Number,
-    required: false,
-  },
+  // total: {
+  //   type: Number,
+  //   required: false,
+  // },
   dateFrom: {
     type: Date,
     required: false,
@@ -25,7 +25,7 @@ const PaymentsSchema = new Schema<IPayments>({
   },
   stateId: {
     type: Schema.Types.String,
-    ref: "StatePayments",
+    ref: "State",
     default: null,
   },
   deleted: {
@@ -52,5 +52,5 @@ const PaymentsSchema = new Schema<IPayments>({
   },
 });
 
-const Payments = mongoose.model<IPayments>("Payments", PaymentsSchema);
-export default Payments;
+const Payment = mongoose.model<IPayment>("Payment", PaymentsSchema);
+export default Payment;

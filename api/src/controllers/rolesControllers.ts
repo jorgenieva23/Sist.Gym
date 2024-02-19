@@ -1,4 +1,4 @@
-import { Roles } from "../models/roles";
+import { Roles } from "../models/rol";
 import { IRoles } from "../utils/types";
 
 // FUNCION QUE CREA LOS ROLES

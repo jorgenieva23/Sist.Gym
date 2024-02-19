@@ -1,5 +1,5 @@
 import { IUser } from "../utils/types";
-import Users from "../models/users";
+import Users from "../models/user";
 import Partner from "../models/partner";
 import dotenv from "dotenv";
 dotenv.config();
@@ -74,7 +74,7 @@ export const createdUser = async (user: IUser) => {
       active,
     });
   } catch (error) {
-    console.error("ERROR createBank controller: ", error);
+    console.error("ERROR createdUser controllers controller: ", error);
     throw error;
   }
 };

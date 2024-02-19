@@ -1,6 +1,6 @@
 import { IStates } from "../utils/types";
-import StateIncome from "../models/states";
-import States from "../models/states";
+import StateIncome from "../models/state";
+import States from "../models/state";
 
 export const getAllStates = async () => {
   try {

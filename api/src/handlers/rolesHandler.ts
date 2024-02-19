@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import { createRoles, getAllRoles, searchRolesByName,} from "../controllers/rolesControllers";
 import { IRoles } from "../utils/types";
-import { Roles }  from "../models/roles";
+import { Roles }  from "../models/rol";
 
 // MANEJADOR QUE TRAE LOS ROLES Y LOS ROLES POR NOMBRE
 

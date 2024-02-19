@@ -10,6 +10,7 @@ import {
   User,
   Promotion,
   Payment,
+  Login,
 } from "./pages";
 import { Route, Routes } from "react-router-dom";
 
@@ -17,7 +18,9 @@ const App: React.FC = (): JSX.Element => {
   return (
     <div>
       <Routes>
+        {/* <Route path="/" element={<Login />} /> */}
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/partner" element={<Partner />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/promotions" element={<Promotion />} />

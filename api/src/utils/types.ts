@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 import { Schema, Document } from "mongoose";
 
 export interface IPartner extends Document {
-  _id: Schema.Types.ObjectId;
+  // _id: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
   dni: number;
@@ -40,12 +40,6 @@ export interface IUser extends Document {
   createdAt: Date;
   lastConnection: Date;
 }
-export interface IRoles {
-  _id: Schema.Types.ObjectId;
-  name: string;
-  created_at: Date;
-  updated_at: Date;
-}
 
 export interface IIncome extends Document {
   _id: Schema.Types.ObjectId;
@@ -56,22 +50,43 @@ export interface IIncome extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
-export interface IStates {
-  _id: Schema.Types.ObjectId;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-export interface IPayments {
+
+export interface IPayment {
   _id: Schema.Types.ObjectId;
   amount: number;
-  total: number;
+  // total: number;
   dateFrom: Date;
   dateTo: Date;
   stateId: Types.ObjectId | string | null;
   deleted: boolean;
   creatorId: Types.ObjectId | string | null;
   partnerId: Types.ObjectId | string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IPromotion {
+  _id: Schema.Types.ObjectId;
+  name: string;
+  contadorReference: Types.ObjectId | string | Number | null;
+  description: string;
+  deleted: boolean;
+  stateId: Types.ObjectId | string | null;
+  creatorId: Types.ObjectId | string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IRoles {
+  _id: Schema.Types.ObjectId;
+  name: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface IStates {
+  _id: Schema.Types.ObjectId;
+  name: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -46,8 +46,8 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
   );
 
   return (
-    <div className="relative overflow-x-auto sm:rounded-lg">
-      <form className="flex items-center">
+    <>
+      <form className="flexitems-center">
         <input
           value={search}
           name="search"
@@ -58,7 +58,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
         />
       </form>
       <table className="w-full text-sm shadow-md text-left text-gray-500">
-        <thead className="text-lg text-gray-700 uppercase bg-gray-50 ">
+        <thead className="text-lg  text-gray-700 uppercase bg-gray-50 ">
           <tr>
             {TABLE_HEAD.map((head) => (
               <th key={head} className="border-b border border-slate-300 p-4">
@@ -98,7 +98,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
 
               return (
                 <tr key={index} className={rowClass}>
-                  <td className="p-3 border border-slate-300">
+                  <td className="p-3  border border-slate-300">
                     <div className="flex items-center">
                       <Typography
                         color="blue-gray"
@@ -189,6 +189,6 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
           setCurrentPage={setCurrentPage}
         />
       </div>
-    </div>
+    </>
   );
 };

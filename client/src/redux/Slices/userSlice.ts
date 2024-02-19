@@ -2,14 +2,6 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IUser } from "../../utils/types";
 
-interface UserCredentials {
-  name: string;
-  email: string;
-  password: string;
-  image: string;
-  rol: string;
-}
-
 interface userState {
   users: IUser[];
   registerStatus: "idle" | "pending" | "fulfilled" | "rejected";
@@ -24,7 +16,7 @@ const initialState: userState = {
 
 export const registerUser = createAsyncThunk<
   string,
-  UserCredentials,
+  IUser,
   { rejectValue: string }
 >("auth/registerUser", async (value, { rejectWithValue }) => {
   try {
@@ -32,7 +24,6 @@ export const registerUser = createAsyncThunk<
       name: value.name,
       email: value.email,
       password: value.password,
-      image: value.image,
       rol: value.rol,
     });
     localStorage.setItem("token", token.data);

@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { IPartner } from "../utils/types";
 import Partner from "../models/partner";
 

@@ -1,8 +1,8 @@
 import { IIncome } from "../utils/types";
 import Income from "../models/income";
 import Partner from "../models/partner";
-import States from "../models/states";
-import Users from "../models/users";
+import States from "../models/state";
+import Users from "../models/user";
 
 export const registerUserIncome = async (income: IIncome) => {
   try {

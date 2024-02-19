@@ -8,10 +8,10 @@ import {
 } from "../controllers/partnerControllers";
 import Partner from "../models/partner";
 import { IPartner } from "../utils/types";
-import { Roles } from "../models/roles";
-import States from "../models/states";
+import { Roles } from "../models/rol";
+import States from "../models/state";
 import dotenv from "dotenv";
-import Users from "../models/users";
+import Users from "../models/user";
 dotenv.config();
 
 export const getPartnerHandler = async (

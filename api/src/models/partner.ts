@@ -65,12 +65,12 @@ const partnerSchema = new Schema<IPartner>({
   stateId: {
     type: Schema.Types.String,
     ref: "States",
-    default: null,
+    default: "inactive",
   },
   userId: {
     type: Schema.Types.String,
     ref: "User",
-    default: null,
+
   },
   rol: {
     type: Schema.Types.String,
