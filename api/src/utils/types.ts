@@ -54,11 +54,12 @@ export interface IIncome extends Document {
 export interface IPayment {
   _id: Schema.Types.ObjectId;
   amount: number;
-  // total: number;
+  total: number;
   dateFrom: Date;
   dateTo: Date;
-  stateId: Types.ObjectId | string | null;
   deleted: boolean;
+  promotionId: number | null;
+  stateId: Types.ObjectId | string | null;
   creatorId: Types.ObjectId | string | null;
   partnerId: Types.ObjectId | string | null;
   createdAt: Date;
@@ -68,7 +69,8 @@ export interface IPayment {
 export interface IPromotion {
   _id: Schema.Types.ObjectId;
   name: string;
-  contadorReference: Types.ObjectId | string | Number | null;
+  percentage: number | null;
+  referredDate: number | null;
   description: string;
   deleted: boolean;
   stateId: Types.ObjectId | string | null;

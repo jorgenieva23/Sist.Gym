@@ -11,11 +11,15 @@ const PromotionSchema = new Schema<IPromotion>({
     type: String,
     require: true,
   },
-  contadorReference: {
+  referredDate: {
+    type: Number,
+  },
+  percentage: {
     type: Number,
   },
   description: {
     type: String,
+    default: null,
   },
   deleted: {
     type: Boolean,

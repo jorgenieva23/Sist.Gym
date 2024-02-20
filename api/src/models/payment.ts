@@ -11,10 +11,10 @@ const PaymentsSchema = new Schema<IPayment>({
     type: Number,
     required: true,
   },
-  // total: {
-  //   type: Number,
-  //   required: false,
-  // },
+  total: {
+    type: Number,
+    required: false,
+  },
   dateFrom: {
     type: Date,
     required: false,
@@ -23,14 +23,19 @@ const PaymentsSchema = new Schema<IPayment>({
     type: Date,
     required: false,
   },
+  deleted: {
+    type: Boolean,
+    required: false,
+  },
+  promotionId: {
+    type: Number,
+    ref: "State",
+    default: null,
+  },
   stateId: {
     type: Schema.Types.String,
     ref: "State",
     default: null,
-  },
-  deleted: {
-    type: Boolean,
-    required: false,
   },
   creatorId: {
     type: Schema.Types.String,
