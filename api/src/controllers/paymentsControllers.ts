@@ -9,9 +9,7 @@ export const registerPaymentController = async (payment: IPayment) => {
   try {
     const { partnerId, stateId, creatorId, promotionId, dateFrom, amount } =
       payment;
-    if (!(dateFrom instanceof Date && !isNaN(dateFrom.getTime()))) {
-      throw new Error("Invalid dateFrom");
-    }
+
     const [partner, state, creator, promotion] = await Promise.all([
       Partner.findOne({ firstName: partnerId }).exec(),
       States.findOne({ name: stateId }).exec(),
@@ -28,32 +26,36 @@ export const registerPaymentController = async (payment: IPayment) => {
     const total = amount - discount;
 
     const dateTo = new Date(dateFrom);
+    if (!(dateTo instanceof Date && !isNaN(dateTo.getTime()))) {
+      throw new Error("Invalid dateFrom");
+    }
     if (
       promotion?.referredDate &&
       promotion.referredDate > 0 &&
       promotion.referredDate <= 12
     ) {
       if (promotion.referredDate === 1) {
-        dateTo.setDate(dateFrom.getDate() + 1);
+        dateTo.setDate(dateTo.getDate() + 1);
       } else {
-        dateTo.setMonth(dateFrom.getMonth() + promotion.referredDate);
+        dateTo.setMonth(dateTo.getMonth() + promotion.referredDate);
       }
     } else {
-      dateTo.setMonth(dateFrom.getMonth() + 1);
+      dateTo.setMonth(dateTo.getMonth() + 1);
     }
+
     const newPayment = new Payments({
       ...payment,
       dateTo: dateTo.toISOString().split("T")[0],
       total,
     });
     await Partner.findOneAndUpdate(
-      { firstName: partnerId },
+      { firstName: partnerId, promotionId: promotionId, creatorId: creatorId },
       { stateId: "active" },
       { new: true }
     );
     return await newPayment.save();
   } catch (error: any) {
-    console.error(error, "error");
+    console.error(error, "error controllers");
     throw new Error(`Error: ${error}`);
   }
 };
@@ -64,5 +66,70 @@ export const getAllPayment = async () => {
     return payment;
   } catch (err) {
     throw new Error("Error when searching for payment in the database");
+  }
+};
+
+export const getPaymentById = async (id: any) => {
+  try {
+    let payment = await Payments.findOne(id);
+    if (!payment) payment = await Users.findOne({ id });
+    if (!payment) return { error: true };
+    return payment;
+  } catch (err) {
+    throw new Error("Error when searching for payment in the database");
+  }
+};
+
+export const updateUserPayment = async (
+  _id: any,
+  updatedData: Partial<IPayment>
+) => {
+  try {
+    const updatePayment = await Users.findByIdAndUpdate(
+      _id,
+      { $set: updatedData },
+      { new: true }
+    );
+    return updatePayment;
+  } catch (err) {
+    throw new Error("Error when searching for payment in the database");
+  }
+};
+
+export const historyPaymentByPartner = async (id: any) => {
+  try {
+    let payment = await Payments.find({ id, delete: false });
+    if (!payment || payment.length === 0) {
+      throw Error("payment not found by userId or type");
+    }
+    payment = payment.sort(
+      (a, b) => new Date(a.dateTo).getTime() - new Date(b.dateTo).getTime()
+    );
+    const historyByYear: { [key: number]: number[] } = {};
+
+    payment.forEach((pay) => {
+      const payYear = new Date(pay.dateTo).getFullYear();
+      const payMonth = new Date(pay.dateTo).getUTCMonth() + 1;
+
+      if (!historyByYear[payYear]) {
+        historyByYear[payYear] = Array(12).fill(0);
+      }
+
+      historyByYear[payYear][payMonth - 1] += pay.total;
+
+      historyByYear[payYear][payMonth - 1] += pay.total;
+    });
+    const historyArray = Object.entries(historyByYear).map(
+      ([year, gainsPerMonth]) => {
+        return {
+          year: parseInt(year),
+          gainsPerMonth: gainsPerMonth,
+        };
+      }
+    );
+    return historyArray;
+  } catch (error: any) {
+    console.error("ERROR chartController: ", error.message);
+    return [];
   }
 };

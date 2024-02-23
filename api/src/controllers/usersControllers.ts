@@ -80,41 +80,31 @@ export const createdUser = async (user: IUser) => {
 };
 
 export const upDateUserControllers = async (
-  id: any,
+  _id: any,
   updatedData: Partial<IUser>
 ) => {
   try {
-    const user = await Users.findById(id);
+    const user = await Users.findById(_id);
     if (!user) {
-      console.log(`No se encontró ningún usuario con ID ${id}`);
+      console.log(`No se encontró ningún usuario con ID ${_id}`);
       return null;
     }
-    const {
-      name,
-      email,
-      deleted,
-      stateId,
-      creatorId,
-      lastConnection,
-      partners,
-      rol,
-      active,
-    } = updatedData;
+    const { name, email } = updatedData;
 
     if (name) {
       const existingUserByName = await Users.findOne({ name });
-      if (existingUserByName && existingUserByName._id != id) {
+      if (existingUserByName && existingUserByName._id != _id) {
         throw new Error("Ya existe un usuario con el mismo nickname");
       }
     }
     if (email) {
       const existingUserByEmail = await Users.findOne({ email });
-      if (existingUserByEmail && existingUserByEmail._id != id) {
+      if (existingUserByEmail && existingUserByEmail._id != _id) {
         throw new Error("Ya existe un usuario con el mismo email");
       }
     }
     const updatedUser = await Users.findByIdAndUpdate(
-      id,
+      _id,
       { $set: updatedData },
       { new: true }
     );

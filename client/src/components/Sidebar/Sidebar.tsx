@@ -15,7 +15,7 @@ import {
   FaUserCog,
 } from "react-icons/fa";
 
-const Sidebar: React.FC = (): JSX.Element => {
+const Sidebar = () => {
   const [open, setOpen] = useState(true);
 
   const Menu = [

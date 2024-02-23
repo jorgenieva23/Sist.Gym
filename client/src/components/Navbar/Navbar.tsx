@@ -1,7 +1,7 @@
 import React from "react";
 import logoGym from "../../assets/JNG.png";
 
-const Navbar: React.FC = (): JSX.Element => {
+const Navbar = () => {
   return (
     <nav className="flex justify-between border-b-2 border-gray-600 items-center bg-gray-800 w-full py-2 px-5">
       <div className="flex items-center">

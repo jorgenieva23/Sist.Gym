@@ -58,7 +58,7 @@ export interface IPayment {
   dateFrom: Date;
   dateTo: Date;
   deleted: boolean;
-  promotionId: number | null;
+  promotionId: number | string | null;
   stateId: Types.ObjectId | string | null;
   creatorId: Types.ObjectId | string | null;
   partnerId: Types.ObjectId | string | null;

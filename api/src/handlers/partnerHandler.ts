@@ -1,4 +1,4 @@
- import { Request, Response } from "express";
+import { Request, Response, json } from "express";
 import {
   getAllPartner,
   searchPartnerByName,
@@ -35,7 +35,7 @@ export const getPartnerId = async (
   res: Response
 ): Promise<void> => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const response = await getPartnerById(id);
     res.status(200).json(response);
   } catch (error: any) {
@@ -109,17 +109,18 @@ export const upDatePartnerById = async (
 export const deletePartner = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const user = await Partner.findByIdAndDelete(id);
-    if (!user) {
-      console.log(`No user found with ID: ${id}`);
-      res.status(404).json({ error: `No user found with ID: ${id}` });
-    } else {
-      console.log(`partner successfully removed: ${id} ${user} `);
-      res.sendStatus(204); // Envía una respuesta exitosa sin contenido
+    const partner = await Partner.findByIdAndDelete(id);
+    if (!partner) {
+      console.log(`No partner found with ID: ${id}`);
+      return res.status(404).json({ error: `No partner found with ID: ${id}` });
     }
+    console.log(`partner successfully removed: ${id} ${partner} `);
+    return res
+      .status(200)
+      .json({ message: "Partner successfully removed", partner });
   } catch (error) {
-    console.error(`partner successfully removed ${id}: ${error}`);
-    res.status(500).json({ error: `partner successfully removed ${id}` });
+    console.error(`Error deleting partner ${id}: ${error}`);
+    return res.status(500).json({ error: `Error deleting partner ${id}` });
   }
 };
 

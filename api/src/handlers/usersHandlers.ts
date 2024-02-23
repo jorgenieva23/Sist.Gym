@@ -35,8 +35,8 @@ export const getUserHandler = async (
 
 export const getUserId = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
-    const response = await getUserById(id);
+    const { _id } = req.params;
+    const response = await getUserById(_id);
     res.status(200).send(response);
   } catch (error: any) {
     res.status(500).send(error.message);
@@ -48,9 +48,9 @@ export const upDateUserById = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params;
+    const { _id } = req.params;
     const dataToUpdate = req.body;
-    const updatedUser = await upDateUserControllers(id, dataToUpdate);
+    const updatedUser = await upDateUserControllers(_id, dataToUpdate);
     res.status(200).json(updatedUser);
   } catch (error: any) {
     res.status(500).send(error.message);

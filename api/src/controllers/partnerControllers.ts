@@ -23,16 +23,16 @@ export const searchPartnerByName = async (name: any) => {
   }
 };
 
-export const getPartnerById = async (_id: any) => {
+export const getPartnerById = async (id: any) => {
   try {
-    const infoDB = await Partner.findById(_id).exec();
+    const infoDB = await Partner.findById(id).exec();
     if (infoDB === null) {
-      console.log(`No partner ID found ${_id}`);
+      console.log(`No partner ID found ${id}`);
     }
     return infoDB;
   } catch (error) {
     console.log(error);
-    throw new Error(`Failed to find user with ID ${_id}`);
+    throw new Error(`Failed to find user with ID ${id}`);
   }
 };
 

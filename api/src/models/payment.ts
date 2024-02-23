@@ -28,7 +28,8 @@ const PaymentsSchema = new Schema<IPayment>({
     required: false,
   },
   promotionId: {
-    type: Number,
+    type: String,
+    // type: Number,
     ref: "State",
     default: null,
   },

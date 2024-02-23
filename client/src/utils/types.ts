@@ -88,7 +88,12 @@ export interface IPayments {
 //   updatedAt: Date;
 // }
 
-// export interface movements {
-// id: string;
+export interface AuthResponse {
+  user: IUser;
+  accessToken: string;
+  refreshToken: string;
+}
 
-// }
+export interface AuthResponseError {
+  error: string;
+}

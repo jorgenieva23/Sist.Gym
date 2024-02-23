@@ -7,6 +7,9 @@ import {
   getUserId,
   loginUser,
   logoutUser,
+  // signuptUser,
+  // signoutUser,
+  // refreshToken,
 } from "../handlers/usersHandlers";
 
 const usersRouter = Router();
@@ -22,7 +25,27 @@ usersRouter.put("/update/:id", upDateUserById as IusersHandler);
 usersRouter.delete("/delete/:id", deleteUsers as IusersHandler);
 
 // Autenticacion
-usersRouter.post("/login", loginUser as IusersHandler);
-usersRouter.post("/logout", logoutUser as IusersHandler);
+
+usersRouter.post("/login", (req: Request, res: Response) => {
+  const { username, password } = req.body;
+  if (!!username || !!password) {
+    return res.status(400).send(400);
+  }
+  res.status(200).send("todoOk");
+});
+
+usersRouter.post("/logout", loginUser as IusersHandler);
+
+usersRouter.post("/signup", (req: Request, res: Response) => {
+  const { username, name, password } = req.body;
+  if (!username || !name || !password) {
+    return res.status(400).send(400);
+  }
+  res.status(200).send("todoOk");
+});
+
+// usersRouter.post("/signout", signoutUser as IusersHandler);
+// usersRouter.post("/refresh-token", refreshToken as IusersHandler);
+usersRouter.post("/signout", logoutUser as IusersHandler);
 
 export default usersRouter;
