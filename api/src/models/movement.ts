@@ -1,23 +1,20 @@
 import mongoose, { Schema } from "mongoose";
+import { IMovement } from "../utils/types";
 
-const movementSchema = new Schema({
-  id: {
-    type: String,
-    primaryKey: true,
-    autoIncrement: true,
+const MovementSchema = new Schema<IMovement>({
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    auto: true,
+    required: true,
   },
-  movementId: {
+  movementType: {
     type: Schema.Types.String,
-    ref: "tipeMovement",
+    ref: "MovementType",
     default: null,
   },
   ip: {
     type: String,
     required: false,
-  },
-  data: {
-    type: [{ type: Schema.Types.Mixed }],
-    required: [],
   },
   creatorId: {
     type: Schema.Types.String,
@@ -32,3 +29,6 @@ const movementSchema = new Schema({
     default: Date.now,
   },
 });
+
+const Movement = mongoose.model("Movement", MovementSchema);
+export default Movement;

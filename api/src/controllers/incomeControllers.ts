@@ -3,6 +3,9 @@ import Income from "../models/income";
 import Partner from "../models/partner";
 import States from "../models/state";
 import Users from "../models/user";
+import { registroMovimiento } from "./movementControllers";
+import Movement from "../models/movement";
+import { IMovement } from "../utils/types";
 
 export const registerUserIncome = async (income: IIncome) => {
   try {
@@ -12,6 +15,9 @@ export const registerUserIncome = async (income: IIncome) => {
       States.findOne({ name: stateId }).exec(),
       Users.findOne({ name: creatorId }).exec(),
     ]);
+    console.log(creator?.name);
+    console.log(state?.name);
+    console.log(partner?.firstName);
 
     if (!partner || !state || !creator) {
       throw new Error("Invalid partner, state, or creator");
@@ -19,6 +25,11 @@ export const registerUserIncome = async (income: IIncome) => {
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+
+    await Movement.create({
+      movementType: "CREAR_INGRESO",
+      creatorId: creator.name,
+    });
 
     return await Income.findOneAndUpdate(
       {

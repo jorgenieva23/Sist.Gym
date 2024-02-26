@@ -51,7 +51,7 @@ export interface IIncome extends Document {
   updatedAt: Date;
 }
 
-export interface IPayment {
+export interface IPayment extends Document {
   _id: Schema.Types.ObjectId;
   amount: number;
   total: number;
@@ -66,7 +66,7 @@ export interface IPayment {
   updatedAt: Date;
 }
 
-export interface IPromotion {
+export interface IPromotion extends Document {
   _id: Schema.Types.ObjectId;
   name: string;
   percentage: number | null;
@@ -79,14 +79,30 @@ export interface IPromotion {
   updatedAt: Date;
 }
 
-export interface IRoles {
+export interface IMovement extends Document {
   _id: Schema.Types.ObjectId;
-  name: string;
-  created_at: Date;
-  updated_at: Date;
+  movementType: Types.ObjectId | string | null;
+  creatorId: Types.ObjectId | string | null;
+  ip: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export interface IStates {
+export interface IMovementType extends Document {
+  _id: Schema.Types.ObjectId;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IRoles extends Document {
+  _id: Schema.Types.ObjectId;
+  name: string;
+  createdAt: Date;
+  updatedat: Date;
+}
+
+export interface IStates extends Document {
   _id: Schema.Types.ObjectId;
   name: string;
   createdAt: Date;

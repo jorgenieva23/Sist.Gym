@@ -1,10 +1,9 @@
 import { IStates } from "../utils/types";
-import StateIncome from "../models/state";
 import States from "../models/state";
 
 export const getAllStates = async () => {
   try {
-    const states = await StateIncome.find();
+    const states = await States.find();
     return states;
   } catch (error: any) {
     throw new Error("Error when searching for income in the database");

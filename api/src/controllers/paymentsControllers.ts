@@ -4,6 +4,7 @@ import Payments from "../models/payment";
 import Partner from "../models/partner";
 import States from "../models/state";
 import Users from "../models/user";
+import Movement from "../models/movement";
 
 export const registerPaymentController = async (payment: IPayment) => {
   try {
@@ -53,6 +54,10 @@ export const registerPaymentController = async (payment: IPayment) => {
       { stateId: "active" },
       { new: true }
     );
+    await Movement.create({
+      movementType: "CREAR_INGRESO",
+      creatorId: creator.name,
+    });
     return await newPayment.save();
   } catch (error: any) {
     console.error(error, "error controllers");

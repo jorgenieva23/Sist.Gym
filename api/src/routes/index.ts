@@ -7,6 +7,7 @@ import paymentRouter from "./paymentRouter";
 import promotionRouter from "./promotionRouter";
 import statesRouter from "./statesRouter";
 import rolesRouter from "./rolesRouter";
+import movementRouter from "./movementRouter";
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use("/income", incomeRouter);
 router.use("/state", statesRouter);
 router.use("/payment", paymentRouter);
 router.use("/promotion", promotionRouter);
+router.use("/movement", movementRouter);
 
 export default router;
