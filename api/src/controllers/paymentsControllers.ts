@@ -1,4 +1,5 @@
 import { IPayment } from "../utils/types";
+import { Request } from "express";
 import Promotion from "../models/promotion";
 import Payments from "../models/payment";
 import Partner from "../models/partner";
@@ -6,7 +7,11 @@ import States from "../models/state";
 import Users from "../models/user";
 import Movement from "../models/movement";
 
-export const registerPaymentController = async (payment: IPayment) => {
+// FUNCION REGISTRO DEL PAGO, MOVIMIENTO Y CALCULO DEL TOTAL MEDIANTE PROMOCIONES
+export const registerPaymentController = async (
+  payment: IPayment,
+  req: Request
+) => {
   try {
     const { partnerId, stateId, creatorId, promotionId, dateFrom, amount } =
       payment;
@@ -18,8 +23,9 @@ export const registerPaymentController = async (payment: IPayment) => {
       Promotion.findOne({ name: promotionId }).exec(),
     ]);
     if (!partner || !state || !creator) {
-      throw new Error("Invalid partner, state, or creator");
+      throw new Error("Invalid partner, state, creator or promotion");
     }
+
     let discount = 0;
     if (promotion?.percentage) {
       discount = (promotion.percentage / 100) * amount;
@@ -30,15 +36,11 @@ export const registerPaymentController = async (payment: IPayment) => {
     if (!(dateTo instanceof Date && !isNaN(dateTo.getTime()))) {
       throw new Error("Invalid dateFrom");
     }
-    if (
-      promotion?.referredDate &&
-      promotion.referredDate > 0 &&
-      promotion.referredDate <= 12
-    ) {
-      if (promotion.referredDate === 1) {
-        dateTo.setDate(dateTo.getDate() + 1);
-      } else {
+    if (promotion?.referredDate) {
+      if (promotion.referredDate > 0 && promotion.referredDate <= 12) {
         dateTo.setMonth(dateTo.getMonth() + promotion.referredDate);
+      } else {
+        dateTo.setDate(dateTo.getDate() + promotion.referredDate);
       }
     } else {
       dateTo.setMonth(dateTo.getMonth() + 1);
@@ -50,13 +52,14 @@ export const registerPaymentController = async (payment: IPayment) => {
       total,
     });
     await Partner.findOneAndUpdate(
-      { firstName: partnerId, promotionId: promotionId, creatorId: creatorId },
+      { firstName: partnerId },
       { stateId: "active" },
       { new: true }
     );
     await Movement.create({
-      movementType: "CREAR_INGRESO",
+      movementType: "CREAR_PAYMENT",
       creatorId: creator.name,
+      ip: req.ip,
     });
     return await newPayment.save();
   } catch (error: any) {
@@ -65,6 +68,7 @@ export const registerPaymentController = async (payment: IPayment) => {
   }
 };
 
+// FUNCION QUE TRAE TODOS LOS PAGOS
 export const getAllPayment = async () => {
   try {
     const payment = await Payments.find();
@@ -74,6 +78,7 @@ export const getAllPayment = async () => {
   }
 };
 
+// FUNCION QUE TRAE PAGOS POR ID
 export const getPaymentById = async (id: any) => {
   try {
     let payment = await Payments.findOne(id);
@@ -85,6 +90,7 @@ export const getPaymentById = async (id: any) => {
   }
 };
 
+// FUNCION QUE ACTUALIZA PAGOS MEDIANTE ID
 export const updateUserPayment = async (
   _id: any,
   updatedData: Partial<IPayment>
@@ -101,6 +107,7 @@ export const updateUserPayment = async (
   }
 };
 
+// FUNCION QUE TRAE LOS PAGOS DE UN SOCIO POR ID
 export const historyPaymentByPartner = async (id: any) => {
   try {
     let payment = await Payments.find({ id, delete: false });

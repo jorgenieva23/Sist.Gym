@@ -15,7 +15,7 @@ export const postPayment = async (
 ): Promise<void> => {
   try {
     const payment = req.body as IPayment;
-    const createPayment = await registerPaymentController(payment);
+    const createPayment = await registerPaymentController(payment, req);
     res.status(200).json(createPayment);
   } catch (error: any) {
     res.status(400).json(error.message);

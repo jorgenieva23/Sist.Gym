@@ -1,4 +1,4 @@
-import { Request, Response, json } from "express";
+import { Request, Response } from "express";
 import {
   getAllPartner,
   searchPartnerByName,
@@ -6,12 +6,14 @@ import {
   createPartner,
   updatePartner,
 } from "../controllers/partnerControllers";
-import Partner from "../models/partner";
-import { IPartner } from "../utils/types";
-import { Roles } from "../models/rol";
+import Movement from "../models/movement";
 import States from "../models/state";
-import dotenv from "dotenv";
 import Users from "../models/user";
+import Partner from "../models/partner";
+import { Roles } from "../models/rol";
+import { IPartner } from "../utils/types";
+
+import dotenv from "dotenv";
 dotenv.config();
 
 export const getPartnerHandler = async (
@@ -57,10 +59,14 @@ export const postPartner = async (
       userId: userName,
     } = req.body as IPartner;
     const [role, state, admin] = await Promise.all([
-      Roles.findOne({ name: { $in: roleNames } }),
-      States.findOne({ name: { $in: stateName } }),
-      Users.findOne({ name: { $in: userName } }),
+      Roles.findOne({ name: roleNames }).exec(),
+      States.findOne({ name: stateName }).exec(),
+      Users.findOne({ email: userName }).exec(),
     ]);
+    console.log(role);
+    console.log(state);
+    console.log(admin);
+
     if (!email || !firstName || !lastName) {
       throw new Error("Missing data required to create a partner");
     }
@@ -81,9 +87,15 @@ export const postPartner = async (
     console.log(createdPartert.email);
 
     await Users.updateOne(
-      { name: admin?.name },
+      { email: admin?.email },
       { $push: { partners: createdPartert.email } }
     );
+
+    await Movement.create({
+      movementType: "CREAR_PAYMENT",
+      creatorId: admin.name,
+      ip: req.ip,
+    });
 
     res.status(201).json(createdPartert);
   } catch (error: any) {

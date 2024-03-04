@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
 import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
-import AuthProvider from "./components/AuthProvider/AuthProvider.tsx";
+import { AuthProvider } from "./context/AuthProvider.tsx";
 
 axios.defaults.baseURL = "http://localhost:3001";
 

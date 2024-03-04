@@ -21,7 +21,7 @@ export const getAllUser = async () => {
 export async function getUserById(id: any) {
   try {
     let user = await Users.findOne({ id });
-    if (!user) user = await Users.findOne({ _id: id });
+    if (!user) user = await Users.findOne({ id });
     if (!user) return { error: true };
     return user;
   } catch (error: any) {
@@ -120,10 +120,11 @@ export const deleteByIdControllers = async (id: any) => {
   try {
     const infoDB = await Users.findByIdAndDelete(id);
     if (!infoDB) {
-      console.log(`No se encontró ningún users con ID ${id}`);
+      console.log(`No user found with ID: ${id}`);
     }
+    console.log(`user successfully removed: ${id} ${infoDB} `);
     return infoDB;
   } catch (error) {
-    throw new Error(`Ocurrió un error al eliminar usuario: ${error}`);
+    throw new Error(`Error: ${error}`);
   }
 };

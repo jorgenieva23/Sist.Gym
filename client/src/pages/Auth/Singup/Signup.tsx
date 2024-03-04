@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth } from "../../../components/AuthProvider/AuthProvider";
+import { useAuth } from "../../../context/AuthProvider";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -41,7 +41,7 @@ export const Signup: React.FC = (): JSX.Element => {
     }
   };
 
-  if (auth.isAuthenticate) {
+  if (auth.isAuthenticated) {
     return <Navigate to="/home" />;
   }
 

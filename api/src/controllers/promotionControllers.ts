@@ -1,9 +1,14 @@
 import { IPromotion } from "../utils/types";
+import { Request } from "express";
+import Movement from "../models/movement";
 import Promotion from "../models/promotion";
 import States from "../models/state";
 import Users from "../models/user";
 
-export const registerPromotionControllers = async (promotion: IPromotion) => {
+export const registerPromotionControllers = async (
+  promotion: IPromotion,
+  req: Request
+) => {
   try {
     const { stateId, creatorId } = promotion;
     const [state, creator] = await Promise.all([
@@ -15,6 +20,13 @@ export const registerPromotionControllers = async (promotion: IPromotion) => {
     }
     const newPromotion = new Promotion(promotion);
     const createdPromotion = await newPromotion.save();
+    console.log(createdPromotion);
+
+    await Movement.create({
+      movementType: "CREAR_PROMOTION",
+      creatorId: creator.name,
+      ip: req.ip,
+    });
 
     return createdPromotion;
   } catch (error) {

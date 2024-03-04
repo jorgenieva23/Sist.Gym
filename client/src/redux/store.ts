@@ -10,7 +10,7 @@ export const store = configureStore({
     partner: partnerReducer,
     income: incomeReducer,
     user: userReducer,
-    roles: rolesReducers,
+    role: rolesReducers,
   },
 });
 

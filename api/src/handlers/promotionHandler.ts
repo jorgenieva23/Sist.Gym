@@ -11,7 +11,7 @@ export const postPromotion = async (
 ): Promise<void> => {
   try {
     const promotion = req.body as IPromotion;
-    const createPromotion = await registerPromotionControllers(promotion);
+    const createPromotion = await registerPromotionControllers(promotion, req);
     res.status(200).json(createPromotion);
   } catch (error: any) {
     res.status(400).json(error.message);

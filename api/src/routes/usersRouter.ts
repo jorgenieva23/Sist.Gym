@@ -7,10 +7,10 @@ import {
   getUserId,
   loginUser,
   logoutUser,
-  // signuptUser,
-  // signoutUser,
-  // refreshToken,
+  profile,
+  refreshAccessToken,
 } from "../handlers/usersHandlers";
+import { authRequired } from "../middlewares/vlaidateToken";
 
 const usersRouter = Router();
 
@@ -26,26 +26,9 @@ usersRouter.delete("/delete/:id", deleteUsers as IusersHandler);
 
 // Autenticacion
 
-usersRouter.post("/login", (req: Request, res: Response) => {
-  const { username, password } = req.body;
-  if (!!username || !!password) {
-    return res.status(400).send(400);
-  }
-  res.status(200).send("todoOk");
-});
-
-usersRouter.post("/logout", loginUser as IusersHandler);
-
-usersRouter.post("/signup", (req: Request, res: Response) => {
-  const { username, name, password } = req.body;
-  if (!username || !name || !password) {
-    return res.status(400).send(400);
-  }
-  res.status(200).send("todoOk");
-});
-
-// usersRouter.post("/signout", signoutUser as IusersHandler);
-// usersRouter.post("/refresh-token", refreshToken as IusersHandler);
-usersRouter.post("/signout", logoutUser as IusersHandler);
+usersRouter.post("/login", loginUser as IusersHandler);
+usersRouter.post("/logout/:id", logoutUser as IusersHandler);
+usersRouter.get("/profile", authRequired, profile as IusersHandler);
+usersRouter.post("/refreshToken", refreshAccessToken as IusersHandler);
 
 export default usersRouter;

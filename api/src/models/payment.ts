@@ -30,7 +30,7 @@ const PaymentsSchema = new Schema<IPayment>({
   promotionId: {
     type: String,
     // type: Number,
-    ref: "State",
+    ref: "Promotion",
     default: null,
   },
   stateId: {

@@ -12,9 +12,10 @@ import {
   Payment,
   Login,
   Signup,
+  // NotFoundPage
 } from "./pages";
 import { Route, Routes } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRouted";
+import ProtectedRoute from "./context/ProtectedRouted";
 
 const App: React.FC = (): JSX.Element => {
   return (
@@ -34,6 +35,7 @@ const App: React.FC = (): JSX.Element => {
           <Route path="monthlyPayment" element={<MonthlyPayment />} />
           <Route path="roles" element={<Roles />} />
         </Route>
+        {/* <Route path="*" element={<NotFoundPage />} /> */}
       </Routes>
     </div>
   );

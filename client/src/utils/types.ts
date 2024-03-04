@@ -88,7 +88,7 @@ export interface IPayments {
 //   updatedAt: Date;
 // }
 
-export interface AuthResponse {
+export interface IAuthResponse {
   user: IUser;
   accessToken: string;
   refreshToken: string;
@@ -96,4 +96,10 @@ export interface AuthResponse {
 
 export interface AuthResponseError {
   error: string;
+}
+
+export interface IAccessTokenResponse {
+  statusCode: number;
+  accessToken: string;
+  error?: string;
 }

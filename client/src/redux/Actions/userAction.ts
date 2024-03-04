@@ -6,6 +6,14 @@ import { IUser } from "../../utils/types";
 export const useUserAction = () => {
   const dispatch = useAppDispatch();
 
+  // const loginUser = async (email, password) => {
+  //   try {
+  //     const response = await axios.post(`/user/login`, {
+  //       email,
+  //       password,
+  //     });
+  //   } catch (error) {}
+  // };
   const getAllUser = async () => {
     try {
       const rawData = await axios.get(`/user/all`);
@@ -52,6 +60,7 @@ export const useUserAction = () => {
       console.error(error.message);
     }
   };
+
   return {
     getAllUser,
     createNewUser,

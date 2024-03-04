@@ -1,8 +1,9 @@
 import { Types } from "mongoose";
+import { Request } from "express";
 import { Schema, Document } from "mongoose";
 
 export interface IPartner extends Document {
-  // _id: Schema.Types.ObjectId;
+  _id: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
   dni: number;
@@ -35,7 +36,7 @@ export interface IUser extends Document {
   rol: string | null;
   active: boolean;
   deleted: boolean;
-  token: string;
+  token: string | undefined;
   updatedAt: Date;
   createdAt: Date;
   lastConnection: Date;
@@ -107,4 +108,8 @@ export interface IStates extends Document {
   name: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface IAuthRequest extends Request {
+  user?: IUser;
 }

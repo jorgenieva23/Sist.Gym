@@ -1,7 +1,10 @@
 import React from "react";
 import { Footer, Navbar, Sidebar } from "../../components";
+import { useAppSelector } from "../../redux/store";
 
 export const Home: React.FC = (): JSX.Element => {
+  const auth = useAppSelector((state) => state.user.users);
+
   return (
     <div className="flex flex-col h-screen">
       <Navbar />

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, MouseEvent } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
 import controlImage from "../../assets/control.png";
 import logoImage from "../../assets/logo.png";
 import {
@@ -35,6 +36,28 @@ const Sidebar = () => {
     { name: "MonthlyPayment", link: "/monthlyPayment", icon: FaMoneyBillAlt },
     { name: "Roles", link: "/roles", icon: FaUserCog },
   ];
+
+  const auth = useAuth();
+
+  async function handleSignOut(e: MouseEvent) {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(`/user/logout/:id`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.getRefreshToken()}`,
+        },
+      });
+      if (response.ok) {
+        auth.signout();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="flex">
       <div
@@ -56,7 +79,7 @@ const Sidebar = () => {
               !open && "scale-0"
             }`}
           >
-            Designer
+            {auth.getUser()?.name || ""}
           </h1>
         </div>
         <div className="mt-10 flex flex-col gap-4 relative">
