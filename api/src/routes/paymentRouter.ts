@@ -4,7 +4,8 @@ import {
   getPaymentHandler,
   getPaymentId,
   upDatePaymentById,
-  deletePayment,
+  getPartnerPaymentsHandler,
+  deleteParterHandler,
 } from "../handlers/paymentsHandlers";
 
 const paymentRouter = Router();
@@ -13,10 +14,14 @@ interface IPaymentHandler {
   (req: Request, res: Response): void;
 }
 
-paymentRouter.post("/create", postPayment as IPaymentHandler);
-paymentRouter.get("/all", getPaymentHandler as IPaymentHandler);
+paymentRouter.post("/createPayment", postPayment as IPaymentHandler);
+paymentRouter.get("/allPaymen", getPaymentHandler as IPaymentHandler);
 paymentRouter.get("/getById/id:", getPaymentId as IPaymentHandler);
+paymentRouter.get(
+  "/partnerPayments/id:",
+  getPartnerPaymentsHandler as IPaymentHandler
+);
 paymentRouter.put("/update/:id", upDatePaymentById as IPaymentHandler);
-paymentRouter.delete("/deleteById/id:", deletePayment as IPaymentHandler);
+paymentRouter.delete("/deleteById/id:", deleteParterHandler as IPaymentHandler);
 
 export default paymentRouter;

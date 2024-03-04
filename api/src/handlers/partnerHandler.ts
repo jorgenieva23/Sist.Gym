@@ -5,6 +5,7 @@ import {
   getPartnerById,
   createPartner,
   updatePartner,
+  deletePartner,
 } from "../controllers/partnerControllers";
 import Movement from "../models/movement";
 import States from "../models/state";
@@ -23,7 +24,7 @@ export const getPartnerHandler = async (
   try {
     const { name } = req.query;
     const result: any = name
-      ? await searchPartnerByName(name)
+      ? await searchPartnerByName(name as string)
       : await getAllPartner();
     res.status(200).json(result);
   } catch (error: any) {
@@ -63,18 +64,15 @@ export const postPartner = async (
       States.findOne({ name: stateName }).exec(),
       Users.findOne({ email: userName }).exec(),
     ]);
-    console.log(role);
-    console.log(state);
-    console.log(admin);
 
     if (!email || !firstName || !lastName) {
       throw new Error("Missing data required to create a partner");
     }
-    if (await Partner.findOne({ email })) {
-      throw new Error("There is already a partner with the same email");
-    }
     if (!role || !state || !admin) {
       throw new Error("Role, state, or admin not found");
+    }
+    if (await Partner.findOne({ email })) {
+      throw new Error("There is already a partner with the same email");
     }
     const partner: IPartner = {
       ...req.body,
@@ -88,11 +86,11 @@ export const postPartner = async (
 
     await Users.updateOne(
       { email: admin?.email },
-      { $push: { partners: createdPartert.email } }
+      { $push: { partners: createdPartert.email || createdPartert.firstName } }
     );
 
     await Movement.create({
-      movementType: "CREAR_PAYMENT",
+      movementType: "CREAR_PARTNER",
       creatorId: admin.name,
       ip: req.ip,
     });
@@ -111,38 +109,28 @@ export const upDatePartnerById = async (
   try {
     const { id } = req.params;
     const dataToUpdate = req.body;
-    const updata = await updatePartner(id, dataToUpdate);
-    res.status(200).json(updatePartner);
+    const updata = await updatePartner({ id, updatedData: dataToUpdate, req });
+    res.status(200).json(updata);
   } catch (error: any) {
     res.status(500).send(error.message);
   }
 };
 
-export const deletePartner = async (req: Request, res: Response) => {
+export const deleteParterHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
   try {
-    const partner = await Partner.findByIdAndDelete(id);
-    if (!partner) {
-      console.log(`No partner found with ID: ${id}`);
-      return res.status(404).json({ error: `No partner found with ID: ${id}` });
+    let result: any = id
+      ? await deletePartner(id, req)
+      : await Partner.deleteMany();
+    if (!result) {
+      console.log(`No income found`);
+      res.status(404).json({ error: `No partner found` });
     }
-    console.log(`partner successfully removed: ${id} ${partner} `);
-    return res
-      .status(200)
-      .json({ message: "Partner successfully removed", partner });
+    res.status(200).json({ message: "partner successfully removed" });
   } catch (error) {
-    console.error(`Error deleting partner ${id}: ${error}`);
-    return res.status(500).json({ error: `Error deleting partner ${id}` });
-  }
-};
-
-export const deleteAllPartner = async (req: Request, res: Response) => {
-  try {
-    const users = await Partner.deleteMany();
-    // if (!users) return res.status(400).json({ message: "invalid ID" });
-    return res.status(200).json(users);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).send("Server Error");
+    res.status(500).json({ error: `Error deleting partner ${id}` });
   }
 };

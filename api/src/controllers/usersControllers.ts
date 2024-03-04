@@ -1,5 +1,7 @@
+import { Request } from "express";
 import { IUser } from "../utils/types";
 import Users from "../models/user";
+import Movement from "../models/movement";
 import Partner from "../models/partner";
 import dotenv from "dotenv";
 dotenv.config();
@@ -116,15 +118,22 @@ export const upDateUserControllers = async (
   }
 };
 
-export const deleteByIdControllers = async (id: any) => {
+export const deleteUser = async (id: any, req: Request) => {
   try {
-    const infoDB = await Users.findByIdAndDelete(id);
-    if (!infoDB) {
+    const user = await Users.findByIdAndDelete(id);
+    if (!user) {
       console.log(`No user found with ID: ${id}`);
     }
-    console.log(`user successfully removed: ${id} ${infoDB} `);
-    return infoDB;
+    console.log(`user successfully removed: ${id} ${user} `);
+
+    await Movement.create({
+      movementType: "DELETE_USER",
+      creatorId: user?.creatorId,
+      ip: req.ip,
+    });
+
+    return user;
   } catch (error) {
-    throw new Error(`Error: ${error}`);
+    console.error(`Error deleting user ${id}: ${error}`);
   }
 };

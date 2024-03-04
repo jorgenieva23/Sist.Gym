@@ -91,16 +91,26 @@ export const getPaymentById = async (id: any) => {
 };
 
 // FUNCION QUE ACTUALIZA PAGOS MEDIANTE ID
-export const updateUserPayment = async (
-  _id: any,
-  updatedData: Partial<IPayment>
-) => {
+export const updateUserPayment = async ({
+  req,
+  id,
+  updatedData,
+}: {
+  id: any;
+  updatedData: Partial<IPayment>;
+  req: Request;
+}) => {
   try {
     const updatePayment = await Users.findByIdAndUpdate(
-      _id,
+      id,
       { $set: updatedData },
       { new: true }
     );
+    await Movement.create({
+      movementType: "UPDATE_PARTNER",
+      creatorId: updatePayment?.creatorId,
+      ip: req.ip,
+    });
     return updatePayment;
   } catch (err) {
     throw new Error("Error when searching for payment in the database");
@@ -108,7 +118,7 @@ export const updateUserPayment = async (
 };
 
 // FUNCION QUE TRAE LOS PAGOS DE UN SOCIO POR ID
-export const historyPaymentByPartner = async (id: any) => {
+export const getPartnerPayments = async (id: any) => {
   try {
     let payment = await Payments.find({ id, delete: false });
     if (!payment || payment.length === 0) {
@@ -143,5 +153,25 @@ export const historyPaymentByPartner = async (id: any) => {
   } catch (error: any) {
     console.error("ERROR chartController: ", error.message);
     return [];
+  }
+};
+
+export const deletePayment = async (id: any, req: Request) => {
+  try {
+    const payment = await Partner.findByIdAndDelete(id);
+    if (!payment) {
+      console.log(`No payment found with ID: ${id}`);
+    }
+    console.log(`payment successfully removed: ${id} ${payment} `);
+
+    await Movement.create({
+      movementType: "DELETE_PARTNER",
+      creatorId: payment?.userId,
+      ip: req.ip,
+    });
+
+    return payment;
+  } catch (error) {
+    console.error(`Error deleting payment ${id}: ${error}`);
   }
 };

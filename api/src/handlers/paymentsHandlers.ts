@@ -4,7 +4,8 @@ import {
   getAllPayment,
   updateUserPayment,
   getPaymentById,
-  historyPaymentByPartner,
+  getPartnerPayments,
+  deletePayment,
 } from "../controllers/paymentsControllers";
 import { IPayment } from "../utils/types";
 import Payment from "../models/payment";
@@ -55,27 +56,46 @@ export const upDatePaymentById = async (
   try {
     const { id } = req.params;
     const dataToUpdate = req.body;
-    const updatedPaymen = await updateUserPayment(id, dataToUpdate);
+    const updatedPaymen = await updateUserPayment({
+      id,
+      updatedData: dataToUpdate,
+      req,
+    });
     res.status(200).json(updatedPaymen);
   } catch (error: any) {
     res.status(500).send(error.message);
   }
 };
 
-export const deletePayment = async (req: Request, res: Response) => {
+export const getPartnerPaymentsHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    let result = await getPartnerPayments(id);
+    res.status(200).json(result);
+  } catch (error) {
+    console.log("possible mistake");
+    res.status(400).json({ error });
+  }
+};
+
+export const deleteParterHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
   try {
-    const payment = await Payment.findByIdAndDelete(id);
-    if (!payment) {
-      console.log(`No payment found with ID: ${id}`);
-      return res.status(404).json({ error: `No payment found with ID: ${id}` });
+    let result: any = id
+      ? await deletePayment(id, req)
+      : await Payment.deleteMany();
+    if (!result) {
+      console.log(`No Payment found`);
+      res.status(404).json({ error: `No Payment found` });
     }
-    console.log(`payment successfully removed: ${id} ${payment} `);
-    return res
-      .status(200)
-      .json({ message: "Partner successfully removed", payment });
+    res.status(200).json({ message: "Payment successfully removed" });
   } catch (error) {
-    console.error(`Error deleting payment ${id}: ${error}`);
-    return res.status(500).json({ error: `Error deleting payment ${id}` });
+    res.status(500).json({ error: `Error deleting Payment ${id}` });
   }
 };

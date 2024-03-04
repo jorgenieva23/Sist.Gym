@@ -16,7 +16,7 @@ export const registerPromotionControllers = async (
       Users.findOne({ name: creatorId }).exec(),
     ]);
     if (!state || !creator) {
-      throw new Error("Invalid partner, state, or creator");
+      throw new Error("Invalid  state, or creator");
     }
     const newPromotion = new Promotion(promotion);
     const createdPromotion = await newPromotion.save();
@@ -41,5 +41,53 @@ export const getAllPromotion = async () => {
     return promotion;
   } catch (err) {
     throw new Error("Error when searching for payment in the database");
+  }
+};
+
+export const updatePromotion = async ({
+  req,
+  id,
+  updatedData,
+}: {
+  req: Request;
+  id: any;
+  updatedData: Partial<IPromotion>;
+}) => {
+  try {
+    const promotion = await Promotion.findById(id);
+    if (!promotion) {
+      console.log(`no promotion found id ${id}`);
+      return null;
+    }
+    await Movement.create({
+      movementType: "UPDATE_PARTNER",
+      creatorId: promotion?.creatorId,
+      ip: req.ip,
+    });
+
+    const updatePromotion = await Promotion.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+    return updatePromotion;
+  } catch (error) {}
+};
+
+export const deletePayment = async (id: any, req: Request) => {
+  try {
+    const payment = await Promotion.findByIdAndDelete(id);
+    if (!payment) {
+      console.log(`No payment found with ID: ${id}`);
+    }
+    console.log(`payment successfully removed: ${id} ${payment} `);
+
+    await Movement.create({
+      movementType: "DELETE_PROMOTION",
+      creatorId: payment?.creatorId,
+      ip: req.ip,
+    });
+
+    return payment;
+  } catch (error) {
+    console.error(`Error deleting payment ${id}: ${error}`);
   }
 };

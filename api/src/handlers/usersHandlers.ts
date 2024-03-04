@@ -5,20 +5,14 @@ import {
   createdUser,
   getUserById,
   upDateUserControllers,
-  deleteByIdControllers,
+  deleteUser,
 } from "../controllers/usersControllers";
-import { createAccessToken, createRefreshToken } from "../utils/jwt";
 import Movement from "../models/movement";
 import Users from "../models/user";
-import { IUser, IAuthRequest } from "../utils/types";
+import { IUser } from "../utils/types";
 import { Roles } from "../models/rol";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import States from "../models/state";
-import dotenv from "dotenv";
-dotenv.config();
-
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
 
 export const getUserHandler = async (
   req: Request,
@@ -92,7 +86,7 @@ export const postUserHandler = async (
       creatorId: admin?.email || null,
     };
     await Movement.create({
-      movementType: "CREAR_PARTNER",
+      movementType: "CREAR_USER",
       creatorId: admin?.email,
       ip: req.ip,
     });
@@ -103,118 +97,19 @@ export const postUserHandler = async (
   }
 };
 
-export const deleteUsers = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const deleteUser = await deleteByIdControllers(id);
-    if (!deleteUser) {
-      return res.status(404).json({ error: `No user found` });
-    }
-    return res.status(200).json(deleteUser);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).send("Server Error");
-  }
-};
-
-export const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  try {
-    const user = await Users.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: "User or password incorrect" });
-    }
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) {
-      return res.status(400).json({ error: "User or password incorrect" });
-    }
-    const accessToken = createAccessToken(user);
-    // const refreshToken = createRefreshToken(user);
-    user.token = accessToken;
-    user.active = true;
-    await user.save();
-    res.status(200).json({ accessToken, user });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Server error" });
-  }
-};
-
-export const logoutUser = async (req: Request, res: Response) => {
+export const deleteUserHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
   try {
-    const user = await Users.findById(id);
-    if (!user) {
-      return res.status(400).json({ error: "Invalid user ID" });
+    let result: any = id ? await deleteUser(id, req) : await Users.deleteMany();
+    if (!result) {
+      console.log(`No income found`);
+      res.status(404).json({ error: `No partner found` });
     }
-    user.token = "";
-    // res.cookie("token", "", { expires: new Date(0) });
-    await user.save();
-    res.status(200).json({ message: "User logged out successfully" });
+    res.status(200).json({ message: "partner successfully removed" });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: `Error deleting partner ${id}` });
   }
 };
-
-export const refreshAccessToken = async (req: Request, res: Response) => {
-  const { refreshToken } = req.body;
-  try {
-    const decoded = jwt.verify(refreshToken, JWT_SECRET_KEY) as {
-      user_id: string;
-    };
-    const user = await Users.findById(decoded.user_id);
-    if (!user) {
-      return res.status(400).json({ error: "Invalid refresh token" });
-    }
-    const accessToken = createAccessToken(user);
-    res.status(200).json({ accessToken });
-  } catch (error) {
-    console.log(error, "error handler");
-    res.status(500).json({ error: "Server error" });
-  }
-};
-
-export const profile = async (req: IAuthRequest, res: Response) => {
-  console.log(req.user);
-  res.send("profile");
-};
-
-// export const refreshAccessToken = async (req: Request, res: Response) => {
-//   try {
-//     const { refreshToken } = req.body;
-
-//     const token = validateToken(req.headers);
-
-//     const decoded = jwt.verify(refreshToken, JWT_SECRET_KEY) as {
-//       userId: string;
-//     };
-//     const user = await Users.findById(decoded.userId);
-//     if (!user) {
-//       return res.status(401).json({ error: "Invalid refresh token" });
-//     }
-//     if (user.token !== token) {
-//       return res.status(401).json({ error: "Invalid access token" });
-//     }
-
-//     const accessToken = createAccessToken(user);
-
-//     res.status(200).json({ accessToken });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Server error" });
-//   }
-// };
-
-// function validateToken(headers: any) {
-//   if (headers.authorization) {
-//     const parted = headers.authorization.split(" ");
-//     if (parted.length === 2) {
-//       return parted[1];
-//     } else {
-//       return null;
-//     }
-//   } else {
-//     return null;
-//   }
-// }

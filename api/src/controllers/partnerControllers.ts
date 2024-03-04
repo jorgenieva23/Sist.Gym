@@ -1,5 +1,7 @@
+import { Request } from "express";
 import { IPartner } from "../utils/types";
 import Partner from "../models/partner";
+import Movement from "../models/movement";
 
 export const getAllPartner = async () => {
   try {
@@ -10,7 +12,7 @@ export const getAllPartner = async () => {
   }
 };
 
-export const searchPartnerByName = async (name: any) => {
+export const searchPartnerByName = async (name: string) => {
   try {
     const infoDB = await Partner.find({ name }).exec();
     if (infoDB === null) {
@@ -44,7 +46,12 @@ export const createPartner = async (partner: IPartner) => {
     address,
     phone,
     email,
+    picture,
+    date,
+    datePhysicalAttitude,
+    medicalCoverage,
     phoneEmergency,
+    phoneEmergencyName,
     stateId: stateName,
     userId: userName,
     rol: roleNames,
@@ -56,41 +63,72 @@ export const createPartner = async (partner: IPartner) => {
     address,
     phone,
     email,
+    picture,
+    date,
+    datePhysicalAttitude,
+    medicalCoverage,
     phoneEmergency,
+    phoneEmergencyName,
     stateId: stateName,
     userId: userName,
     rol: roleNames,
   });
 };
 
-export const updatePartner = async (
-  id: any,
-  updatedData: Partial<IPartner>
-) => {
+export const updatePartner = async ({
+  req,
+  id,
+  updatedData,
+}: {
+  req: Request;
+  id: any;
+  updatedData: Partial<IPartner>;
+}) => {
   try {
     const partner = await Partner.findById(id);
     if (!partner) {
       console.log(`no partner found id ${id}`);
       return null;
     }
-    const { firstName, email } = updatedData;
+    const { email } = updatedData;
     if (email) {
       const existingPartnerByEmail = await Partner.findOne({ email });
       if (existingPartnerByEmail && existingPartnerByEmail._id != id) {
         throw new Error("There is already a partner with the same email");
       }
     }
-    if (firstName) {
-      const existingPartnerByFirstName = await Partner.findOne({ firstName });
-      if (existingPartnerByFirstName && existingPartnerByFirstName._id != id) {
-        throw new Error("There is already a partner with the same first name");
-      }
-    }
+
+    await Movement.create({
+      movementType: "UPDATE_PARTNER",
+      creatorId: partner?.userId,
+      ip: req.ip,
+    });
+
     const updatedPartner = await Partner.findByIdAndUpdate(id, updatedData, {
       new: true,
     });
     return updatedPartner;
   } catch (error: any) {
     throw new Error(`error updating partner ${error.message}`);
+  }
+};
+
+export const deletePartner = async (id: any, req: Request) => {
+  try {
+    const partner = await Partner.findByIdAndDelete(id);
+    if (!partner) {
+      console.log(`No partner found with ID: ${id}`);
+    }
+    console.log(`partner successfully removed: ${id} ${partner} `);
+
+    await Movement.create({
+      movementType: "BORRAR_INGRESO",
+      creatorId: partner?.userId,
+      ip: req.ip,
+    });
+
+    return partner;
+  } catch (error) {
+    console.error(`Error deleting partner ${id}: ${error}`);
   }
 };
