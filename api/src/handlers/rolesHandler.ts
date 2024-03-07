@@ -1,8 +1,12 @@
 // import { IRoles } from "../utils/types";
 import { Request, Response } from "express";
-import { createRoles, getAllRoles, searchRolesByName,} from "../controllers/rolesControllers";
+import {
+  createRoles,
+  getAllRoles,
+  searchRolesByName,
+} from "../controllers/rolesControllers";
 import { IRoles } from "../utils/types";
-import { Roles }  from "../models/rol";
+import Roles from "../models/rol";
 
 // MANEJADOR QUE TRAE LOS ROLES Y LOS ROLES POR NOMBRE
 
@@ -28,8 +32,11 @@ export const postRolesHandler = async (
   res: Response
 ): Promise<void> => {
   try {
-    const rol = req.body as IRoles;
-    const createdRol = await createRoles(rol);
+    const { name, permissions } = req.body as {
+      name: string;
+      permissions: string[];
+    };
+    const createdRol = await createRoles(name, permissions);
     res.status(200).json(createdRol);
   } catch (error: any) {
     res.status(400).json(error.message);

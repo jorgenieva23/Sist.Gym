@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth } from "../../../context/AuthProvider";
+// import { useAuth } from "../../../context/AuthProvider";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -13,7 +13,7 @@ export const Signup: React.FC = (): JSX.Element => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const auth = useAuth();
+  // const auth = useAuth();
 
   const redirect = useNavigate();
 
@@ -41,9 +41,9 @@ export const Signup: React.FC = (): JSX.Element => {
     }
   };
 
-  if (auth.isAuthenticated) {
-    return <Navigate to="/home" />;
-  }
+  // if (auth.isAuthenticated) {
+  //   return <Navigate to="/home" />;
+  // }
 
   return (
     <div className="justify-center h-screen flex items-center">

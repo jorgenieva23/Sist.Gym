@@ -14,6 +14,7 @@ const createAccessToken = (user: IUser) => {
   const payload = {
     token_type: "access",
     user_id: user._id,
+    user_rol: user.rol,
     iat: Date.now(),
     exp: expToken.getTime(),
   };

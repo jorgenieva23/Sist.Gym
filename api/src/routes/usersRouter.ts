@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { authRequired } from "../middlewares/vlaidateToken";
+import { auth } from "../middlewares/vlaidateToken";
 import {
   getUserHandler,
   getUserId,
@@ -29,7 +29,7 @@ usersRouter.delete("/delete/:id", deleteUserHandler as IusersHandler);
 // Autenticacion
 usersRouter.post("/login", loginUser as IusersHandler);
 usersRouter.post("/logout/:id", logoutUser as IusersHandler);
-usersRouter.get("/profile", authRequired, profile as IusersHandler);
+usersRouter.get("/profile", auth(["indexUsuario"]), profile as IusersHandler);
 usersRouter.post("/refreshToken", refreshAccessToken as IusersHandler);
 
 export default usersRouter;

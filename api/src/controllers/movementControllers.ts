@@ -1,7 +1,6 @@
 import Movement from "../models/movement";
 import MovementType from "../models/movementType";
-import { IMovement } from "../utils/types";
-import { IMovementType } from "../utils/types";
+import { IMovement, IMovementType } from "../utils/types";
 
 // CONTROLODORES DE LOS TIPOS DE MOVIMIENTOS
 
@@ -190,7 +189,7 @@ export const sabeAllMovementTypes = async () => {
       const name = movement.name;
       const types = await MovementType.findOne({ name });
       if (!types) {
-        const newTypes = new MovementType({ types });
+        const newTypes = new MovementType({ name });
         await newTypes.save();
         contador++;
         console.log(`vuelta creada N: ${contador} `);

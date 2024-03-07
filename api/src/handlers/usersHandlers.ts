@@ -10,7 +10,7 @@ import {
 import Movement from "../models/movement";
 import Users from "../models/user";
 import { IUser } from "../utils/types";
-import { Roles } from "../models/rol";
+import Roles from "../models/rol";
 import bcrypt from "bcrypt";
 import States from "../models/state";
 

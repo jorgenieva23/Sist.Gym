@@ -15,7 +15,6 @@ export const registerPaymentController = async (
   try {
     const { partnerId, stateId, creatorId, promotionId, dateFrom, amount } =
       payment;
-
     const [partner, state, creator, promotion] = await Promise.all([
       Partner.findOne({ firstName: partnerId }).exec(),
       States.findOne({ name: stateId }).exec(),
@@ -64,7 +63,7 @@ export const registerPaymentController = async (
     return await newPayment.save();
   } catch (error: any) {
     console.error(error, "error controllers");
-    throw new Error(`Error: ${error}`);
+    throw new Error(`ErrorControler: ${error}`);
   }
 };
 

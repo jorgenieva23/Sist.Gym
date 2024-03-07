@@ -46,7 +46,7 @@ const PaymentsSchema = new Schema<IPayment>({
   partnerId: {
     type: Schema.Types.String,
     ref: "Partner",
-    default: [],
+    default: null,
   },
   createdAt: {
     type: Date,

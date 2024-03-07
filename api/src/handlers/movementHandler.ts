@@ -3,10 +3,6 @@ import {
   //   createMovementType,
   getAllMovementType,
 } from "../controllers/movementControllers";
-import MovementType from "../models/movementType";
-import Movement from "../models/movement";
-import { IMovementType } from "../utils/types";
-import { IMovement } from "../utils/types";
 
 // MANEJADORES DE LOS TIPOS DE MOVIMIENTOS
 

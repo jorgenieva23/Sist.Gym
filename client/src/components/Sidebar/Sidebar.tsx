@@ -1,6 +1,6 @@
 import React, { useState, MouseEvent } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
+// import { useAuth } from "../../context/AuthProvider";
 import controlImage from "../../assets/control.png";
 import logoImage from "../../assets/logo.png";
 import {
@@ -18,6 +18,11 @@ import {
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
+  // const auth = useAuth();
+
+  // const isAdmin = auth.getUser()?.rol === "admin";
+  // const isDevelop = auth.getUser()?.rol === "develop";
+  // const isUser = auth.getUser()?.rol === "user";
 
   const Menu = [
     { name: "Panel", link: "/", icon: FaHome },
@@ -37,26 +42,24 @@ const Sidebar = () => {
     { name: "Roles", link: "/roles", icon: FaUserCog },
   ];
 
-  const auth = useAuth();
+  // async function handleSignOut(e: MouseEvent) {
+  //   e.preventDefault();
 
-  async function handleSignOut(e: MouseEvent) {
-    e.preventDefault();
-
-    try {
-      const response = await fetch(`/user/logout/:id`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.getRefreshToken()}`,
-        },
-      });
-      if (response.ok) {
-        auth.signout();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //   try {
+  //     const response = await fetch(`/user/logout/:id`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${auth.getRefreshToken()}`,
+  //       },
+  //     });
+  //     if (response.ok) {
+  //       auth.signout();
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   return (
     <div className="flex">
@@ -79,38 +82,44 @@ const Sidebar = () => {
               !open && "scale-0"
             }`}
           >
-            {auth.getUser()?.name || ""}
+            {/* {auth.getUser()?.name || ""} */}
           </h1>
         </div>
         <div className="mt-10 flex flex-col gap-4 relative">
-          {Menu?.map((Menu, i) => (
-            <Link
-              to={Menu?.link}
-              key={i}
-              className={`${
-                Menu?.margin && "mt-5"
-              } group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md text-white`}
-            >
-              <div>{React.createElement(Menu?.icon, { size: "22.5" })}</div>
-              <h2
-                style={{
-                  transitionDelay: `${i + 3}00ms`,
-                }}
-                className={`whitespace-pre duration-500 ${
-                  !open && "opacity-0 translate-x-28 overflow-hidden"
-                }`}
-              >
-                {Menu?.name}
-              </h2>
-              <h2
+          {Menu?.map(
+            (Menu, i) => (
+              // (Menu.rol === "User" && (isUser || isDevelop || isAdmin)) ||
+              // (Menu.rol === "Develop" && (isDevelop || isAdmin)) ||
+              // (Menu.rol === "Admin" && isAdmin) ?
+              <Link
+                to={Menu?.link}
+                key={i}
                 className={`${
-                  open && "hidden"
-                } absolute left-48 bg-gray-800 font-semibold whitespace-pre rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-16 group-hover:duration-300 group-hover:w-fit  `}
+                  Menu?.margin && "mt-5"
+                } group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md text-white`}
               >
-                {Menu?.name}
-              </h2>
-            </Link>
-          ))}
+                <div>{React.createElement(Menu?.icon, { size: "22.5" })}</div>
+                <h2
+                  style={{
+                    transitionDelay: `${i + 3}00ms`,
+                  }}
+                  className={`whitespace-pre duration-500 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  {Menu?.name}
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-gray-800 font-semibold whitespace-pre rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-16 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  {Menu?.name}
+                </h2>
+              </Link>
+            )
+            // : null
+          )}
         </div>
       </div>
     </div>

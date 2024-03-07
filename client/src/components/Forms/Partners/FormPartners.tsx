@@ -281,9 +281,7 @@ const FormPartners: React.FC<FormProps> = ({
               Fecha de nacimiento
             </label>
             <div className="flex">
-              <span
-                className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md"
-              >
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
                 <PiCalendarLight className="w-7 h-7 text-black" />
               </span>
               <input

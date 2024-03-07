@@ -11,7 +11,7 @@ import Movement from "../models/movement";
 import States from "../models/state";
 import Users from "../models/user";
 import Partner from "../models/partner";
-import { Roles } from "../models/rol";
+import Roles from "../models/rol";
 import { IPartner } from "../utils/types";
 
 import dotenv from "dotenv";
@@ -74,19 +74,16 @@ export const postPartner = async (
     if (await Partner.findOne({ email })) {
       throw new Error("There is already a partner with the same email");
     }
-    const partner: IPartner = {
+    const newPartner = new Partner({
       ...req.body,
       rol: role?.name || null,
       stateId: state?.name || null,
       creatorId: admin?.name || null,
-    };
-
-    const createdPartert = await createPartner(partner);
-    console.log(createdPartert.email);
+    });
 
     await Users.updateOne(
       { email: admin?.email },
-      { $push: { partners: createdPartert.email || createdPartert.firstName } }
+      { $push: { partners: newPartner.email || newPartner.firstName } }
     );
 
     await Movement.create({
@@ -94,8 +91,9 @@ export const postPartner = async (
       creatorId: admin.name,
       ip: req.ip,
     });
-
-    res.status(201).json(createdPartert);
+    
+    await newPartner.save();
+    res.status(201).json(newPartner);
   } catch (error: any) {
     console.log(error);
     res.status(400).json(error.message);

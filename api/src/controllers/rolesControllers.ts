@@ -1,12 +1,38 @@
-import { Roles } from "../models/rol";
+import Roles from "../models/rol";
+import Permission from "../models/permission";
 import { IRoles } from "../utils/types";
 
 // FUNCION QUE CREA LOS ROLES
 
-export const createRoles = async (roles: IRoles): Promise<IRoles> => {
+export const createRoles = async (
+  name: string,
+  permissions?: string[]
+): Promise<IRoles> => {
   try {
-    const { name } = roles;
-    const createdRole = await Roles.create(roles);
+    let permissionQuery = {};
+    if (permissions) {
+      permissionQuery = { name: { $in: permissions } };
+    }
+
+    const allPermission = await Permission.find(permissionQuery);
+
+    if (permissions && allPermission.length !== permissions.length) {
+      const missingPermissions = permissions.filter(
+        (permission) => !allPermission.some((p) => p.name === permission)
+      );
+      throw new Error(
+        `Los siguientes permisos no existen en la base de datos: ${missingPermissions.join(
+          ", "
+        )}`
+      );
+    }
+
+    const newRol = new Roles({
+      name,
+      permissions: permissions ? allPermission.map((p) => p.name) : [],
+    });
+
+    const createdRole = await newRol.save();
     return createdRole.toJSON() as IRoles;
   } catch (error) {
     throw new Error(`Ocurrió un error al crear el rol: ${error}`);

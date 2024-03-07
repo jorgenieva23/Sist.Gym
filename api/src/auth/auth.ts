@@ -26,6 +26,12 @@ export const loginUser = async (req: Request, res: Response) => {
     user.token = accessToken;
     user.active = true;
 
+    // res.cookie("token", accessToken, {
+    //   httpOnly: process.env.NODE_ENV !== "development",
+    //   secure: true,
+    //   sameSite: "none",
+    // });
+
     await Movement.create({
       movementType: "LOGIN_USER",
       creatorId: user?.name,
@@ -50,6 +56,11 @@ export const logoutUser = async (req: Request, res: Response) => {
     user.token = "";
     // res.cookie("token", "", { expires: new Date(0) });
     await user.save();
+    res.cookie("token", "", {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(0),
+    });
     res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
     console.log(error);
@@ -76,7 +87,7 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
 };
 
 export const profile = async (req: IAuthRequest, res: Response) => {
-  console.log(req.user);
+  console.log(req.user, "req.user");
   res.send("profile");
 };
 

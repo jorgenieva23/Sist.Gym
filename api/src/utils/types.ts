@@ -33,7 +33,7 @@ export interface IUser extends Document {
   stateId: Types.ObjectId | string | null;
   creatorId: Types.ObjectId | string | null;
   partners: string[];
-  rol: string | null;
+  rol: string;
   active: boolean;
   deleted: boolean;
   token: string | undefined;
@@ -99,8 +99,16 @@ export interface IMovementType extends Document {
 export interface IRoles extends Document {
   _id: Schema.Types.ObjectId;
   name: string;
+  permissions: string[];
   createdAt: Date;
-  updatedat: Date;
+  updatedAt: Date;
+}
+
+export interface IPermission extends Document {
+  _id: Schema.Types.ObjectId;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IStates extends Document {
