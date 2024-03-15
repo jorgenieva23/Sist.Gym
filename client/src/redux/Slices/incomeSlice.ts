@@ -3,13 +3,13 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { IIncome } from "../../utils/types";
 
 interface incomeState {
-  incomes: IIncome[];
+  income: IIncome[];
   registeredBy: string;
   // registrationDate: Date;
 }
 
 const initialState: incomeState = {
-  incomes: [],
+  income: [],
   registeredBy: "",
   // registrationDate: "",
 };
@@ -21,25 +21,25 @@ export const incomeSlice = createSlice({
     getIncome: (state, action: PayloadAction<IIncome[]>) => {
       return {
         ...state,
-        incomes: action.payload,
+        income: action.payload,
       };
     },
     fetchIncome: (state, action: PayloadAction<IIncome[]>) => {
       return {
         ...state,
-        incomes: action.payload,
+        income: action.payload,
       };
     },
     createIncome: (state, action: PayloadAction<IIncome>) => {
       return {
         ...state,
-        incomes: [...state.incomes, action.payload],
+        income: [...state.income, action.payload],
       };
     },
     editIncome: (state, action: PayloadAction<IIncome[]>) => {
       return {
         ...state,
-        incomes: action.payload,
+        income: action.payload,
       };
     },
   },

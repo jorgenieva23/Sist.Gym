@@ -10,8 +10,10 @@ import { Promotion } from "./Promotions/Promotions";
 import { Payment } from "./Payments/Payments";
 import { Login } from "./Auth/Login/Login";
 import { Signup } from "./Auth/Singup/Signup";
+import { Profile } from "./Profile/Profile";
 
 export {
+  Profile,
   Login,
   Signup,
   Home,

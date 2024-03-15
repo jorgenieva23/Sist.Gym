@@ -1,6 +1,6 @@
 import axios from "axios";
 import { IPartner } from "../../utils/types";
-import { useAppDispatch } from "../store";
+import { useAppDispatch } from "../hooks";
 import { getPartner, createPartner } from "../Slices/partnerSlice";
 
 export const usePartnerAction = () => {

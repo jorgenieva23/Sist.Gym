@@ -1,9 +1,8 @@
-// import { Outlet, Navigate } from "react-router-dom";
-// import { useAuth } from "../context/AuthProvider";
+import { Outlet, Navigate } from "react-router-dom";
+import { useAppSelector } from "../redux/hooks";
 
-// export default function ProtectedRoute() {
-//   const auth = useAuth();
-//   console.log(auth);
+export default function ProtectedRoute() {
+  const { userInfo, accessToken } = useAppSelector((state) => state.auth);
 
-//   return auth.isAuthenticated ? <Outlet /> : <Navigate to="/" />;
-// }
+  return userInfo && accessToken ? <Outlet /> : <Navigate to="/" />;
+}

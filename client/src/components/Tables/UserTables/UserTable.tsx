@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IUser } from "../../../utils/types";
 import { format } from "date-fns";
-import { useAppSelector } from "../../../redux/store";
+import { useAppSelector } from "../../../redux/hooks";
 import Pagination from "../../Pagination/Pagination";
 
 const TABLE_HEAD = ["Nombre", "Email", "rol", "Estado", "Creado", "Opciones"];

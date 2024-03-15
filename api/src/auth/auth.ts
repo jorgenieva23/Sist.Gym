@@ -22,16 +22,14 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "User or password incorrect" });
     }
     const accessToken = createAccessToken(user);
-    // const refreshToken = createRefreshToken(user);
     user.token = accessToken;
     user.active = true;
-
     // res.cookie("token", accessToken, {
     //   httpOnly: process.env.NODE_ENV !== "development",
     //   secure: true,
     //   sameSite: "none",
     // });
-
+    console.log(user?.name);
     await Movement.create({
       movementType: "LOGIN_USER",
       creatorId: user?.name,

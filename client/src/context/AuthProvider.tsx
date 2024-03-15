@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { IUser, IAuthResponse } from "../utils/types";
-import {
-  requestNewAccessToken,
-  retrieveUserInfo,
-} from "./requestNewAccessToken";
+// import React, { createContext, useContext, useState, useEffect } from "react";
+// import { IUser, IAuthResponse } from "../utils/types";
+// import {
+//   requestNewAccessToken,
+//   retrieveUserInfo,
+// } from "./requestNewAccessToken";
 // // Definimos el tipo para el contexto de autenticación
 // interface IAuthContext {
 //   user: IUser | null;

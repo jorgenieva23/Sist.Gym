@@ -1,21 +1,22 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import partnerReducer from "./Slices/partnerSlice";
 import incomeReducer from "./Slices/incomeSlice";
 import userReducer from "./Slices/userSlice";
 import rolesReducers from "./Slices/rolesSlice";
+import paymentReducer from "./Slices/paymentSlice";
+import authReducers from "./Slices/authSlice";
 
 export const store = configureStore({
   reducer: {
     partner: partnerReducer,
     income: incomeReducer,
+    payemnt: paymentReducer,
     user: userReducer,
-    role: rolesReducers,
+    roles: rolesReducers,
+    auth: authReducers,
   },
 });
 
-export const useAppDispatch: () => AppDispatch = useDispatch;
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export type AppThunk<ReturnType = void> = ThunkAction<

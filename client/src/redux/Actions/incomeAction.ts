@@ -1,6 +1,6 @@
 import axios from "axios";
 import { IIncome } from "../../utils/types";
-import { useAppDispatch } from "../store";
+import { useAppDispatch } from "../hooks";
 import { getIncome, createIncome } from "../Slices/incomeSlice";
 
 export const useIncomeAction = () => {
@@ -20,33 +20,39 @@ export const useIncomeAction = () => {
       const rawData = await axios.post(`/income/create`, {
         partnerId: income.partnerId,
         dateOfAdmission: income.dateOfAdmission,
-        stateId: income.stateId,
         creatorId: income.creatorId,
+        stateId: income.stateId,
       });
       return dispatch(createIncome(rawData.data));
     } catch (error: any) {
       console.error(error.message);
     }
   };
-  const updateIncome = async ({
-    id: _id,
-    updatedData,
-  }: {
-    id: string | null;
-    updatedData: IIncome;
-  }) => {
+  const IncomeOfTheDay = async () => {
     try {
-      const updatedIncome = await axios.put(`/income/update/${_id}`, {
-        updatedData,
-      });
-      return dispatch(getIncome(updatedIncome.data));
+      const today = await axios.get("/partnerIncome");
+      return dispatch(getIncome(today.data));
+    } catch (error) {}
+  };
+  const IncomeOfPartner = async (id: any) => {
+    try {
+      const income = await axios.get(`/allByPartnerId/${id}`);
+      return dispatch(getIncome(income.data));
+    } catch (error) {}
+  };
+  const deleteIncome = async (id: any) => {
+    try {
+      const deleted = await axios.delete(`/deleteIncome/${id}`);
+      return dispatch(getIncome(deleted.data));
     } catch (error: any) {
-      console.error(error.message);
+      console.log(error.message);
     }
   };
   return {
     getAllIncome,
     createNewIncome,
-    updateIncome,
+    IncomeOfTheDay,
+    IncomeOfPartner,
+    deleteIncome,
   };
 };

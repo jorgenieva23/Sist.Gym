@@ -1,8 +1,9 @@
-import React, { useState, MouseEvent } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-// import { useAuth } from "../../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 import controlImage from "../../assets/control.png";
 import logoImage from "../../assets/logo.png";
+import { logout } from "../../redux/Actions/authActions";
 import {
   FaUsers,
   FaHome,
@@ -15,17 +16,27 @@ import {
   FaMoneyBillAlt,
   FaUserCog,
 } from "react-icons/fa";
+import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
-  // const auth = useAuth();
+  const user = useAppSelector((state) => state.auth.userInfo);
 
-  // const isAdmin = auth.getUser()?.rol === "admin";
-  // const isDevelop = auth.getUser()?.rol === "develop";
-  // const isUser = auth.getUser()?.rol === "user";
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    if (user && user[0]?._id) {
+      dispatch(logout(user[0]?._id));
+      setTimeout;
+      setTimeout(() => {
+        navigate("/");
+      }, 1000); // Redirigir después de 2 segundos (2000 milisegundos)
+    }
+  };
 
   const Menu = [
-    { name: "Panel", link: "/", icon: FaHome },
+    { name: "Panel", link: "/home", icon: FaHome },
     { name: "Partners", link: "/Partner", icon: FaUsers },
     { name: "Payment", link: "/payment", icon: FaFileInvoiceDollar },
     { name: "Promotion", link: "/promotions", icon: FaRegStar },
@@ -76,15 +87,21 @@ const Sidebar = () => {
           onClick={() => setOpen(!open)}
         />
         <div className="flex gap-x-4 items-center">
-          <img src={logoImage} className={`cursor-pointer duration-500`} />
+          <img src={logoImage} className={`duration-500`} />
           <h1
             className={`text-white origin-left font-medium text-xl duration-200 ${
               !open && "scale-0"
             }`}
           >
-            {/* {auth.getUser()?.name || ""} */}
+            {user[0]?.name}
           </h1>
         </div>
+        <button
+          className="text-white text-sm mt-2 hover:underline cursor-pointer"
+          onClick={handleLogout}
+        >
+          Cerrar sesión
+        </button>
         <div className="mt-10 flex flex-col gap-4 relative">
           {Menu?.map(
             (Menu, i) => (

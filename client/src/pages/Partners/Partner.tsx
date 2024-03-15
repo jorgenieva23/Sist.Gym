@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector } from "../../redux/store";
+import { useAppSelector } from "../../redux/hooks";
 import { PartnerTable } from "../../components/Tables/PartnerTable/PartnerTable";
 import { usePartnerAction } from "../../redux/Actions/partnerAction";
 import { Footer, Navbar, Sidebar } from "../../components";

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ClipLoader } from "react-spinners";
 import { IIncome } from "../../../utils/types";
-import { useAppSelector } from "../../../redux/store";
+import { useAppSelector } from "../../../redux/hooks";
 import { useIncomeAction } from "../../../redux/Actions/incomeAction";
 import { PiUserCirclePlusLight, PiCalendarLight } from "react-icons/pi";
 
@@ -14,15 +14,15 @@ const FormIncome: React.FC<FormProps> = ({
   incomeToEdit,
   setEditingIncome,
 }: FormProps): JSX.Element => {
-  const { createNewIncome, updateIncome } = useIncomeAction();
-
-  const isEditing = !!incomeToEdit;
+  const { createNewIncome } = useIncomeAction();
 
   const partners = useAppSelector((state) => state.partner.partners);
+  const userAuth = useAppSelector((state) => state.auth.userInfo);
 
-  // const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  // const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  const isEditing = !!incomeToEdit;
   const [form, setForm] = useState<IIncome>({
     partnerId: isEditing ? incomeToEdit?.partnerId : "",
     dateOfAdmission: isEditing ? incomeToEdit?.dateOfAdmission : 0,
@@ -40,21 +40,16 @@ const FormIncome: React.FC<FormProps> = ({
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoadingSubmit(true);
-    if (isEditing && incomeToEdit && incomeToEdit._id) {
-      updateIncome({ id: incomeToEdit._id, updatedData: form }).then(() => {
-        setLoadingSubmit(false);
-        setEditingIncome && setEditingIncome(false);
-      });
-    } else {
-      createNewIncome(form).then(() => {
-        setLoadingSubmit(false);
-      });
+    createNewIncome(form).then(() => {
+      setLoadingSubmit(false);
+    });
 
-      setForm({
-        partnerId: "",
-        dateOfAdmission: 0,
-      });
-    }
+    setForm({
+      partnerId: "",
+      dateOfAdmission: 0,
+      creatorId: userAuth[0]?.name,
+      stateId: "active",
+    });
   };
 
   return (

@@ -4,9 +4,12 @@ import { usePartnerAction } from "../../redux/Actions/partnerAction";
 import Modal from "../../components/Modal/Modal";
 import ReactDOM from "react-dom";
 import FormIncome from "../../components/Forms/Income/FormIncome";
+import IncomeTable from "../../components/Tables/IncomeTable/IncomeTable";
+import { useAppSelector } from "../../redux/hooks";
 
 export const Income: React.FC = (): JSX.Element => {
   const { getAllPartner } = usePartnerAction();
+  const incomes = useAppSelector((state) => state.income.income);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
@@ -38,6 +41,9 @@ export const Income: React.FC = (): JSX.Element => {
               </Modal>,
               document.body
             )}
+          <div className="m-5">
+            <IncomeTable currentIncome={incomes} />
+          </div>
         </div>
       </div>
       <Footer />

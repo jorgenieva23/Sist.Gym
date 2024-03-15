@@ -6,7 +6,7 @@ import corazonSano from "../../../Images/corazonSano.png";
 import { PiImage, PiNotePencil, PiTrash, PiXCircle } from "react-icons/pi";
 import { format } from "date-fns";
 import Pagination from "../../Pagination/Pagination";
-import { useAppSelector } from "../../../redux/store";
+import { useAppSelector } from "../../../redux/hooks";
 
 const TABLE_HEAD = [
   // "#",
@@ -102,7 +102,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
                     <div className="flex items-center">
                       <Typography
                         color="blue-gray"
-                        className="cursor-pointer text-blue-500 font-semibold"
+                        className="cursor-pointer text-base text-blue-500 font-semibold"
                       >
                         {firstName} {lastName}
                       </Typography>
@@ -160,19 +160,16 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
                       {formattedDate}
                     </Typography>
                   </td>
-                  <td className="p-3 border border-slate-300 flex ">
-                    <PiNotePencil
-                      size="30"
-                      className="text-black bg-blue-500 rounded-sm"
-                    />
-                    <PiXCircle
-                      size="30"
-                      className="text-black bg-yellow-500 rounded-sm"
-                    />
-                    <PiTrash
-                      size="30"
-                      className="text-black bg-red-500 rounded-sm"
-                    />
+                  <td className="p-3 border border-slate-300">
+                    <button className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded">
+                      <PiNotePencil size="30" />
+                    </button>
+                    <button className="bg-yellow-500 px-1 hover:bg-yellow-800 text-white font-bolt rounded">
+                      <PiXCircle size="30" />
+                    </button>
+                    <button className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded">
+                      <PiTrash size="30" />
+                    </button>
                   </td>
                 </tr>
               );

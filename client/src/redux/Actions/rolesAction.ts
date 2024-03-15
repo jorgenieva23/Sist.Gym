@@ -1,6 +1,6 @@
 import axios from "axios";
 // import { IRoles } from "../../utils/types";
-import { useAppDispatch } from "../store";
+import { useAppDispatch } from "../hooks";
 import { getRoles } from "../Slices/rolesSlice";
 
 export const useRolesAction = () => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAppSelector } from "../../../redux/store";
+import { useAppSelector } from "../../../redux/hooks";
 import { usePartnerAction } from "../../../redux/Actions/partnerAction";
 import { IPartner } from "../../../utils/types";
 import { ClipLoader } from "react-spinners";

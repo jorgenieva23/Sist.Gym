@@ -22,14 +22,14 @@ export interface IPartner {
 
 export interface IUser {
   _id?: string;
-  name: string;
+  name?: string;
   email: string;
   emailVerifiedAt?: string;
   password: string;
   stateId?: string | null;
   creatorId?: string | null;
   partners?: string[];
-  rol: string;
+  rol?: string;
   active?: boolean;
   deleted?: boolean;
   token?: string;

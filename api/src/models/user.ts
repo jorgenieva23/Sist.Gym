@@ -9,7 +9,6 @@ const userSchema = new Schema<IUser>({
   },
   name: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
@@ -58,12 +57,11 @@ const userSchema = new Schema<IUser>({
   partners: {
     type: [{ type: Schema.Types.String }],
     ref: "Partner",
-    required: true,
   },
   rol: {
     type: String,
     ref: "Roles",
-    required: true,
+    default: "user",
   },
   active: {
     type: Boolean,

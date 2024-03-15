@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAppSelector } from "../../../redux/store";
+import { useAppSelector } from "../../../redux/hooks";
 import { useUserAction } from "../../../redux/Actions/userAction";
 import { IUser } from "../../../utils/types";
 import { ClipLoader } from "react-spinners";
@@ -213,7 +213,7 @@ const FormUsers: React.FC<FormProps> = ({
               onChange={(e) => handleChange(e)}
               required
             >
-              <option value="" >Selecciona el rol del usuario</option>
+              <option value="">Selecciona el rol del usuario</option>
               {roles.map((rol) => (
                 <option key={rol.name} value={rol.name} className=" text-lg">
                   {rol.name}

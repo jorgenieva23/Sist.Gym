@@ -1,30 +1,33 @@
 import React, { useState } from "react";
+import { Typography } from "@material-tailwind/react";
+import { IPayments } from "../../../utils/types";
+import { PiImage, PiNotePencil, PiTrash, PiXCircle } from "react-icons/pi";
 import { format } from "date-fns";
-import { IIncome } from "../../../utils/types";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
-import { Typography } from "@material-tailwind/react";
-import { PiNotePencil, PiTrash, PiXCircle } from "react-icons/pi";
 
 const TABLE_HEAD = [
   // "#",
-  "Socio",
-  "Fecha de ingreso",
+  "Nombre y Apellido",
+  "DNI",
+  "foto",
+  "Telefono",
   "Estado",
+  "Creado",
   "Opciones",
 ];
 
-export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
-  currentIncome,
+export const PartnerTable: React.FC<{ currentPayments: IPayments[] }> = ({
+  currentPayments,
 }): JSX.Element => {
-  const income = useAppSelector((state) => state.income.income);
+    const payment = 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
 
   const itemsPerPage = 8;
   const indexOfLastItems = currentPage * itemsPerPage;
   const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
-  const currentItems = currentIncome.slice(
+  const currentItems = currentPayments.slice(
     indexOfFirstCourse,
     indexOfLastItems
   );
@@ -34,8 +37,8 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
     setCurrentPage(1);
   };
 
-  const filteredItems = currentItems.filter((income) =>
-    `${income.partnerId} ${income.dateOfAdmission} ${income.stateId}`
+  const filteredItems = currentItems.filter((partner) =>
+    `${partner.firstName} ${partner.lastName} ${partner.dni}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );
@@ -52,7 +55,6 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
           onChange={handleSearchChange}
         />
       </form>
-
       <table className="w-full text-sm shadow-md text-left text-gray-500">
         <thead className="text-lg  text-gray-700 uppercase bg-gray-50 ">
           <tr>
@@ -71,7 +73,18 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
         </thead>
         <tbody>
           {filteredItems.map(
-            ({ partnerId, dateOfAdmission, stateId, createdAt }, index) => {
+            (
+              {
+                firstName,
+                lastName,
+                dni,
+                phone,
+                stateId,
+                condition,
+                createdAt,
+              },
+              index
+            ) => {
               const isEvenRow = index % 2 === 0;
               const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
 
@@ -87,15 +100,46 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
                     <div className="flex items-center">
                       <Typography
                         color="blue-gray"
-                        className="cursor-pointer text-blue-500 font-semibold"
+                        className="cursor-pointer text-base text-blue-500 font-semibold"
                       >
-                        {partnerId}
+                        {firstName} {lastName}
                       </Typography>
+                      <div className="flex items-center ml-2">
+                        {condition === "fit" ? (
+                          <>
+                            <span className="text-green-600 w-10 font-semibold">
+                              Apto
+                            </span>
+                            <img
+                              src={corazonSano}
+                              alt="Corazón sano"
+                              className="w-10 h-5 mr-1"
+                            />
+                          </>
+                        ) : (
+                          <>
+                            <span className="text-red-600">No Apto</span>
+                            <img
+                              src={corazonRoto}
+                              alt="Corazón roto"
+                              className="w-5 h-5 mr-1"
+                            />
+                          </>
+                        )}
+                      </div>
                     </div>
                   </td>
                   <td className="p-3 border border-slate-300">
                     <Typography color="blue-gray" className="font-semibold">
-                      {dateOfAdmission}
+                      {dni}
+                    </Typography>
+                  </td>
+                  <td className="p-3 border border-slate-300 text-center">
+                    <PiImage size="30" />
+                  </td>
+                  <td className="p-3 border border-slate-300">
+                    <Typography color="blue-gray" className="font-semibold">
+                      {phone}
                     </Typography>
                   </td>
                   <td className="p-3 border border-slate-300">
@@ -114,14 +158,14 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
                       {formattedDate}
                     </Typography>
                   </td>
-                  <td className="p-3 border border-slate-300 flex ">
-                    <button className="bg-blue-500 hover:bg-blue-800 text-white font-bolt rounded">
+                  <td className="p-3 border border-slate-300">
+                    <button className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded">
                       <PiNotePencil size="30" />
                     </button>
-                    <button className="bg-yellow-500 hover:bg-yellow-800 text-white font-bolt rounded">
+                    <button className="bg-yellow-500 px-1 hover:bg-yellow-800 text-white font-bolt rounded">
                       <PiXCircle size="30" />
                     </button>
-                    <button className="bg-red-500 hover:bg-red-800 text-white font-bolt rounded">
+                    <button className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded">
                       <PiTrash size="30" />
                     </button>
                   </td>
@@ -136,12 +180,10 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
           maxLength={7}
-          totalItems={income.length}
+          totalItems={partners.length}
           setCurrentPage={setCurrentPage}
         />
       </div>
     </>
   );
 };
-
-export default IncomeTable;
