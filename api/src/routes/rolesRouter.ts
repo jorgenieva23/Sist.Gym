@@ -3,6 +3,7 @@ import {
   getRolHandlers,
   postRolesHandler,
   deleteRol,
+  updatePermissionsHandler,
 } from "../handlers/rolesHandler";
 
 const rolesRouter = Router();
@@ -14,6 +15,10 @@ interface IRolesHandler {
 rolesRouter.get("/all", getRolHandlers as IRolesHandler);
 rolesRouter.get("/getById/:id", getRolHandlers as IRolesHandler);
 rolesRouter.post("/create", postRolesHandler as IRolesHandler);
+rolesRouter.put(
+  "/updatePermission/:id",
+  updatePermissionsHandler as IRolesHandler
+);
 rolesRouter.delete("/delete/:id", deleteRol as IRolesHandler);
 
 export default rolesRouter;

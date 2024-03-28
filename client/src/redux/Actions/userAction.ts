@@ -6,9 +6,9 @@ import {
   getUser,
   getSpecificUser,
   createUser,
-  searchUser,
+  // searchUser,
   editUser,
-  deleteUser,
+  // deleteUser,
 } from "../Slices/userSlice";
 import { IUser } from "../../utils/types";
 
@@ -47,18 +47,11 @@ export const useUserAction = () => {
       throw new Error("Failed to create user. Please try again later.");
     }
   };
-  const updateUser = async ({
-    id: _id,
-    updatedData,
-  }: {
-    id: string | null;
-    updatedData: IUser;
-  }) => {
+  const updateUser = async (_id: string | null, updatedData: IUser) => {
     try {
       const updatedUser = await axios.put(`/user/update/${_id}`, {
         updatedData,
       });
-      // const updatedUser = await axios.put(`/user/update/${id}`, updatedData);
       return dispatch(editUser(updatedUser.data));
     } catch (error: any) {
       console.error(error.message);

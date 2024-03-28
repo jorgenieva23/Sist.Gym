@@ -14,7 +14,7 @@ export const usePaymentAction = () => {
 
   const getAllPayment = async () => {
     try {
-      const rawData = await axios.get(`/payment/all`);
+      const rawData = await axios.get(`/payment/allPaymen`);
       const response = rawData.data;
       dispatch(getPayment(response));
     } catch (error: any) {
@@ -23,7 +23,7 @@ export const usePaymentAction = () => {
   };
   const getSpecificPaymentById = async (id: string) => {
     try {
-      const rawData = await axios.get(`/payment/${id}`);
+      const rawData = await axios.get(`/payment/getById/${id}`);
       const response = rawData.data;
       dispatch(getSpecificPayment(response));
     } catch (error: any) {
@@ -32,17 +32,15 @@ export const usePaymentAction = () => {
   };
   const createNewPayment = async (payment: IPayments) => {
     try {
-      const rawData = await axios.post(`/payment/create`, {
+      const rawData = await axios.post(`/payment/createPayment`, {
         amount: payment.amount,
-        total: payment.total,
         dateFrom: payment.dateFrom,
-        dateTo: payment.dateTo,
+        promotionId: payment.promotionId,
         stateId: payment.stateId,
-        deleted: payment.deleted,
         creatorId: payment.creatorId,
         partnerId: payment.partnerId,
       });
-      console.log(rawData, "hola");
+      console.log(rawData.data, "hola");
 
       return dispatch(createPayment(rawData.data));
     } catch (error: any) {
@@ -62,7 +60,7 @@ export const usePaymentAction = () => {
   };
   const removePayment = async (_id: string) => {
     try {
-      await axios.delete(`/payment/${_id}`);
+      await axios.delete(`/payment/delete/${_id}`);
       dispatch(deletePayment(_id));
     } catch (error: any) {
       console.error("Error deleting payment:", error.message);

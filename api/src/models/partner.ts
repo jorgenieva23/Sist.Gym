@@ -65,12 +65,10 @@ const partnerSchema = new Schema<IPartner>({
   stateId: {
     type: Schema.Types.String,
     ref: "States",
-    default: "inactive",
   },
   userId: {
     type: Schema.Types.String,
     ref: "User",
-
   },
   rol: {
     type: Schema.Types.String,
@@ -78,8 +76,6 @@ const partnerSchema = new Schema<IPartner>({
   },
   condition: {
     type: String,
-    enum: ["fit", "unfit"],
-    default: "unfit",
   },
   createdAt: {
     type: Date,

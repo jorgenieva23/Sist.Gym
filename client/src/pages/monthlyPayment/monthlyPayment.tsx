@@ -3,15 +3,15 @@ import { Footer, Navbar, Sidebar } from "../../components";
 
 export const MonthlyPayment: React.FC = (): JSX.Element => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <header className="flex flex-col h-screen">
       <Navbar />
       <div className="flex flex-grow">
-        <Sidebar/>
+        <Sidebar />
         <div className="max-w-md mx-auto flex-grow">
-          <h1 className="text-center text-3xl font-bold">Hola soy MonthlyPayment</h1>
+          <p className="text-center text-3xl font-bold">Hola soy mensualidad</p>
         </div>
       </div>
       <Footer />
-    </div>
+    </header>
   );
 };

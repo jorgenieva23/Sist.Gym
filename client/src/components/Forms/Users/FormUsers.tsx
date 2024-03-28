@@ -113,7 +113,7 @@ const FormUsers: React.FC<FormProps> = ({
     e.preventDefault();
     setLoadingSubmit(true);
     if (isEditing && userToEdit && userToEdit._id) {
-      updateUser({ id: userToEdit._id, updatedData: form }).then(() => {
+      updateUser(userToEdit._id, form).then(() => {
         setLoadingSubmit(false);
         setEditingUser && setEditingUser(false);
         window.location.reload();

@@ -29,11 +29,11 @@ export const loginUser = async (req: Request, res: Response) => {
     //   secure: true,
     //   sameSite: "none",
     // });
-    console.log(user?.name);
     await Movement.create({
       movementType: "LOGIN_USER",
       creatorId: user?.name,
       ip: req.ip,
+      rolUser: user?.rol,
     });
 
     await user.save();

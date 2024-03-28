@@ -204,8 +204,7 @@ export const sabeAllMovementTypes = async () => {
 
 export const getAllMovementType = async () => {
   try {
-    const types = await MovementType.find();
-    console.log(types);
+    const types = await Movement.find();
     return types;
   } catch (error: any) {
     throw new Error("Error when searching for income in the database");

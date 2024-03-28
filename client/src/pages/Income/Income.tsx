@@ -18,7 +18,7 @@ export const Income: React.FC = (): JSX.Element => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       <Navbar />
       <div className="flex flex-grow">
         <Sidebar />

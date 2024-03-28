@@ -4,6 +4,7 @@ import {
   createRoles,
   getAllRoles,
   searchRolesByName,
+  updateRolePermissions,
 } from "../controllers/rolesControllers";
 import { IRoles } from "../utils/types";
 import Roles from "../models/rol";
@@ -42,6 +43,24 @@ export const postRolesHandler = async (
     res.status(400).json(error.message);
   }
 };
+
+// MANEJADOR QUE MODIFICA LOS PERMISOS DE CADA ROL
+
+export const updatePermissionsHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const _id = req.params.id;
+    const newPermissions = req.body.perm;
+    const updatedRole = await updateRolePermissions(_id, newPermissions);
+    res.status(200).json(updatedRole);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// MANEJADOR QUE ELIMINA UN ROL POR ID
 
 export const deleteRol = async (req: Request, res: Response): Promise<void> => {
   try {

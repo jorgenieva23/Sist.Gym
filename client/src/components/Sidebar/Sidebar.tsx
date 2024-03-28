@@ -16,6 +16,7 @@ import {
   FaMoneyBillAlt,
   FaUserCog,
 } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 
 const Sidebar = () => {
@@ -53,31 +54,12 @@ const Sidebar = () => {
     { name: "Roles", link: "/roles", icon: FaUserCog },
   ];
 
-  // async function handleSignOut(e: MouseEvent) {
-  //   e.preventDefault();
-
-  //   try {
-  //     const response = await fetch(`/user/logout/:id`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${auth.getRefreshToken()}`,
-  //       },
-  //     });
-  //     if (response.ok) {
-  //       auth.signout();
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
   return (
     <div className="flex">
       <div
         className={`${
           open ? "w-64" : "w-20"
-        } z-10 duration-300 p-5 pt-5 py-10 bg-gray-800 relative`}
+        } duration-300 p-5 pt-5 bg-gray-800 relative`}
       >
         <img
           src={controlImage}
@@ -88,21 +70,24 @@ const Sidebar = () => {
         />
         <div className="flex gap-x-4 items-center">
           <img src={logoImage} className={`duration-500`} />
+
           <h1
-            className={`text-white origin-left font-medium text-xl duration-200 ${
+            className={`text-white font-medium text-xl duration-200 ${
               !open && "scale-0"
             }`}
           >
-            {user[0]?.name}
+            jorge
           </h1>
+          <button
+            className={`text-white font-medium text-sm duration-200 ${
+              !open && "scale-0"
+            }`}
+            onClick={handleLogout}
+          >
+            <FiLogOut className="" size="20" />
+          </button>
         </div>
-        <button
-          className="text-white text-sm mt-2 hover:underline cursor-pointer"
-          onClick={handleLogout}
-        >
-          Cerrar sesión
-        </button>
-        <div className="mt-10 flex flex-col gap-4 relative">
+        <div className="mt-4 flex flex-col gap-4 relative">
           {Menu?.map(
             (Menu, i) => (
               // (Menu.rol === "User" && (isUser || isDevelop || isAdmin)) ||
@@ -129,7 +114,7 @@ const Sidebar = () => {
                 <h2
                   className={`${
                     open && "hidden"
-                  } absolute left-48 bg-gray-800 font-semibold whitespace-pre rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-16 group-hover:duration-300 group-hover:w-fit  `}
+                  } z-10 absolute left-48 bg-gray-800 font-semibold whitespace-pre rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-16 group-hover:duration-300 group-hover:w-fit  `}
                 >
                   {Menu?.name}
                 </h2>

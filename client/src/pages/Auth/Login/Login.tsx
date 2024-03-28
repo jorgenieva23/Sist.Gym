@@ -5,7 +5,7 @@ import { userLogin } from "../../../redux/Actions/authActions";
 import { PiEyeSlash, PiEye, PiPasswordBold, PiEnvelope } from "react-icons/pi";
 
 export const Login: React.FC = (): JSX.Element => {
-  const { loading, userInfo, error } = useAppSelector((state) => state.auth);
+  const { userInfo, error } = useAppSelector((state) => state.auth);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

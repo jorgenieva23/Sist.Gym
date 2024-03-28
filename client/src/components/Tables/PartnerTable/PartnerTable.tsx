@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IPartner } from "../../../utils/types";
 import corazonRoto from "../../../Images/corazonRoto.png";
 import corazonSano from "../../../Images/corazonSano.png";
 import { PiImage, PiNotePencil, PiTrash, PiXCircle } from "react-icons/pi";
 import { format } from "date-fns";
+import { NavLink } from "react-router-dom";
+import FormPartners from "../../Forms/Partners/FormPartners";
+import Modal from "../../Modal/Modal";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
+import { usePartnerAction } from "../../../redux/Actions/partnerAction";
+import { Toaster, toast } from "sonner";
 
 const TABLE_HEAD = [
   // "#",
@@ -22,9 +27,13 @@ const TABLE_HEAD = [
 export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
   currentPartner,
 }): JSX.Element => {
+  const { getAllPartner, removePartner } = usePartnerAction();
   const partners = useAppSelector((state) => state.partner.partners);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
+  const [editingPart, setEditingPart] = useState<string | null | undefined>(
+    null
+  );
 
   const itemsPerPage = 8;
   const indexOfLastItems = currentPage * itemsPerPage;
@@ -45,9 +54,13 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
       .includes(search.toLowerCase())
   );
 
+  useEffect(() => {
+    getAllPartner();
+  }, []);
+
   return (
-    <>
-      <form className="flexitems-center">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 overflow-auto">
+      <form className="flex items-center mb-2">
         <input
           value={search}
           name="search"
@@ -56,6 +69,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
           placeholder="Search for Partners..."
           onChange={handleSearchChange}
         />
+        <h1>{`socios activos : ${filteredItems.length}`}</h1>
       </form>
       <table className="w-full text-sm shadow-md text-left text-gray-500">
         <thead className="text-lg  text-gray-700 uppercase bg-gray-50 ">
@@ -74,110 +88,151 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
           </tr>
         </thead>
         <tbody>
-          {filteredItems.map(
-            (
-              {
-                firstName,
-                lastName,
-                dni,
-                phone,
-                stateId,
-                condition,
-                createdAt,
-              },
-              index
-            ) => {
-              const isEvenRow = index % 2 === 0;
-              const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
+          {filteredItems.reverse().map((part, index) => {
+            const isEvenRow = index % 2 === 0;
+            const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
 
-              const formattedDate = createdAt
-                ? format(new Date(createdAt), "yyyy-MM-dd HH:mm:ss")
-                : "";
+            const formattedDate = part.createdAt
+              ? format(new Date(part.createdAt), "HH:mm dd-MM-yyyy")
+              : "";
 
-              const isActive = stateId === "active";
+            const isActive = part.stateId === "active";
 
-              return (
-                <tr key={index} className={rowClass}>
-                  <td className="p-3  border border-slate-300">
-                    <div className="flex items-center">
+            return (
+              <tr key={index} className={rowClass}>
+                <td className="p-3  border border-slate-300">
+                  <div className="flex items-center">
+                    <NavLink
+                      to={`/partner/${part._id}`}
+                      style={{
+                        color: "inherit",
+                        textDecoration: "inherit",
+                        zIndex: "0",
+                      }}
+                    >
                       <Typography
                         color="blue-gray"
                         className="cursor-pointer text-base text-blue-500 font-semibold"
                       >
-                        {firstName} {lastName}
+                        {part.firstName} {part.lastName}
                       </Typography>
-                      <div className="flex items-center ml-2">
-                        {condition === "fit" ? (
-                          <>
-                            <span className="text-green-600 w-10 font-semibold">
-                              Apto
-                            </span>
-                            <img
-                              src={corazonSano}
-                              alt="Corazón sano"
-                              className="w-10 h-5 mr-1"
-                            />
-                          </>
-                        ) : (
-                          <>
-                            <span className="text-red-600">No Apto</span>
-                            <img
-                              src={corazonRoto}
-                              alt="Corazón roto"
-                              className="w-5 h-5 mr-1"
-                            />
-                          </>
-                        )}
-                      </div>
+                    </NavLink>
+                    <div className="flex items-center ml-2">
+                      {part.condition === "fit" ? (
+                        <>
+                          <span className="text-green-600 w-10 font-semibold">
+                            Apto
+                          </span>
+                          <img
+                            src={corazonSano}
+                            alt="Corazón sano"
+                            className="w-10 h-5 mr-1"
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-red-600">No Apto</span>
+                          <img
+                            src={corazonRoto}
+                            alt="Corazón roto"
+                            className="w-5 h-5 mr-1"
+                          />
+                        </>
+                      )}
                     </div>
-                  </td>
-                  <td className="p-3 border border-slate-300">
-                    <Typography color="blue-gray" className="font-semibold">
-                      {dni}
+                  </div>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    {part.dni}
+                  </Typography>
+                </td>
+                <td className="p-3 border border-slate-300 text-center">
+                  <PiImage size="30" />
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    {part.phone}
+                  </Typography>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <div
+                    className={`rounded-lg w-20 h-8 flex items-center justify-center ${
+                      isActive ? "bg-green-500 text-lg" : "bg-red-500"
+                    }`}
+                  >
+                    <Typography color="white">
+                      {isActive ? "Activo" : "Inactivo"}
                     </Typography>
-                  </td>
-                  <td className="p-3 border border-slate-300 text-center">
-                    <PiImage size="30" />
-                  </td>
-                  <td className="p-3 border border-slate-300">
-                    <Typography color="blue-gray" className="font-semibold">
-                      {phone}
-                    </Typography>
-                  </td>
-                  <td className="p-3 border border-slate-300">
-                    <div
-                      className={`rounded-lg w-20 h-8 flex items-center justify-center ${
-                        isActive ? "bg-green-500 text-lg" : "bg-red-500"
-                      }`}
+                  </div>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    {formattedDate}
+                  </Typography>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <>
+                    <button
+                      onClick={() => setEditingPart(part?._id)}
+                      className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded"
                     >
-                      <Typography color="white">
-                        {isActive ? "Activo" : "Inactivo"}
-                      </Typography>
-                    </div>
-                  </td>
-                  <td className="p-3 border border-slate-300">
-                    <Typography color="blue-gray" className="font-semibold">
-                      {formattedDate}
-                    </Typography>
-                  </td>
-                  <td className="p-3 border border-slate-300">
-                    <button className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded">
                       <PiNotePencil size="30" />
                     </button>
+                    {editingPart === part._id && (
+                      <Modal
+                        open={editingPart !== null}
+                        onClose={() => setEditingPart(null)}
+                      >
+                        <div className="flex flex-col z-10 gap-4">
+                          <FormPartners
+                            partnerToEdit={part}
+                            setEditingPartner={() => setEditingPart(null)}
+                          />
+                        </div>
+                      </Modal>
+                    )}
+                  </>
+                  <>
                     <button className="bg-yellow-500 px-1 hover:bg-yellow-800 text-white font-bolt rounded">
                       <PiXCircle size="30" />
                     </button>
-                    <button className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded">
+                  </>
+                  <>
+                    <button
+                      onClick={() => {
+                        toast.info("Desea borrarlo?", {
+                          action: {
+                            label: "Borrar",
+                            onClick: () => {
+                              if (part._id) {
+                                removePartner(part._id);
+                                toast("Socio Borrado", {
+                                  description: `El Socio ${part.firstName} ${part.lastName} fue borrado del sistema`,
+                                });
+                              } else {
+                                console.error("Error: part._id is undefined");
+                              }
+                            },
+                          },
+                        });
+                      }}
+                      className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded"
+                    >
                       <PiTrash size="30" />
                     </button>
-                  </td>
-                </tr>
-              );
-            }
-          )}
+                  </>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
+      <Toaster richColors position="bottom-center" />
       <div className="flex justify-center mt-4">
+        {/* {partners.length < 7 ? (
+          `N°. de socios: ${partners.length} `
+        ) : ( */}
         <Pagination
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
@@ -185,7 +240,8 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
           totalItems={partners.length}
           setCurrentPage={setCurrentPage}
         />
+        {/* )} */}
       </div>
-    </>
+    </div>
   );
 };

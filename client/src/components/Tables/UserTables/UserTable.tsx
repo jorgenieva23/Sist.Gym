@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IUser } from "../../../utils/types";
 import { format } from "date-fns";
 import { useAppSelector } from "../../../redux/hooks";
 import Pagination from "../../Pagination/Pagination";
+import { useUserAction } from "../../../redux/Actions/userAction";
 
 const TABLE_HEAD = ["Nombre", "Email", "rol", "Estado", "Creado", "Opciones"];
 
@@ -11,6 +12,8 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
   currentUser,
 }): JSX.Element => {
   const users = useAppSelector((state) => state.user.users);
+
+  const { getAllUser } = useUserAction();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
@@ -28,6 +31,10 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
   const filteredItems = currentItems.filter((user) =>
     `${user.name} ${user.email}`.toLowerCase().includes(search.toLowerCase())
   );
+
+  useEffect(() => {
+    getAllUser();
+  }, []);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

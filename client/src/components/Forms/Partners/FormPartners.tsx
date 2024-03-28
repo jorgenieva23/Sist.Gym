@@ -27,6 +27,8 @@ const FormPartners: React.FC<FormProps> = ({
 }: FormProps): JSX.Element => {
   const { createNewPartner, updatePartner } = usePartnerAction();
   const partners = useAppSelector((state) => state.partner.partners);
+  const useAuth = useAppSelector((state) => state.auth.userInfo);
+  const creator = useAuth[0].email;
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -47,6 +49,10 @@ const FormPartners: React.FC<FormProps> = ({
     medicalCoverage: isEditing ? partnerToEdit?.medicalCoverage : "",
     phoneEmergency: isEditing ? partnerToEdit?.phoneEmergency : 0,
     phoneEmergencyName: isEditing ? partnerToEdit?.phoneEmergencyName : "",
+    stateId: isEditing ? partnerToEdit?.stateId : "inactive",
+    condition: isEditing ? partnerToEdit?.condition : "",
+    userId: creator,
+    rol: "partner",
   });
 
   const validate = (form: IPartner): { [key: string]: string } => {
@@ -146,35 +152,37 @@ const FormPartners: React.FC<FormProps> = ({
     );
   };
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoadingSubmit(true);
-    if (isEditing && partnerToEdit && partnerToEdit._id) {
-      updatePartner({ id: partnerToEdit._id, updatedData: form }).then(() => {
-        setLoadingSubmit(false);
-        setEditingPartner && setEditingPartner(false);
-        window.location.reload();
-      });
-    } else {
-      createNewPartner(form).then(() => {
-        setLoadingSubmit(false);
-        window.location.reload();
-      });
-
-      setForm({
-        firstName: "",
-        lastName: "",
-        dni: 0,
-        address: "",
-        phone: 0,
-        email: "",
-        picture: null,
-        date: 0,
-        datePhysicalAttitude: 0,
-        medicalCoverage: "",
-        phoneEmergency: 0,
-        phoneEmergencyName: "",
-      });
+    try {
+      if (isEditing && partnerToEdit && partnerToEdit._id) {
+        await updatePartner(partnerToEdit._id, form).then(() => {
+          setEditingPartner && setEditingPartner(false);
+          window.location.reload();
+        });
+      } else {
+        await createNewPartner(form as IPartner);
+        setForm({
+          firstName: "",
+          lastName: "",
+          dni: 0,
+          address: "",
+          phone: 0,
+          email: "",
+          picture: null,
+          date: 0,
+          datePhysicalAttitude: 0,
+          medicalCoverage: "",
+          phoneEmergency: 0,
+          phoneEmergencyName: "",
+        });
+      }
+    } catch (error: any) {
+      console.error(error.message);
+      alert("Ocurrió un error");
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 

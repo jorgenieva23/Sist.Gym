@@ -1,26 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IPayments } from "../../../utils/types";
-import { PiImage, PiNotePencil, PiTrash, PiXCircle } from "react-icons/pi";
+import { PiNotePencil, PiTrash } from "react-icons/pi";
 import { format } from "date-fns";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
+import { usePaymentAction } from "../../../redux/Actions/paymentActions";
+import { toast, Toaster } from "sonner";
 
 const TABLE_HEAD = [
   // "#",
-  "Nombre y Apellido",
-  "DNI",
-  "foto",
-  "Telefono",
+  "Socio",
+  "Promoción Aplicada",
+  "Fecha Desde",
+  "Fecha Hasta",
+  "Monto",
+  "Total",
   "Estado",
-  "Creado",
+  "Creada",
   "Opciones",
 ];
 
-export const PartnerTable: React.FC<{ currentPayments: IPayments[] }> = ({
+export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
   currentPayments,
 }): JSX.Element => {
-    const payment = 
+  const { getAllPayment, removePayment } = usePaymentAction();
+  const payment = useAppSelector((state) => state.payment.payments);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
 
@@ -31,21 +36,25 @@ export const PartnerTable: React.FC<{ currentPayments: IPayments[] }> = ({
     indexOfFirstCourse,
     indexOfLastItems
   );
+  console.log(currentPayments);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     setCurrentPage(1);
   };
 
-  const filteredItems = currentItems.filter((partner) =>
-    `${partner.firstName} ${partner.lastName} ${partner.dni}`
+  const filteredItems = currentItems.filter((payment) =>
+    `${payment.partnerId} ${payment.promotionId} ${payment.dateFrom}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );
+  useEffect(() => {
+    getAllPayment();
+  }, []);
 
   return (
     <>
-      <form className="flexitems-center">
+      <form className="flexi tems-center">
         <input
           value={search}
           name="search"
@@ -72,117 +81,124 @@ export const PartnerTable: React.FC<{ currentPayments: IPayments[] }> = ({
           </tr>
         </thead>
         <tbody>
-          {filteredItems.map(
-            (
-              {
-                firstName,
-                lastName,
-                dni,
-                phone,
-                stateId,
-                condition,
-                createdAt,
-              },
-              index
-            ) => {
-              const isEvenRow = index % 2 === 0;
-              const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
+          {filteredItems.reverse().map((paym, index) => {
+            const isEvenRow = index % 2 === 0;
+            const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
 
-              const formattedDate = createdAt
-                ? format(new Date(createdAt), "yyyy-MM-dd HH:mm:ss")
-                : "";
+            const formattedDate = paym.createdAt
+              ? format(new Date(paym.createdAt), "yyyy-MM-dd ")
+              : "";
+            const formatDateFrom = paym.dateFrom
+              ? format(new Date(paym.dateFrom), "yyyy-MM-dd ")
+              : "";
+            const formatDateTo = paym.dateTo
+              ? format(new Date(paym.dateTo), "yyyy-MM-dd ")
+              : "";
 
-              const isActive = stateId === "active";
+            const isActive = paym.stateId === "active";
 
-              return (
-                <tr key={index} className={rowClass}>
-                  <td className="p-3  border border-slate-300">
-                    <div className="flex items-center">
-                      <Typography
-                        color="blue-gray"
-                        className="cursor-pointer text-base text-blue-500 font-semibold"
-                      >
-                        {firstName} {lastName}
-                      </Typography>
-                      <div className="flex items-center ml-2">
-                        {condition === "fit" ? (
-                          <>
-                            <span className="text-green-600 w-10 font-semibold">
-                              Apto
-                            </span>
-                            <img
-                              src={corazonSano}
-                              alt="Corazón sano"
-                              className="w-10 h-5 mr-1"
-                            />
-                          </>
-                        ) : (
-                          <>
-                            <span className="text-red-600">No Apto</span>
-                            <img
-                              src={corazonRoto}
-                              alt="Corazón roto"
-                              className="w-5 h-5 mr-1"
-                            />
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-3 border border-slate-300">
-                    <Typography color="blue-gray" className="font-semibold">
-                      {dni}
-                    </Typography>
-                  </td>
-                  <td className="p-3 border border-slate-300 text-center">
-                    <PiImage size="30" />
-                  </td>
-                  <td className="p-3 border border-slate-300">
-                    <Typography color="blue-gray" className="font-semibold">
-                      {phone}
-                    </Typography>
-                  </td>
-                  <td className="p-3 border border-slate-300">
-                    <div
-                      className={`rounded-lg w-20 h-8 flex items-center justify-center ${
-                        isActive ? "bg-green-500 text-lg" : "bg-red-500"
-                      }`}
+            return (
+              <tr key={index} className={rowClass}>
+                <td className="p-3  border border-slate-300">
+                  <div className="flex items-center">
+                    <Typography
+                      color="blue-gray"
+                      className="cursor-pointer text-base text-blue-500 font-semibold"
                     >
-                      <Typography color="white">
-                        {isActive ? "Activo" : "Inactivo"}
-                      </Typography>
-                    </div>
-                  </td>
-                  <td className="p-3 border border-slate-300">
-                    <Typography color="blue-gray" className="font-semibold">
-                      {formattedDate}
+                      {paym.partnerId}
                     </Typography>
-                  </td>
-                  <td className="p-3 border border-slate-300">
+                  </div>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    {paym.promotionId ? `${paym.promotionId}` : `ninguna`}
+                  </Typography>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    {formatDateFrom}
+                  </Typography>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    {formatDateTo}
+                  </Typography>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    ${paym.amount}
+                  </Typography>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    ${paym.total}
+                  </Typography>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <div
+                    className={`rounded-lg w-20 h-8 flex items-center justify-center ${
+                      isActive ? "bg-green-500 text-lg" : "bg-red-500"
+                    }`}
+                  >
+                    <Typography color="white">
+                      {isActive ? "Activo" : "Inactivo"}
+                    </Typography>
+                  </div>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    {formattedDate}
+                  </Typography>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <>
                     <button className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded">
                       <PiNotePencil size="30" />
                     </button>
-                    <button className="bg-yellow-500 px-1 hover:bg-yellow-800 text-white font-bolt rounded">
-                      <PiXCircle size="30" />
-                    </button>
-                    <button className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded">
+                  </>
+                  <>
+                    <button
+                      onClick={() => {
+                        toast.info("Desea borrarla?", {
+                          action: {
+                            label: "Borrar",
+                            onClick: () => {
+                              if (paym._id) {
+                                removePayment(paym._id);
+                                toast("Promocion Borrada", {
+                                  description: `La promocion fue borrado del sistema`,
+                                });
+                              } else {
+                                console.error("Error: part._id is undefined");
+                              }
+                            },
+                          },
+                        });
+                      }}
+                      className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded"
+                    >
                       <PiTrash size="30" />
                     </button>
-                  </td>
-                </tr>
-              );
-            }
-          )}
+                  </>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
+      <Toaster />
       <div className="flex justify-center mt-4">
-        <Pagination
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
-          maxLength={7}
-          totalItems={partners.length}
-          setCurrentPage={setCurrentPage}
-        />
+        {payment.length < 7 ? (
+          `mostrando ${payment.length} pagos`
+        ) : (
+          <Pagination
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            maxLength={7}
+            totalItems={payment.length}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 export interface IPartner {
-  _id?: string | null;
+  _id?: string;
   firstName: string;
   lastName: string;
   dni: string | number;
@@ -18,6 +18,7 @@ export interface IPartner {
   condition?: string | null;
   rol?: string | null;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IUser {
@@ -38,8 +39,12 @@ export interface IUser {
   lastConnectoin?: Date;
 }
 
-export interface IRoles {
+export interface newIRol {
   name: string;
+  permissions: string[];
+}
+export interface IRoles extends newIRol {
+  _id: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -47,13 +52,26 @@ export interface IRoles {
 export interface IIncome {
   _id?: string;
   partnerId: string;
-  dateOfAdmission: number;
+  dateOfAdmission?: number;
   stateId?: string | null;
   deleted?: boolean;
   creatorId?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
+// export interface newIIncome {
+//   partnerId: string;
+//   dateOfAdmission: number;
+// }
+
+// export interface IIncome extends newIIncome {
+//   _id: string;
+//   stateId: string | null;
+//   deleted: boolean;
+//   creatorId: string | null;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
 export interface IStates {
   _id: string;
   name: string;
@@ -61,32 +79,41 @@ export interface IStates {
   updatedAt: Date;
 }
 export interface IPayments {
-  _id: string;
+  _id?: string;
   amount: number;
-  total: number;
-  dateFrom: Date;
-  dateTo: Date;
-  stateId: string | null;
-  deleted: boolean;
+  total?: number;
+  dateFrom: number;
+  dateTo?: number;
+  deleted?: boolean;
+  promotionId: string;
+  stateId?: string | undefined;
+  creatorId?: string | undefined;
+  partnerId: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IPromotion {
+  _id?: string;
+  name: string;
+  percentage: number;
+  referredDate: number;
+  description: string;
+  deleted?: boolean;
+  stateId?: string | null;
+  creatorId?: string | undefined;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface IMovement {
+  _id: string;
+  movementType: string | null;
   creatorId: string | null;
-  partnerId: string | null;
+  ip: string;
   createdAt: Date;
   updatedAt: Date;
 }
-
-// export interface IPromotion {
-// id: string;
-//   name: string;
-//   descuento: number;
-//   counter_reference: number;
-//   description: string;
-//   stateId: Types.ObjectId[];
-//   deleted: boolean;
-//   creatorId: Types.ObjectId[];
-//   secondariId: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
 
 export interface IAuthResponse {
   user: IUser;
@@ -102,4 +129,11 @@ export interface IAccessTokenResponse {
   statusCode: number;
   accessToken: string;
   error?: string;
+}
+
+export interface IPermission {
+  _id: string;
+  name: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

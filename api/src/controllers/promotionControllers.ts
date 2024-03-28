@@ -20,7 +20,6 @@ export const registerPromotionControllers = async (
     }
     const newPromotion = new Promotion(promotion);
     const createdPromotion = await newPromotion.save();
-    console.log(createdPromotion);
 
     await Movement.create({
       movementType: "CREAR_PROMOTION",

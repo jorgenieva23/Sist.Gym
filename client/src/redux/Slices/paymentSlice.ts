@@ -4,12 +4,12 @@ import { IPayments } from "../../utils/types";
 
 interface paymentState {
   payments: IPayments[];
-  specificPartner: IPayments | null;
+  specificIPayments: IPayments | null;
 }
 
 const initialState: paymentState = {
   payments: [],
-  specificPartner: null,
+  specificIPayments: null,
 };
 
 export const paymentSlice = createSlice({
@@ -31,13 +31,13 @@ export const paymentSlice = createSlice({
     createPayment: (state, action: PayloadAction<IPayments>) => {
       return {
         ...state,
-        payment: [...state.payments, action.payload],
+        payments: [...state.payments, action.payload],
       };
     },
     editPayment: (state, action: PayloadAction<IPayments[]>) => {
       return {
         ...state,
-        payment: action.payload,
+        payments: action.payload,
       };
     },
     deletePayment: (state, action: PayloadAction<string>) => {

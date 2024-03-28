@@ -20,6 +20,10 @@ const MovementSchema = new Schema<IMovement>({
     type: Schema.Types.String,
     require: true,
   },
+  rolUser: {
+    type: Schema.Types.String,
+    require: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

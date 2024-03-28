@@ -1,7 +1,15 @@
 import axios from "axios";
 import { IPartner } from "../../utils/types";
 import { useAppDispatch } from "../hooks";
-import { getPartner, createPartner } from "../Slices/partnerSlice";
+import {
+  getPartner,
+  getSpecificPartner,
+  clearSpecificPartner,
+  createPartner,
+  // searchPartners,
+  editPartner,
+  deletePartners,
+} from "../Slices/partnerSlice";
 
 export const usePartnerAction = () => {
   const dispatch = useAppDispatch();
@@ -15,8 +23,24 @@ export const usePartnerAction = () => {
       console.error("Error fetching partner data:", error.message);
     }
   };
+  const getSpecificPartnerById = async (_id: string) => {
+    try {
+      const rawData = await axios.get(`/partner/getById/${_id}`);
+      const response = rawData.data;
+      dispatch(getSpecificPartner(response));
+    } catch (error: any) {
+      console.error("Error fetching specific partner data:", error.message);
+    }
+  };
+  const clearSpecificPartnerById = () => {
+    try {
+      return dispatch(clearSpecificPartner());
+    } catch (error) {}
+  };
   const createNewPartner = async (partner: IPartner) => {
     try {
+      console.log(partner);
+
       const rawData = await axios.post(`/partner/create`, {
         firstName: partner.firstName,
         lastName: partner.lastName,
@@ -30,6 +54,10 @@ export const usePartnerAction = () => {
         medicalCoverage: partner.medicalCoverage,
         phoneEmergency: partner.phoneEmergency,
         phoneEmergencyName: partner.phoneEmergencyName,
+        stateId: partner.stateId,
+        userId: partner.userId,
+        condition: partner.condition,
+        rol: partner.rol,
       });
       console.log(rawData, "hola");
 
@@ -38,26 +66,33 @@ export const usePartnerAction = () => {
       console.error(error.message);
     }
   };
-  const updatePartner = async ({
-    id: _id,
-    updatedData,
-  }: {
-    id: string | null;
-    updatedData: IPartner;
-  }) => {
+  const updatePartner = async (_id: string | null, updatedData: IPartner) => {
     try {
-      const updatedPartner = await axios.put(`/partner/update/${_id}`, {
-        updatedData,
-      });
-      return dispatch(getPartner(updatedPartner.data));
+      const updatedPartner = await axios.put(
+        `/partner/update/${_id}`,
+        updatedData
+      );
+      console.log(updatedPartner.data);
+      return dispatch(editPartner(updatedPartner.data));
     } catch (error: any) {
       console.error(error.message);
+    }
+  };
+  const removePartner = async (_id: string) => {
+    try {
+      await axios.delete(`/partner/delete/${_id}`);
+      dispatch(deletePartners(_id));
+    } catch (error: any) {
+      console.error("Error deleting promotion:", error.message);
     }
   };
 
   return {
     getAllPartner,
+    getSpecificPartnerById,
+    clearSpecificPartnerById,
     createNewPartner,
     updatePartner,
+    removePartner,
   };
 };

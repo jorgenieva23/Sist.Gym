@@ -32,6 +32,12 @@ export const partnerSlice = createSlice({
         specificPartner: action.payload,
       };
     },
+    clearSpecificPartner: (state) => {
+      return {
+        ...state,
+        specificPartner: null,
+      };
+    },
     createPartner: (state, action: PayloadAction<IPartner>) => {
       return {
         ...state,
@@ -50,11 +56,10 @@ export const partnerSlice = createSlice({
         partners: action.payload,
       };
     },
-    deletePartners: (state, action: PayloadAction<IPartner[]>) => {
-      return {
-        ...state,
-        partners: action.payload,
-      };
+    deletePartners: (state, action: PayloadAction<string>) => {
+      state.partners = state.partners.filter(
+        (part) => part._id !== action.payload
+      );
     },
   },
 });
@@ -62,6 +67,7 @@ export const partnerSlice = createSlice({
 export const {
   getPartner,
   getSpecificPartner,
+  clearSpecificPartner,
   createPartner,
   searchPartners,
   editPartner,

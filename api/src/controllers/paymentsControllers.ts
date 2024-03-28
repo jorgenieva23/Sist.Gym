@@ -21,6 +21,8 @@ export const registerPaymentController = async (
       Users.findOne({ name: creatorId }).exec(),
       Promotion.findOne({ name: promotionId }).exec(),
     ]);
+    console.log(promotion);
+
     if (!partner || !state || !creator) {
       throw new Error("Invalid partner, state, creator or promotion");
     }
@@ -155,17 +157,17 @@ export const getPartnerPayments = async (id: any) => {
   }
 };
 
-export const deletePayment = async (id: any, req: Request) => {
+export const deletePayments = async (id: any, req: Request) => {
   try {
-    const payment = await Partner.findByIdAndDelete(id);
+    const payment = await Payments.findByIdAndDelete(id);
     if (!payment) {
       console.log(`No payment found with ID: ${id}`);
     }
     console.log(`payment successfully removed: ${id} ${payment} `);
 
     await Movement.create({
-      movementType: "DELETE_PARTNER",
-      creatorId: payment?.userId,
+      movementType: "BORRAR_INGRESO",
+      creatorId: payment?.creatorId,
       ip: req.ip,
     });
 
@@ -174,3 +176,44 @@ export const deletePayment = async (id: any, req: Request) => {
     console.error(`Error deleting payment ${id}: ${error}`);
   }
 };
+
+async function verifyPaymentsExpiredToday() {
+  const currentDate = new Date();
+  try {
+    const expiredPartnersInfo = [];
+
+    const expiredPaid = await Payments.find({
+      dateTo: { $lte: currentDate },
+    });
+    if (!expiredPaid) {
+      console.log("no hay pagos");
+    }
+    console.log(expiredPaid);
+
+    for (const checkPaid of expiredPaid) {
+      await Payments.findOneAndUpdate(
+        { _id: checkPaid._id },
+        { stateId: "inactive" },
+        { new: true }
+      );
+
+      const updatedPartner = await Partner.findOneAndUpdate(
+        { firstName: checkPaid.partnerId },
+        { stateId: "inactive" },
+        { new: true }
+      );
+
+      expiredPartnersInfo.push({
+        partnerId: updatedPartner?._id,
+        firstName: updatedPartner?.firstName,
+        lastName: updatedPartner?.lastName,
+        email: updatedPartner?.email,
+      });
+    }
+    console.log("Proceso de verificación de pagos vencidos completado.");
+    console.log("Socios cuya suscripción ha vencido:");
+    console.log(expiredPartnersInfo);
+  } catch (error) {
+    console.error(`Error al verificar pagos vencidos: ${error}`);
+  }
+}

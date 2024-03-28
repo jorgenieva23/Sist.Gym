@@ -97,7 +97,9 @@ export const updatePartner = async ({
         throw new Error("There is already a partner with the same email");
       }
     }
-
+    if (updatedData.datePhysicalAttitude) {
+      updatedData.condition = "fit";
+    }
     await Movement.create({
       movementType: "UPDATE_PARTNER",
       creatorId: partner?.userId,

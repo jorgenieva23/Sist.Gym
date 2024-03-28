@@ -85,6 +85,7 @@ export interface IMovement extends Document {
   movementType: Types.ObjectId | string | null;
   creatorId: Types.ObjectId | string | null;
   ip: string;
+  rolUser: string;
   createdAt: Date;
   updatedAt: Date;
 }

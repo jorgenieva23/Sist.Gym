@@ -8,7 +8,8 @@ export const useIncomeAction = () => {
 
   const getAllIncome = async () => {
     try {
-      const rawData = await axios.get(`/income/all`);
+      const rawData = await axios.get(`/income/allIncome`);
+      console.log(rawData.data);
       const response = rawData.data;
       dispatch(getIncome(response));
     } catch (error: any) {
@@ -17,9 +18,10 @@ export const useIncomeAction = () => {
   };
   const createNewIncome = async (income: IIncome) => {
     try {
+      console.log(income);
+
       const rawData = await axios.post(`/income/create`, {
         partnerId: income.partnerId,
-        dateOfAdmission: income.dateOfAdmission,
         creatorId: income.creatorId,
         stateId: income.stateId,
       });

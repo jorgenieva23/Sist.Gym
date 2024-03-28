@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { PartnerTable } from "../../components/Tables/PartnerTable/PartnerTable";
-import { usePartnerAction } from "../../redux/Actions/partnerAction";
 import { Footer, Navbar, Sidebar } from "../../components";
 import Modal from "../../components/Modal/Modal";
 import ReactDOM from "react-dom";
 import FormPartners from "../../components/Forms/Partners/FormPartners";
 
 export const Partner: React.FC = (): JSX.Element => {
-  const { getAllPartner } = usePartnerAction();
   const partners = useAppSelector((state) => state.partner.partners);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
-
-  useEffect(() => {
-    getAllPartner();
-  }, []);
 
   return (
     <div className="flex flex-col h-screen">
@@ -49,6 +43,6 @@ export const Partner: React.FC = (): JSX.Element => {
       <Footer />
     </div>
   );
-};
+}
 
 export default Partner;

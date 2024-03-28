@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUser } from "../../utils/types";
 
 export interface userState {
-  users: Array<IUser>;
+  users: IUser[];
   specificUser: IUser[];
   user: IUser | null;
 }

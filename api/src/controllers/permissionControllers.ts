@@ -76,7 +76,6 @@ export const saveAllPermisos = async () => {
 export const getAllPermissionType = async () => {
   try {
     const types = await Permission.find();
-    console.log(types);
     return types;
   } catch (error: any) {
     throw new Error("Error when searching for income in the database");

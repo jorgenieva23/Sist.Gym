@@ -5,7 +5,7 @@ import {
   updateUserPayment,
   getPaymentById,
   getPartnerPayments,
-  deletePayment,
+  deletePayments,
 } from "../controllers/paymentsControllers";
 import { IPayment } from "../utils/types";
 import Payment from "../models/payment";
@@ -81,17 +81,15 @@ export const getPartnerPaymentsHandler = async (
   }
 };
 
-export const deleteParterHandler = async (
+export const deletePaymentHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
   try {
-    let result: any = id
-      ? await deletePayment(id, req)
-      : await Payment.deleteMany();
+    let result = await deletePayments(id, req);
     if (!result) {
-      console.log(`No Payment found`);
+      console.log(`No income found`);
       res.status(404).json({ error: `No Payment found` });
     }
     res.status(200).json({ message: "Payment successfully removed" });

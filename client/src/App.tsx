@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { PartnerDetail } from "./components/PartnerDetail/PartnerDetail";
 import ProtectedRoute from "./context/ProtectedRouted";
 import { useAppDispatch } from "./redux/hooks";
 import { setCredentials } from "./redux/Slices/authSlice";
@@ -9,7 +10,7 @@ import {
   Balance,
   Income,
   MonthlyPayment,
-  Movements,
+  Movement,
   Partner,
   Roles,
   User,
@@ -23,7 +24,6 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // Carga la información del usuario desde el almacenamiento local cuando la aplicación se carga
     const userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       dispatch(setCredentials(JSON.parse(userInfo)));
@@ -39,12 +39,13 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/home" element={<Home />} />
           <Route path="/partner" element={<Partner />} />
+          <Route path="/partner/:_id" element={<PartnerDetail />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/promotions" element={<Promotion />} />
           <Route path="/income" element={<Income />} />
           <Route path="/user" element={<User />} />
           <Route path="/balance" element={<Balance />} />
-          <Route path="/movements" element={<Movements />} />
+          <Route path="/movements" element={<Movement />} />
           <Route path="/monthlyPayment" element={<MonthlyPayment />} />
           <Route path="/roles" element={<Roles />} />
         </Route>

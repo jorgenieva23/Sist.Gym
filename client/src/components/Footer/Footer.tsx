@@ -13,7 +13,7 @@ const Footer = () => {
         </a>
       </p>
 
-      <p className="px-8 text-gray-400 font-bold hidden lg:block">V.1.0.0</p>
+      <p className="px-8 text-gray-400 font-bold lg:block">V.1.0.0</p>
     </footer>
   );
 };

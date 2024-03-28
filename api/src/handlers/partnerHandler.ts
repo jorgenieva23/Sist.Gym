@@ -55,6 +55,7 @@ export const postPartner = async (
       firstName,
       lastName,
       email,
+      datePhysicalAttitude,
       rol: roleNames,
       stateId: stateName,
       userId: userName,
@@ -71,27 +72,23 @@ export const postPartner = async (
     if (!role || !state || !admin) {
       throw new Error("Role, state, or admin not found");
     }
+
     if (await Partner.findOne({ email })) {
       throw new Error("There is already a partner with the same email");
     }
+
+    const currentDate = new Date();
+    const isPhysicalAttitudeFit = new Date(datePhysicalAttitude) > currentDate;
+    const condition = isPhysicalAttitudeFit ? "fit" : "unfit";
+
     const newPartner = new Partner({
       ...req.body,
+      condition,
       rol: role?.name || null,
       stateId: state?.name || null,
       creatorId: admin?.name || null,
     });
 
-    await Users.updateOne(
-      { email: admin?.email },
-      { $push: { partners: newPartner.email || newPartner.firstName } }
-    );
-
-    await Movement.create({
-      movementType: "CREAR_PARTNER",
-      creatorId: admin.name,
-      ip: req.ip,
-    });
-    
     await newPartner.save();
     res.status(201).json(newPartner);
   } catch (error: any) {
@@ -120,9 +117,7 @@ export const deleteParterHandler = async (
 ): Promise<void> => {
   const { id } = req.params;
   try {
-    let result: any = id
-      ? await deletePartner(id, req)
-      : await Partner.deleteMany();
+    let result = await deletePartner(id, req);
     if (!result) {
       console.log(`No income found`);
       res.status(404).json({ error: `No partner found` });
