@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { format, isSameDay } from "date-fns";
+import { format } from "date-fns";
 import { IIncome } from "../../../utils/types";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
 import { useIncomeAction } from "../../../redux/Actions/incomeAction";
 import { Typography } from "@material-tailwind/react";
-import { PiNotePencil, PiTrash, PiXCircle } from "react-icons/pi";
+import { PiTrash } from "react-icons/pi";
 
 const TABLE_HEAD = [
   // "#",
@@ -18,7 +18,7 @@ const TABLE_HEAD = [
 export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
   currentIncome,
 }): JSX.Element => {
-  const { getAllIncome } = useIncomeAction();
+  const { getAllIncomeOfTheDay } = useIncomeAction();
   const income = useAppSelector((state) => state.income.income);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
@@ -26,11 +26,9 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
   const itemsPerPage = 8;
   const indexOfLastItems = currentPage * itemsPerPage;
   const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
-  const currentItems = currentIncome.slice(
-    indexOfFirstCourse,
-    indexOfLastItems
-  );
-  const today = new Date();
+  const currentItems = [...currentIncome]
+    .reverse()
+    .slice(indexOfFirstCourse, indexOfLastItems);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -44,7 +42,7 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
   );
 
   useEffect(() => {
-    getAllIncome();
+    getAllIncomeOfTheDay();
   }, []);
 
   return (
@@ -77,68 +75,57 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
           </tr>
         </thead>
         <tbody>
-          {filteredItems
-            // .filter(
-            //   (e) => e.createdAt && isSameDay(new Date(e.createdAt), today)
-            // )
-            .reverse()
-            .map(({ partnerId, stateId, createdAt }, index) => {
-              const isEvenRow = index % 2 === 0;
-              const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
+          {filteredItems.map(({ partnerId, stateId, createdAt }, index) => {
+            const isEvenRow = index % 2 === 0;
+            const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
 
-              const formattedDate = createdAt
-                ? format(new Date(createdAt), "yyyy-MM-dd HH:mm:ss")
-                : "";
+            const formattedDate = createdAt
+              ? format(new Date(createdAt), "yyyy-MM-dd HH:mm:ss")
+              : "";
 
-              const isActive = stateId === "active";
+            const isActive = stateId === "active";
 
-              return (
-                <tr key={index} className={rowClass}>
-                  <td className="p-3  border border-slate-300">
-                    <div className="flex items-center">
-                      <Typography
-                        color="blue-gray"
-                        className="cursor-pointer text-blue-500 font-semibold"
-                      >
-                        {partnerId}
-                      </Typography>
-                    </div>
-                  </td>
-                  {/* <td className="p-3 border border-slate-300">
+            return (
+              <tr key={index} className={rowClass}>
+                <td className="p-3  border border-slate-300">
+                  <div className="flex items-center">
+                    <Typography
+                      color="blue-gray"
+                      className="cursor-pointer text-blue-500 font-semibold"
+                    >
+                      {partnerId}
+                    </Typography>
+                  </div>
+                </td>
+                {/* <td className="p-3 border border-slate-300">
                     <Typography color="blue-gray" className="font-semibold">
                       {dateOfAdmission}
                     </Typography>
                   </td> */}
-                  <td className="p-3 border border-slate-300">
-                    <div
-                      className={`rounded-lg w-20 h-8 flex items-center justify-center ${
-                        isActive ? "bg-green-500 text-lg" : "bg-red-500"
-                      }`}
-                    >
-                      <Typography color="white">
-                        {isActive ? "Activo" : "Inactivo"}
-                      </Typography>
-                    </div>
-                  </td>
-                  <td className="p-3 border border-slate-300">
-                    <Typography color="blue-gray" className="font-semibold">
-                      {formattedDate}
+                <td className="p-3 border border-slate-300">
+                  <div
+                    className={`rounded-lg w-20 h-8 flex items-center justify-center ${
+                      isActive ? "bg-green-500 text-lg" : "bg-red-500"
+                    }`}
+                  >
+                    <Typography color="white">
+                      {isActive ? "Activo" : "Inactivo"}
                     </Typography>
-                  </td>
-                  <td className="p-3 border border-slate-300 flex ">
-                    <button className="bg-blue-500 hover:bg-blue-800 text-white font-bolt rounded">
-                      <PiNotePencil size="30" />
-                    </button>
-                    <button className="bg-yellow-500 hover:bg-yellow-800 text-white font-bolt rounded">
-                      <PiXCircle size="30" />
-                    </button>
-                    <button className="bg-red-500 hover:bg-red-800 text-white font-bolt rounded">
-                      <PiTrash size="30" />
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+                  </div>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    {formattedDate}
+                  </Typography>
+                </td>
+                <td className="p-3 border border-slate-300 flex ">
+                  <button className="bg-red-500 hover:bg-red-800 text-white font-bolt rounded">
+                    <PiTrash size="30" />
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       <div className="flex justify-center mt-4">

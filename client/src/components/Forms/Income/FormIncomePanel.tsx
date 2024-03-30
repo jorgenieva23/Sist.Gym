@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import Select from "react-select";
+import Select from "react-select";
 // import { ClipLoader } from "react-spinners";
 import { IIncome } from "../../../utils/types";
 import { useAppSelector } from "../../../redux/hooks";
@@ -10,7 +10,7 @@ const FormIncomePanel: React.FC = (): JSX.Element => {
 
   const partners = useAppSelector((state) => state.partner.partners);
   const useAuth = useAppSelector((state) => state.auth.userInfo);
-  const creator = useAuth[0].email;
+  const creator = useAuth[0]?.email;
   console.log(creator);
 
   const [form, setForm] = useState<IIncome>({
@@ -19,23 +19,25 @@ const FormIncomePanel: React.FC = (): JSX.Element => {
     stateId: "active",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  interface OptionType {
+    value: string | undefined;
+    label: string | number | undefined;
+  }
+
+  const options: OptionType[] = partners.map((partner) => ({
+    value: partner.firstName,
+    label: partner.dni,
+  }));
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       await createNewIncome(form as IIncome);
       console.log(form.creatorId);
       setForm({
         partnerId: "",
+        creatorId: creator,
+        stateId: "active",
       });
     } catch (error: any) {
       console.error(error.message);
@@ -52,26 +54,19 @@ const FormIncomePanel: React.FC = (): JSX.Element => {
             Socio
           </label>
           <div className="flex">
-            <select
-              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+            <Select
+              className="rounded-lg border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
               name="partnerId"
-              value={form.partnerId}
-              onChange={(e) => handleChange(e)}
+              value={options.find((option) => option.value === form.partnerId)}
+              onChange={(selectedOption: OptionType | null) =>
+                setForm({
+                  ...form,
+                  partnerId: selectedOption ? selectedOption.value : "",
+                })
+              }
               required
-            >
-              <option value="">seleccione al socio</option>
-              {partners
-                .filter((state) => state.stateId !== "inactive")
-                .map((part) => (
-                  <option
-                    className="text-md font-medium text-gray-900"
-                    key={part.firstName}
-                    value={`${part._id}`}
-                  >
-                    {part.firstName} || {part.dni}
-                  </option>
-                ))}
-            </select>
+              options={options}
+            />
           </div>
         </div>
 

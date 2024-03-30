@@ -51,7 +51,7 @@ export interface IRoles extends newIRol {
 
 export interface IIncome {
   _id?: string;
-  partnerId: string;
+  partnerId: string | undefined;
   dateOfAdmission?: number;
   stateId?: string | null;
   deleted?: boolean;

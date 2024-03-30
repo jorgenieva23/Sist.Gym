@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import Income from "../models/income";
 import { IIncome, IPartner } from "../utils/types";
 import {
   getAllIncome, //trae todos los ingresos registrados de todos los socios

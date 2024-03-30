@@ -11,13 +11,13 @@ export const registerPartnerIncome = async (income: IIncome, req: Request) => {
   try {
     const { partnerId, stateId, creatorId } = income;
     const [partner, state, creator] = await Promise.all([
-      Partner.findOne({ _id: partnerId }).exec(),
+      Partner.findOne({ firstName: partnerId }).exec(),
       States.findOne({ name: stateId }).exec(),
       Users.findOne({ email: creatorId }).exec(),
     ]);
-    console.log(partner, "partner");
-    console.log(state, "estado");
-    console.log(creator, "creador");
+    console.log(partner?.firstName, "partner");
+    console.log(state?.name, "estado");
+    console.log(creator?.name, "creador");
 
     if (!partner || !state || !creator) {
       throw new Error("Invalid partner, state, or creator");
@@ -31,8 +31,8 @@ export const registerPartnerIncome = async (income: IIncome, req: Request) => {
     today.setHours(0, 0, 0, 0);
 
     await Movement.create({
-      movementType: "CREAR_INGRESO",
-      creatorId: creator.email,
+      movementType: `CREAR_INGRESO para ${partner.firstName}  ${partner.lastName}`,
+      creatorId: creator.name,
       ip: req.ip,
     });
 

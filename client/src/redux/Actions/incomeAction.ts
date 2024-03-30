@@ -9,7 +9,15 @@ export const useIncomeAction = () => {
   const getAllIncome = async () => {
     try {
       const rawData = await axios.get(`/income/allIncome`);
-      console.log(rawData.data);
+      const response = rawData.data;
+      dispatch(getIncome(response));
+    } catch (error: any) {
+      console.error("Error fetching income data:", error.message);
+    }
+  };
+  const getAllIncomeOfTheDay = async () => {
+    try {
+      const rawData = await axios.get(`/income/incomeToday`);
       const response = rawData.data;
       dispatch(getIncome(response));
     } catch (error: any) {
@@ -18,8 +26,6 @@ export const useIncomeAction = () => {
   };
   const createNewIncome = async (income: IIncome) => {
     try {
-      console.log(income);
-
       const rawData = await axios.post(`/income/create`, {
         partnerId: income.partnerId,
         creatorId: income.creatorId,
@@ -52,6 +58,7 @@ export const useIncomeAction = () => {
   };
   return {
     getAllIncome,
+    getAllIncomeOfTheDay,
     createNewIncome,
     IncomeOfTheDay,
     IncomeOfPartner,

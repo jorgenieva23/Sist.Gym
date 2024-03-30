@@ -4,14 +4,13 @@ import { IMovement } from "../../../utils/types";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
 import { Typography } from "@material-tailwind/react";
-import { PiNotePencil, PiTrash, PiXCircle } from "react-icons/pi";
 
 const TABLE_HEAD = [
   // "#",
   "Socio",
+  "Usuario",
+  "IP",
   "Fecha de ingreso",
-  "Estado",
-  "Opciones",
 ];
 
 export const MovementTable: React.FC<{ currentMovement: IMovement[] }> = ({
@@ -24,10 +23,9 @@ export const MovementTable: React.FC<{ currentMovement: IMovement[] }> = ({
   const itemsPerPage = 8;
   const indexOfLastItems = currentPage * itemsPerPage;
   const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
-  const currentItems = currentMovement.slice(
-    indexOfFirstCourse,
-    indexOfLastItems
-  );
+  const currentItems = [...currentMovement]
+    .reverse()
+    .slice(indexOfFirstCourse, indexOfLastItems);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -70,7 +68,7 @@ export const MovementTable: React.FC<{ currentMovement: IMovement[] }> = ({
           </tr>
         </thead>
         <tbody>
-          {filteredItems.reverse().map(
+          {filteredItems.map(
             ({ movementType, creatorId, createdAt, ip }, index) => {
               const isEvenRow = index % 2 === 0;
               const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
@@ -105,17 +103,6 @@ export const MovementTable: React.FC<{ currentMovement: IMovement[] }> = ({
                     <Typography color="blue-gray" className="font-semibold">
                       {formattedDate}
                     </Typography>
-                  </td>
-                  <td className="p-3 border border-slate-300 flex ">
-                    <button className="bg-blue-500 hover:bg-blue-800 text-white font-bolt rounded">
-                      <PiNotePencil size="30" />
-                    </button>
-                    <button className="bg-yellow-500 hover:bg-yellow-800 text-white font-bolt rounded">
-                      <PiXCircle size="30" />
-                    </button>
-                    <button className="bg-red-500 hover:bg-red-800 text-white font-bolt rounded">
-                      <PiTrash size="30" />
-                    </button>
                   </td>
                 </tr>
               );

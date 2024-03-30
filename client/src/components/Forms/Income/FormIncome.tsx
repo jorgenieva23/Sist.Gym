@@ -81,8 +81,8 @@ const FormIncome: React.FC<FormProps> = ({
                 .map((part) => (
                   <option
                     className="text-md font-medium text-gray-900"
-                    key={part.firstName}
-                    value={`${part._id}`}
+                    key={part._id}
+                    value={`${part.firstName}`}
                   >
                     {part.firstName} || {part.dni}
                   </option>
