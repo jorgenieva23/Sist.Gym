@@ -74,7 +74,7 @@ export const MovementTable: React.FC<{ currentMovement: IMovement[] }> = ({
               const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
 
               const formattedDate = createdAt
-                ? format(new Date(createdAt), "yyyy-MM-dd HH:mm:ss")
+                ? format(new Date(createdAt), "dd-MM-yyyy HH:mm:ss")
                 : "";
 
               return (

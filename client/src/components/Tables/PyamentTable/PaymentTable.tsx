@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IPayments } from "../../../utils/types";
-import { PiNotePencil, PiTrash } from "react-icons/pi";
+import { PiTrash } from "react-icons/pi";
 import { format } from "date-fns";
+import FormatDate from "../../../utils/FormatDate";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
 import { usePaymentAction } from "../../../redux/Actions/paymentActions";
 import { toast, Toaster } from "sonner";
+import FormPayment from "../../Forms/Payment/FormPayment";
+import EditButton from "../../Buttons/EditButon";
 
 const TABLE_HEAD = [
   // "#",
@@ -54,7 +57,7 @@ export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
 
   return (
     <>
-      <form className="flexi tems-center">
+      <form className="flex items-center">
         <input
           value={search}
           name="search"
@@ -86,14 +89,11 @@ export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
             const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
 
             const formattedDate = paym.createdAt
-              ? format(new Date(paym.createdAt), "yyyy-MM-dd ")
+              ? format(new Date(paym.createdAt), "dd-MM-yyyy HH:mm:ss")
               : "";
-            const formatDateFrom = paym.dateFrom
-              ? format(new Date(paym.dateFrom), "yyyy-MM-dd ")
-              : "";
-            const formatDateTo = paym.dateTo
-              ? format(new Date(paym.dateTo), "yyyy-MM-dd ")
-              : "";
+
+            const formatDateFrom = FormatDate(paym.dateFrom);
+            const formatDateTo = FormatDate(paym.dateTo);
 
             const isActive = paym.stateId === "active";
 
@@ -151,11 +151,11 @@ export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
                   </Typography>
                 </td>
                 <td className="p-3 border border-slate-300">
+                  {/* Boton que edita el pago */}
                   <>
-                    <button className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded">
-                      <PiNotePencil size="30" />
-                    </button>
+                    <EditButton item={paym?._id} FormComponent={FormPayment} />
                   </>
+                  {/* Boton que borra el pago */}
                   <>
                     <button
                       onClick={() => {

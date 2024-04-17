@@ -29,7 +29,7 @@ usersRouter.delete("/delete/:id", deleteUserHandler as IusersHandler);
 // Autenticacion
 usersRouter.post("/login", loginUser as IusersHandler);
 usersRouter.post("/logout/:id", logoutUser as IusersHandler);
-usersRouter.get("/profile", auth(["indexUsuario"]), profile as IusersHandler);
+usersRouter.get("/profile", auth(["indexCuota"]), profile as IusersHandler);
 usersRouter.post("/refreshToken", refreshAccessToken as IusersHandler);
 
 export default usersRouter;

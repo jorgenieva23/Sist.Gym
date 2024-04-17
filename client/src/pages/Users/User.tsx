@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { Footer, Navbar, Sidebar } from "../../components";
 import Modal from "../../components/Modal/Modal";
@@ -8,6 +8,8 @@ import FormUsers from "../../components/Forms/Users/FormUsers";
 
 export const User: React.FC = (): JSX.Element => {
   const users = useAppSelector((state) => state.user.users);
+  const roles = useAppSelector((state) => state.roles.roles);
+  console.log(roles);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 

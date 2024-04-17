@@ -8,8 +8,8 @@ const accessToken = localStorage.getItem("accessToken")
 
 export interface authState {
   loading: boolean;
-  // userInfo: IUser;
-  userInfo: IUser[];
+  userInfo: IUser;
+  // userInfo: IUser[];
   accessToken: string | null;
   error: string | undefined | null;
   success: boolean;
@@ -17,8 +17,8 @@ export interface authState {
 
 export const initialState: authState = {
   loading: false,
-  userInfo: [],
-  // userInfo: {} as IUser,
+  // userInfo: [],
+  userInfo: {} as IUser,
   accessToken,
   error: null,
   success: false,
@@ -31,8 +31,8 @@ const authSlice = createSlice({
     logout: (state) => {
       localStorage.removeItem("accessToken"); // deletes token from storage
       state.loading = false;
-      state.userInfo = [];
-      // state.userInfo = {} as IUser;
+      // state.userInfo = [];
+      state.userInfo = {} as IUser;
       state.accessToken = null;
       state.error = null;
     },
@@ -45,22 +45,22 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(
-      userLogin.fulfilled,
-      (state, action: PayloadAction<{ accessToken: string; user: IUser }>) => {
-        state.loading = false;
-        state.userInfo.push(action.payload.user); // Agrega el usuario al array
-        state.accessToken = action.payload.accessToken;
-      }
-    );
     // builder.addCase(
     //   userLogin.fulfilled,
     //   (state, action: PayloadAction<{ accessToken: string; user: IUser }>) => {
     //     state.loading = false;
-    //     state.userInfo = action.payload.user; // Asigna el usuario directamente
+    //     state.userInfo.push(action.payload.user); // Agrega el usuario al array
     //     state.accessToken = action.payload.accessToken;
     //   }
     // );
+    builder.addCase(
+      userLogin.fulfilled,
+      (state, action: PayloadAction<{ accessToken: string; user: IUser }>) => {
+        state.loading = false;
+        state.userInfo = action.payload.user; // Asigna el usuario directamente
+        state.accessToken = action.payload.accessToken;
+      }
+    );
     builder.addCase(userLogin.rejected, (state, action: PayloadAction<any>) => {
       state.loading = false;
       state.error = action.payload;

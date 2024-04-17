@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import controlImage from "../../assets/control.png";
 import logoImage from "../../assets/logo.png";
 import { logout } from "../../redux/Actions/authActions";
@@ -22,13 +22,17 @@ import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
   const user = useAppSelector((state) => state.auth.userInfo);
+  let creator = user?.name;
+  console.log(creator);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const { pathname } = useLocation();
+
   const handleLogout = () => {
-    if (user && user[0]?._id) {
-      dispatch(logout(user[0]?._id));
+    if (user && user?._id) {
+      dispatch(logout(user?._id));
       setTimeout;
       setTimeout(() => {
         navigate("/");
@@ -37,29 +41,71 @@ const Sidebar = () => {
   };
 
   const Menu = [
-    { name: "Panel", link: "/home", icon: FaHome },
-    { name: "Partners", link: "/Partner", icon: FaUsers },
-    { name: "Payment", link: "/payment", icon: FaFileInvoiceDollar },
-    { name: "Promotion", link: "/promotions", icon: FaRegStar },
-    { name: "Income", link: "/Income", icon: FaDoorOpen },
-    { name: "User", link: "/user", icon: FaAddressCard, margin: true },
-    { name: "Baleance", link: "/balance", icon: FaHandHoldingUsd },
+    {
+      name: "Panel",
+      link: "/home",
+      icon: FaHome,
+      rol: ["user", "develop", "partner", "admin"],
+    },
+    {
+      name: "Partners",
+      link: "/Partner",
+      icon: FaUsers,
+      rol: ["user", "develop", "admin", "partner"],
+    },
+    {
+      name: "Payment",
+      link: "/payment",
+      icon: FaFileInvoiceDollar,
+      rol: ["user", "develop", "admin", "partner"],
+    },
+    {
+      name: "Promotion",
+      link: "/promotions",
+      icon: FaRegStar,
+      rol: ["user", "develop", "admin", "partner"],
+    },
+    {
+      name: "Income",
+      link: "/Income",
+      icon: FaDoorOpen,
+      rol: ["user", "develop", "admin", "partner"],
+    },
+    {
+      name: "User",
+      link: "/user",
+      icon: FaAddressCard,
+      margin: true,
+      rol: ["develop", "admin"],
+    },
+    {
+      name: "Baleance",
+      link: "/balance",
+      icon: FaHandHoldingUsd,
+      rol: ["develop", "admin"],
+    },
     {
       name: "Movements",
       link: "/movements",
       icon: FaClipboardList,
       margin: true,
+      rol: "admin",
     },
-    { name: "MonthlyPayment", link: "/monthlyPayment", icon: FaMoneyBillAlt },
-    { name: "Roles", link: "/roles", icon: FaUserCog },
+    {
+      name: "MonthlyPayment",
+      link: "/monthlyPayment",
+      icon: FaMoneyBillAlt,
+      rol: "admin",
+    },
+    { name: "Roles", link: "/roles", icon: FaUserCog, rol: "admin" },
   ];
 
   return (
-    <div className="flex">
+    <div className="flex border-r-2 border-gray-600">
       <div
         className={`${
           open ? "w-64" : "w-20"
-        } duration-300 p-5 pt-5 bg-gray-800 relative`}
+        } duration-300 p-5 pt-5 bg-zinc-900 relative`}
       >
         <img
           src={controlImage}
@@ -76,7 +122,7 @@ const Sidebar = () => {
               !open && "scale-0"
             }`}
           >
-            jorge
+            {creator}
           </h1>
           <button
             className={`text-white font-medium text-sm duration-200 ${
@@ -88,19 +134,16 @@ const Sidebar = () => {
           </button>
         </div>
         <div className="mt-4 flex flex-col gap-4 relative">
-          {Menu?.map(
-            (Menu, i) => (
-              // (Menu.rol === "User" && (isUser || isDevelop || isAdmin)) ||
-              // (Menu.rol === "Develop" && (isDevelop || isAdmin)) ||
-              // (Menu.rol === "Admin" && isAdmin) ?
+          {Menu?.map((menu, i) =>
+            user?.rol && menu.rol.includes(user.rol) ? (
               <Link
-                to={Menu?.link}
+                to={menu?.link}
                 key={i}
-                className={`${
-                  Menu?.margin && "mt-5"
-                } group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-700 rounded-md text-white`}
+                className={`${menu?.margin && "mt-5"} ${
+                  pathname === menu?.link ? "bg-gray-600" : ""
+                } group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-600 rounded-md text-white`}
               >
-                <div>{React.createElement(Menu?.icon, { size: "22.5" })}</div>
+                <div>{React.createElement(menu?.icon, { size: "22.5" })}</div>
                 <h2
                   style={{
                     transitionDelay: `${i + 3}00ms`,
@@ -109,18 +152,17 @@ const Sidebar = () => {
                     !open && "opacity-0 translate-x-28 overflow-hidden"
                   }`}
                 >
-                  {Menu?.name}
+                  {menu?.name}
                 </h2>
                 <h2
                   className={`${
                     open && "hidden"
                   } z-10 absolute left-48 bg-gray-800 font-semibold whitespace-pre rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-16 group-hover:duration-300 group-hover:w-fit  `}
                 >
-                  {Menu?.name}
+                  {menu?.name}
                 </h2>
               </Link>
-            )
-            // : null
+            ) : null
           )}
         </div>
       </div>

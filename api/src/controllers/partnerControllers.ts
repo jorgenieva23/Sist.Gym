@@ -2,6 +2,7 @@ import { Request } from "express";
 import { IPartner } from "../utils/types";
 import Partner from "../models/partner";
 import Movement from "../models/movement";
+import Payment from "../models/payment";
 
 export const getAllPartner = async () => {
   try {
@@ -52,6 +53,7 @@ export const createPartner = async (partner: IPartner) => {
     medicalCoverage,
     phoneEmergency,
     phoneEmergencyName,
+    deleted,
     stateId: stateName,
     userId: userName,
     rol: roleNames,
@@ -69,6 +71,7 @@ export const createPartner = async (partner: IPartner) => {
     medicalCoverage,
     phoneEmergency,
     phoneEmergencyName,
+    deleted,
     stateId: stateName,
     userId: userName,
     rol: roleNames,
@@ -110,6 +113,25 @@ export const updatePartner = async ({
       new: true,
     });
     return updatedPartner;
+  } catch (error: any) {
+    throw new Error(`error updating partner ${error.message}`);
+  }
+};
+
+export const expiredPartner = async () => {
+  try {
+    const currentDate = new Date();
+    const allPartner = await Partner.find();
+    const expiredToday = allPartner.filter((partner) => {
+      const diffDays = Math.ceil(
+        Math.abs(
+          (currentDate.getTime() - new Date(partner.createdAt).getTime()) /
+            (1000 * 60 * 60 * 24)
+        )
+      );
+      return partner.stateId === "activo" && diffDays <= 1;
+    });
+    return expiredToday;
   } catch (error: any) {
     throw new Error(`error updating partner ${error.message}`);
   }

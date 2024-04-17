@@ -5,6 +5,7 @@ import { IPartner } from "../../utils/types";
 interface partnerState {
   partners: IPartner[];
   specificPartner: IPartner | null;
+  historyIncome: Array<{ year: number; incomePerMonth: number[] }>;
   registeredBy: string;
   // registrationDate: Date;
 }
@@ -12,6 +13,7 @@ interface partnerState {
 const initialState: partnerState = {
   partners: [],
   specificPartner: null,
+  historyIncome: [],
   registeredBy: "",
   // registrationDate: "",
 };
@@ -56,6 +58,12 @@ export const partnerSlice = createSlice({
         partners: action.payload,
       };
     },
+    getHistory(state, action: PayloadAction<[]>) {
+      return {
+        ...state,
+        historyIncome: action.payload,
+      };
+    },
     deletePartners: (state, action: PayloadAction<string>) => {
       state.partners = state.partners.filter(
         (part) => part._id !== action.payload
@@ -71,6 +79,7 @@ export const {
   createPartner,
   searchPartners,
   editPartner,
+  getHistory,
   deletePartners,
 } = partnerSlice.actions;
 export default partnerSlice.reducer;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Select from "react-select";
 import { ClipLoader } from "react-spinners";
 import { IIncome } from "../../../utils/types";
 import { useAppSelector } from "../../../redux/hooks";
@@ -7,7 +8,10 @@ import { PiUserCirclePlusLight } from "react-icons/pi";
 
 interface FormProps {
   incomeToEdit?: IIncome;
-  setEditingIncome?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+interface OptionType {
+  value: string | undefined;
+  label: string | number | undefined;
 }
 
 const FormIncome: React.FC<FormProps> = ({
@@ -24,18 +28,18 @@ const FormIncome: React.FC<FormProps> = ({
   const isEditing = !!incomeToEdit;
   const [form, setForm] = useState<IIncome>({
     partnerId: isEditing ? incomeToEdit?.partnerId : "",
-    creatorId: userAuth[0].email,
+    creatorId: userAuth?.email,
     stateId: "active",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const options: OptionType[] = partners
+    .filter((state) => state.stateId !== "inactive")
+    .map((partner) => ({
+      value: partner._id,
+      label: `${partner.firstName} ${partner.lastName} - DNI: ${
+        partner.dni
+      } || ${partner.condition === "fit" ? " Apto" : "No apto "}`,
+    }));
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,6 +50,7 @@ const FormIncome: React.FC<FormProps> = ({
       setForm({
         partnerId: "",
       });
+      window.location.reload();
     } catch (error: any) {
       console.error(error.message);
       alert("Ocurrió un error");
@@ -65,29 +70,30 @@ const FormIncome: React.FC<FormProps> = ({
             Socio
           </label>
           <div className="flex">
-            <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+            <span className="items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md bg-transparent block mr-2 h-10 w-10">
               <PiUserCirclePlusLight className=" w-7 h-7 text-black" />
             </span>
-            <select
-              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+            <Select
+              className="rounded-lg border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm "
               name="partnerId"
-              value={form.partnerId}
-              onChange={(e) => handleChange(e)}
+              value={options.find((option) => option.value === form.partnerId)}
+              onChange={(selectedOption: OptionType | null) =>
+                setForm({
+                  ...form,
+                  partnerId: selectedOption ? selectedOption.value : "",
+                })
+              }
               required
-            >
-              <option value="">seleccione al socio</option>
-              {partners
-                .filter((state) => state.stateId !== "inactive")
-                .map((part) => (
-                  <option
-                    className="text-md font-medium text-gray-900"
-                    key={part._id}
-                    value={`${part.firstName}`}
-                  >
-                    {part.firstName} || {part.dni}
-                  </option>
-                ))}
-            </select>
+              options={options}
+              menuPortalTarget={document.body} // Añade esta línea
+              styles={{
+                menu: (provided) => ({
+                  ...provided,
+                  maxHeight: 200,
+                  overflow: "auto",
+                }),
+              }}
+            />
           </div>
         </div>
 

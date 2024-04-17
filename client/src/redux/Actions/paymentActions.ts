@@ -4,6 +4,9 @@ import { useAppDispatch } from "../hooks";
 import {
   getPayment,
   getSpecificPayment,
+  PaymentGetStats,
+  getHistoryPaymentDay,
+  getHistoryPaymentMonth,
   createPayment,
   editPayment,
   deletePayment,
@@ -14,9 +17,37 @@ export const usePaymentAction = () => {
 
   const getAllPayment = async () => {
     try {
-      const rawData = await axios.get(`/payment/allPaymen`);
+      const rawData = await axios.get(`/payment/allPayment`);
       const response = rawData.data;
       dispatch(getPayment(response));
+    } catch (error: any) {
+      console.error("Error fetching payment data:", error.message);
+    }
+  };
+  const getAllExpiredPayment = async () => {
+    try {
+      const rawData = await axios.get(`/payment/allExpiredPayment`);
+      const response = rawData.data;
+      dispatch(PaymentGetStats(response));
+    } catch (error: any) {
+      console.error("Error fetching payment data:", error.message);
+    }
+  };
+  const getAllPaymentForDay = async () => {
+    try {
+      const rawData = await axios.get(`/payment/partnerPaymentsDay`);
+      const response = rawData.data;
+      dispatch(getHistoryPaymentDay(response));
+    } catch (error: any) {
+      console.error("Error fetching payment data:", error.message);
+    }
+  };
+  const getAllPaymentForMonth = async () => {
+    try {
+      const rawData = await axios.get(`/payment/partnerPaymentsMonth`);
+      console.log(rawData.data);
+      const response = rawData.data;
+      dispatch(getHistoryPaymentMonth(response));
     } catch (error: any) {
       console.error("Error fetching payment data:", error.message);
     }
@@ -68,6 +99,9 @@ export const usePaymentAction = () => {
   };
   return {
     getAllPayment,
+    getAllExpiredPayment,
+    getAllPaymentForDay,
+    getAllPaymentForMonth,
     createNewPayment,
     updatePayment,
     getSpecificPaymentById,

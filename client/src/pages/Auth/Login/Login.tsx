@@ -39,10 +39,10 @@ export const Login: React.FC = (): JSX.Element => {
   return (
     <div className="justify-center h-screen flex items-center">
       <form
-        className="flex flex-col gap-4 bg-gray-900 px-8 py-10 w-1/4 rounded-xl border-t-4 border-red-400"
+        className="flex flex-col gap-4 bg-gray-900 px-8 py-10  rounded-xl border-t-4 border-red-400"
         onSubmit={handleSubmit}
       >
-        <h1 className="sm:text-sm md:text-2xl lg:text-3xl xl:text-4xl text-center text-slate-300 font-bold mb-7 transition-all duration-300">
+        <h1 className="sm:text-sm md:text-2xl lg:text-4xl xl:text-4xl text-center text-slate-300 font-bold mb-7 transition-all duration-300">
           Login
         </h1>
         {!!error && <div className="text-slate-100 errorMessage">{error}</div>}
@@ -80,7 +80,7 @@ export const Login: React.FC = (): JSX.Element => {
             />
           )}
         </div>
-        <button className="bg-blue-500 text-white justify-center w-1/2 mt-6 py-2 px-6 rounded-lg items-center mx-auto">
+        <button className="flex bg-blue-500 sm:text-sm text-white justify-center w-1/2 mt-6 py-2 px-6 rounded-lg items-center mx-auto">
           Login
         </button>
       </form>

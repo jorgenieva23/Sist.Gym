@@ -2,9 +2,12 @@ import { Request, Response } from "express";
 import {
   registerPaymentController,
   getAllPayment,
+  // calculateTotalSum,
   updateUserPayment,
   getPaymentById,
-  getPartnerPayments,
+  getAllPaymentsForMonth,
+  getPaymentsForToday,
+  expiredPartner,
   deletePayments,
 } from "../controllers/paymentsControllers";
 import { IPayment } from "../utils/types";
@@ -35,6 +38,20 @@ export const getPaymentHandler = async (
     res.status(400).json({ error });
   }
 };
+
+// export const getPaymentSumHandler = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     const { startDate, endDate } = req.body;
+//     let result = await calculateTotalSum(startDate, endDate);
+//     res.status(200).json(result);
+//   } catch (error) {
+//     console.log("possible mistake");
+//     res.status(400).json({ error });
+//   }
+// };
 
 export const getPaymentId = async (
   req: Request,
@@ -67,13 +84,38 @@ export const upDatePaymentById = async (
   }
 };
 
-export const getPartnerPaymentsHandler = async (
+export const getAllPaymentsForMonthHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params;
-    let result = await getPartnerPayments(id);
+    let result = await getAllPaymentsForMonth();
+    res.status(200).json(result);
+  } catch (error) {
+    console.log("possible mistake");
+    res.status(400).json({ error });
+  }
+};
+
+export const getAllPaymentsForDayHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    let result = await getPaymentsForToday();
+    res.status(200).json(result);
+  } catch (error) {
+    console.log("possible mistake");
+    res.status(400).json({ error });
+  }
+};
+
+export const getAllExpiredPayments = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    let result = await expiredPartner();
     res.status(200).json(result);
   } catch (error) {
     console.log("possible mistake");

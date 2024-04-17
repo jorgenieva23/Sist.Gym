@@ -22,7 +22,7 @@ const FormRoles: React.FC<FormProps> = ({
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const isEditing = !!rolToEdit;
 
-  const [originalPermissions, setOriginalPermissions] = useState<string[]>(
+  const [originalPermissions] = useState<string[]>(
     isEditing ? rolToEdit?.permissions : []
   );
 

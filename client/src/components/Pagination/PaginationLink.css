@@ -9,9 +9,9 @@
   font-weight: 500;
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-  border-color 0.15s ease-in-out;
+    border-color 0.15s ease-in-out;
   cursor: pointer;
-  z-index: 0;
+  /* z-index: 0; */
 }
 
 .page-link:first-child {
@@ -33,10 +33,10 @@
   color: #0a58ca;
   background-color: #e9ecef;
 }
-
+/* 
 .page-link:focus {
   z-index: 3;
-}
+} */
 
 .page-link.active {
   color: #ffffff;

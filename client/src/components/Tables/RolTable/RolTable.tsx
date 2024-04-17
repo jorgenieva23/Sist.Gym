@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IRoles } from "../../../utils/types";
-import { PiNotePencil } from "react-icons/pi";
-import Modal from "../../Modal/Modal";
+import EditButton from "../../Buttons/EditButon";
 import FormRoles from "../../Forms/Roles/FormRol";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
@@ -17,7 +16,6 @@ export const RolesTable: React.FC<{ currentRoles: IRoles[] }> = ({
   const roles = useAppSelector((state) => state.roles.roles);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
-  const [editingRol, setEditingRol] = useState<string | null>(null);
 
   const itemsPerPage = 7;
   const indexOfLastItems = currentPage * itemsPerPage;
@@ -86,25 +84,9 @@ export const RolesTable: React.FC<{ currentRoles: IRoles[] }> = ({
                 </td>
 
                 <td className="p-3 border border-slate-300">
-                  <button
-                    onClick={() => setEditingRol(role._id)}
-                    className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded"
-                  >
-                    <PiNotePencil size="30" />
-                  </button>
-                  {editingRol === role._id && (
-                    <Modal
-                      open={editingRol !== null}
-                      onClose={() => setEditingRol(null)}
-                    >
-                      <div className="flex flex-col z-10 gap-4">
-                        <FormRoles
-                          rolToEdit={role}
-                          setEditingRoles={() => setEditingRol(null)}
-                        />
-                      </div>
-                    </Modal>
-                  )}
+                  <>
+                    <EditButton item={role?._id} FormComponent={FormRoles} />
+                  </>
                 </td>
               </tr>
             );

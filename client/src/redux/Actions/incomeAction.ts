@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IIncome } from "../../utils/types";
 import { useAppDispatch } from "../hooks";
-import { getIncome, createIncome } from "../Slices/incomeSlice";
+import { getIncome, createIncome, deleteIncome } from "../Slices/incomeSlice";
 
 export const useIncomeAction = () => {
   const dispatch = useAppDispatch();
@@ -48,10 +48,10 @@ export const useIncomeAction = () => {
       return dispatch(getIncome(income.data));
     } catch (error) {}
   };
-  const deleteIncome = async (id: any) => {
+  const deleteIncomeAction = async (_id: string) => {
     try {
-      const deleted = await axios.delete(`/deleteIncome/${id}`);
-      return dispatch(getIncome(deleted.data));
+      await axios.delete(`/income/deleteIncome/${_id}`);
+      return dispatch(deleteIncome(_id));
     } catch (error: any) {
       console.log(error.message);
     }
@@ -62,6 +62,6 @@ export const useIncomeAction = () => {
     createNewIncome,
     IncomeOfTheDay,
     IncomeOfPartner,
-    deleteIncome,
+    deleteIncomeAction,
   };
 };

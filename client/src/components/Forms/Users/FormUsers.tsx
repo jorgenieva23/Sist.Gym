@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Select from "react-select";
 import { useAppSelector } from "../../../redux/hooks";
 import { useUserAction } from "../../../redux/Actions/userAction";
 import { IUser } from "../../../utils/types";
@@ -6,14 +7,19 @@ import { ClipLoader } from "react-spinners";
 
 import {
   PiUserCirclePlusLight,
-  PiPasswordBold,
+  PiPassword,
   PiEnvelope,
-  PiUserSwitchBold,
+  PiUserSwitch,
 } from "react-icons/pi";
 
 interface FormProps {
   userToEdit?: IUser;
   setEditingUser?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface OptionType {
+  value: string | undefined;
+  label: string | number | undefined;
 }
 
 const FormUsers: React.FC<FormProps> = ({
@@ -92,6 +98,11 @@ const FormUsers: React.FC<FormProps> = ({
 
     return errorMessage;
   };
+
+  const options: OptionType[] = roles.map((R) => ({
+    value: R.name,
+    label: `${R.name}`,
+  }));
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -183,7 +194,7 @@ const FormUsers: React.FC<FormProps> = ({
           </label>
           <div className="flex">
             <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-              <PiPasswordBold className="w-7 h-7 text-black" />
+              <PiPassword className="w-7 h-7 text-black" />
             </span>
             <input
               className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
@@ -204,22 +215,30 @@ const FormUsers: React.FC<FormProps> = ({
           </label>
           <div className="flex">
             <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-              <PiUserSwitchBold className="w-7 h-7 text-black" />
+              <PiUserSwitch className="w-7 h-7 text-black" />
             </span>
-            <select
-              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-              name="rol"
-              value={form.rol}
-              onChange={(e) => handleChange(e)}
+            <Select
+              className="rounded-lg border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm"
+              name="partnerId"
+              value={options.find((option) => option.value === form.rol)}
+              onChange={(selectedOption: OptionType | null) =>
+                setForm({
+                  ...form,
+                  rol: selectedOption ? selectedOption.value || "" : "",
+                })
+              }
               required
-            >
-              <option value="">Selecciona el rol del usuario</option>
-              {roles.map((rol) => (
-                <option key={rol.name} value={rol.name} className=" text-lg">
-                  {rol.name}
-                </option>
-              ))}
-            </select>
+              options={options}
+              menuPortalTarget={document.body} // Añade esta línea
+              styles={{
+                menu: (provided) => ({
+                  ...provided,
+                  maxHeight: 200,
+                  overflow: "auto",
+                }),
+              }}
+            />
+            ;
           </div>
         </div>
 

@@ -5,7 +5,7 @@ import {
   getIncomeOfTheDay, //los ingresos que hubo en el dia
   registerPartnerIncome, //registra un ingreso
   getPartnerIncome, //trae los ingresos de un socio en un rango de fecha especificos,
-  getAllIncomeByPartnerID, //trae todos los ingresos del socio
+  getMonthlyIncome, //trae todos los ingresos del socio
   deleteIncomeControllers, //borra un ingreso
 } from "../controllers/incomeControllers";
 
@@ -68,16 +68,10 @@ export const getAllIncomeByPartnerIDHandler = async (
 ) => {
   const { partnerId } = req.params;
   try {
-    let result = await getAllIncomeByPartnerID(partnerId);
-    if (!result) {
-      console.log(`No incomes found`);
-      res.status(404).json({ error: `No incomes found` });
-    }
-    res
-      .status(200)
-      .json({ message: `income successfully removed  ${partnerId}` });
+    let result = await getMonthlyIncome(partnerId);
+    return res.status(200).json({ result });
   } catch (error) {
-    res.status(500).json({ error: `Error deleting income ${partnerId}` });
+    res.status(500).json({ error: `Error found income ${partnerId}` });
   }
 };
 

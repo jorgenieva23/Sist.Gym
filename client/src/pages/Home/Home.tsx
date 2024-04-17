@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from "react";
-import Select from "react-select";
 import { Footer, Navbar, Sidebar } from "../../components";
-import { useAppSelector } from "../../redux/hooks";
 import { usePartnerAction } from "../../redux/Actions/partnerAction";
+import { useAppSelector } from "../../redux/hooks";
+import ButtonRegister from "../../components/Buttons/ButtonRegisterP";
+import FormPartners from "../../components/Forms/Partners/FormPartners";
+import FormPayment from "../../components/Forms/Payment/FormPayment";
 import FormIncomePanel from "../../components/Forms/Income/FormIncomePanel";
+import CardPartner from "../../components/Card/Card";
+import { ExpiredPayment } from "../../components/Tables/ExpiredTable/ExpiredTable";
 
 export const Home: React.FC = (): JSX.Element => {
   const { getAllPartner } = usePartnerAction();
+  const partners = useAppSelector((state) => state.partner.partners);
+
+  const [selectedButton, setSelectedButton] = useState("usuarios");
+
+  const Birthday = partners.filter((partner) => {
+    const today = new Date();
+    const dob = new Date(partner.date);
+    return (
+      dob.getUTCDate() === today.getUTCDate() &&
+      dob.getUTCMonth() === today.getUTCMonth()
+    );
+  });
 
   useEffect(() => {
     getAllPartner();
@@ -17,17 +33,67 @@ export const Home: React.FC = (): JSX.Element => {
       <Navbar />
       <div className="flex flex-grow">
         <Sidebar />
-        <div className="flex-grow md:flex-col bg-white">
-          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-2 py-2 m-4 bg-blue-500">
-            <div className="mx-5 bg-indigo-900">
-              <div className="mb-20 m-2">
-                <h1 className="text-2xl font-bold text-white">Ingresos</h1>
+        <div className="flex-grow md:flex-col bg-zinc-200">
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 m-4 gap-4">
+            <div className="bg-white shadow rounded-lg">
+              <div className="text-2xl rounded-t-lg bg-zinc-900 font-semibold py-2 text-white">
+                <h1 className="mx-3 ">Ingresos</h1>
+              </div>
+              <div className="mb-4 ">
                 <FormIncomePanel />
               </div>
             </div>
 
-            <div className="bg-green-600 mx-5">
-              <h1 className="text-3xl font-bold">texto</h1>
+            <div className="bg-white mb-12 shadow rounded-lg">
+              <div className="text-2xl text-white shadow rounded-t-lg bg-zinc-900 font-semibold py-2">
+                <h1 className="mx-2 ">Acciones rapidas</h1>
+              </div>
+              <div className="flex flex-grow mt-6 mx-2">
+                <ButtonRegister
+                  FormComponent={FormPartners}
+                  buttonText="Registrar socio"
+                />
+                <ButtonRegister
+                  FormComponent={FormPayment}
+                  buttonText="Registrar socio"
+                />
+              </div>
+            </div>
+
+            <div className="bg-white shadow rounded-lg">
+              <div className="text-2xl text-white bg-zinc-900 font-semibold rounded-t-lg py-2">
+                {Birthday.length > 0 ? (
+                  <h1 className="mx-2">Socios que cumplen años hoy</h1>
+                ) : (
+                  <h1 className="mx-2">No hay socios que cumplan años hoy</h1>
+                )}
+              </div>
+              <div className="grid m-6 mx-2">
+                <CardPartner partner={Birthday} />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white shadow rounded-lg mx-4">
+            <div className="text-2xl rounded-t-lg bg-zinc-900 font-semibold py-2 text-white">
+              <h1 className="mx-3">Cuotas</h1>
+            </div>
+            <div className="m-4 gap-4">
+              <button
+                onClick={() => setSelectedButton("vencen hoy")}
+                className="border border-neutral-300 rounded-lg py-2 mr-6 w-32 bg-gradient-to-r from-yellow-500 from-10% via-orange-500 via-50% to-amber-500  text-white items-center"
+              >
+                Vencen Hoy
+              </button>
+              <button
+                onClick={() => setSelectedButton("a vencer mañana")}
+                className="border border-neutral-300 rounded-lg py-2 mr-6 w-32 bg-gradient-to-r from-yellow-500 from-10% via-orange-500 via-50% to-amber-500  text-white items-center"
+              >
+                Vencen mañana
+              </button>
+            </div>
+            <div>
+              <ExpiredPayment selectedButton={selectedButton} />
             </div>
           </div>
         </div>

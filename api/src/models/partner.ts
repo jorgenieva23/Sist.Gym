@@ -45,6 +45,7 @@ const partnerSchema = new Schema<IPartner>({
   },
   deleted: {
     type: Boolean,
+    default: false,
   },
   date: {
     type: Date,

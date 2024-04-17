@@ -2,9 +2,12 @@ import { Router, Request, Response } from "express";
 import {
   postPayment,
   getPaymentHandler,
+  // getPaymentSumHandler,
   getPaymentId,
   upDatePaymentById,
-  getPartnerPaymentsHandler,
+  getAllPaymentsForDayHandler,
+  getAllPaymentsForMonthHandler,
+  getAllExpiredPayments,
   deletePaymentHandler,
 } from "../handlers/paymentsHandlers";
 
@@ -15,13 +18,21 @@ interface IPaymentHandler {
 }
 
 paymentRouter.post("/createPayment", postPayment as IPaymentHandler);
-paymentRouter.get("/allPaymen", getPaymentHandler as IPaymentHandler);
+paymentRouter.get("/allPayment", getPaymentHandler as IPaymentHandler);
+paymentRouter.get(
+  "/allExpiredPayment",
+  getAllExpiredPayments as IPaymentHandler
+);
 paymentRouter.get("/getById/id:", getPaymentId as IPaymentHandler);
 paymentRouter.get(
-  "/partnerPayments/id:",
-  getPartnerPaymentsHandler as IPaymentHandler
+  "/partnerPaymentsMonth",
+  getAllPaymentsForMonthHandler as IPaymentHandler
 );
-paymentRouter.put("/update/:id", upDatePaymentById as IPaymentHandler);
+paymentRouter.get(
+  "/partnerPaymentsDay",
+  getAllPaymentsForDayHandler as IPaymentHandler
+);
+paymentRouter.put("/update/:partnerId", upDatePaymentById as IPaymentHandler);
 paymentRouter.delete("/delete/:id", deletePaymentHandler as IPaymentHandler);
 
 export default paymentRouter;

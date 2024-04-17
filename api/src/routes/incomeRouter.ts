@@ -19,7 +19,7 @@ incomeRouter.get("/allIncome", getAllIncomeHandler as IIncomeHandler);
 incomeRouter.get("/incomeToday", getIncomeTodayHandler as IIncomeHandler);
 incomeRouter.get("/partnerIncome", getPartnerIncomeHandler as IIncomeHandler);
 incomeRouter.get(
-  "/allByPartnerId/:id",
+  "/allIncomeByPartnerId/:partnerId",
   getAllIncomeByPartnerIDHandler as IIncomeHandler
 );
 incomeRouter.delete("/deleteIncome/:id", deleteIncome as IIncomeHandler);

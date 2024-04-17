@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { useAppSelector } from "../../../redux/hooks";
 import { usePartnerAction } from "../../../redux/Actions/partnerAction";
 import { IPartner } from "../../../utils/types";
@@ -28,7 +29,7 @@ const FormPartners: React.FC<FormProps> = ({
   const { createNewPartner, updatePartner } = usePartnerAction();
   const partners = useAppSelector((state) => state.partner.partners);
   const useAuth = useAppSelector((state) => state.auth.userInfo);
-  const creator = useAuth[0].email;
+  const creator = useAuth?.email;
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -43,7 +44,7 @@ const FormPartners: React.FC<FormProps> = ({
     address: isEditing ? partnerToEdit?.address : "",
     phone: isEditing ? partnerToEdit?.phone : 0,
     email: isEditing ? partnerToEdit?.email : "",
-    picture: isEditing ? partnerToEdit?.picture : null,
+    picture: isEditing ? partnerToEdit?.picture : "",
     date: isEditing ? partnerToEdit?.date : 0,
     datePhysicalAttitude: isEditing ? partnerToEdit?.datePhysicalAttitude : 0,
     medicalCoverage: isEditing ? partnerToEdit?.medicalCoverage : "",
@@ -51,6 +52,7 @@ const FormPartners: React.FC<FormProps> = ({
     phoneEmergencyName: isEditing ? partnerToEdit?.phoneEmergencyName : "",
     stateId: isEditing ? partnerToEdit?.stateId : "inactive",
     condition: isEditing ? partnerToEdit?.condition : "",
+    deleted: isEditing ? partnerToEdit?.deleted : false,
     userId: creator,
     rol: "partner",
   });
@@ -143,26 +145,31 @@ const FormPartners: React.FC<FormProps> = ({
       ...form,
       [e.target.name]: e.target.value,
     });
-
-    setErrors(
-      validate({
-        ...form,
-        [e.target.name]: e.target.value,
-      })
-    );
   };
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoadingSubmit(true);
+
+    const errors = validate(form);
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      setLoadingSubmit(false);
+      return;
+    }
+
     try {
       if (isEditing && partnerToEdit && partnerToEdit._id) {
         await updatePartner(partnerToEdit._id, form).then(() => {
+          setLoadingSubmit(false);
           setEditingPartner && setEditingPartner(false);
           window.location.reload();
         });
       } else {
-        await createNewPartner(form as IPartner);
+        await createNewPartner(form as IPartner).then(() => {
+          setLoadingSubmit(false);
+          window.location.reload();
+        });
         setForm({
           firstName: "",
           lastName: "",
@@ -170,7 +177,7 @@ const FormPartners: React.FC<FormProps> = ({
           address: "",
           phone: 0,
           email: "",
-          picture: null,
+          picture: "",
           date: 0,
           datePhysicalAttitude: 0,
           medicalCoverage: "",
@@ -208,12 +215,9 @@ const FormPartners: React.FC<FormProps> = ({
                 value={form.firstName}
                 placeholder="Nombre"
                 onChange={(e) => handleChange(e)}
-                required
               />
             </div>
-            {/* {errors.firstName && (
-                <div className="error fl">{errors.firstName}</div>
-              )} */}
+            {errors.firstName && toast.info(errors.amount)}
           </div>
 
           <div className="flex flex-col">
@@ -233,9 +237,7 @@ const FormPartners: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            {/* {errors.lastName && (
-                <div className="error">{errors.lastName}</div>
-              )} */}
+            {errors.lastName && toast.info(errors.lastName)}
           </div>
 
           <div className="flex flex-col">
@@ -255,7 +257,7 @@ const FormPartners: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            {/* {errors.phone && <div className="error">{errors.phone}</div>} */}
+            {errors.phone && toast.info(errors.phone)}
           </div>
 
           <div className="flex flex-col">
@@ -279,7 +281,7 @@ const FormPartners: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            {/* {errors.dni && <div className="error">{errors.dni}</div>} */}
+            {errors.dni && toast.info(errors.dni)}
           </div>
           {/* </div>
 
@@ -301,7 +303,7 @@ const FormPartners: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            {/* {errors.date && <div className="error">{errors.date}</div>} */}
+            {errors.date && toast.info(errors.date)}
           </div>
           <div className="flex flex-col">
             <label className="block mb-1 text-sm font-medium text-gray-900">
@@ -319,10 +321,9 @@ const FormPartners: React.FC<FormProps> = ({
                 value={form.email}
                 placeholder="Correo Electrónico"
                 onChange={(e) => handleChange(e)}
-                required
               />
             </div>
-            {errors.email && <div className="error fl">{errors.email}</div>}
+            {errors.email && toast.info(errors.email)}
           </div>
         </div>
 
@@ -343,7 +344,7 @@ const FormPartners: React.FC<FormProps> = ({
               onChange={(e) => handleChange(e)}
             />
           </div>
-          {/* {errors.date && <div className="error">{errors.address}</div>} */}
+          {errors.date && toast.info(errors.email)}
         </div>
 
         <div className="flex flex-col my-2">
@@ -359,12 +360,11 @@ const FormPartners: React.FC<FormProps> = ({
               type="file"
               name="imageFileOrder"
               accept=".jpeg, .jpg, .png, .webp, .svg"
-              onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
-                if (event.target.files && event.target.files[0]) {
+              onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files && e.target.files[0]) {
+                  const selectedFile = e.target.files[0];
                   try {
-                    const resizedImage = await resizeImage(
-                      event.target.files[0]
-                    );
+                    const resizedImage = await resizeImage(selectedFile);
                     setForm({
                       ...form,
                       picture: resizedImage,
@@ -373,15 +373,10 @@ const FormPartners: React.FC<FormProps> = ({
                     console.error("Error resizing image:", error);
                   }
                 }
-                handleChange(event);
               }}
             />
           </div>
-          {/* {errors.date && (
-                  <div className="error">{errors.date}</div>
-                )} */}
         </div>
-
         <hr className="bg-gray-400 w-full h-0.5 mx-auto mt-8 border-0"></hr>
         <h1 className="text-2xl">Datos Medicos</h1>
         <div className="my-4 items-center grid gap-4 grid-cols-2">
@@ -402,9 +397,7 @@ const FormPartners: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            {/* {errors.date && (
-              <div className="error">{errors.datePhysicalAttitude}</div>
-            )} */}
+            {errors.date && toast.info(errors.date)}
           </div>
 
           <div className="flex flex-col">
@@ -424,9 +417,7 @@ const FormPartners: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            {/* {errors.lastName && (
-              <div className="error">{errors.medicalCoverage}</div>
-            )} */}
+            {errors.medicalCoverage && toast.info(errors.medicalCoverage)}
           </div>
           <div className="flex flex-col">
             <label className="block mb-1 text-sm font-medium text-gray-900">
@@ -445,9 +436,7 @@ const FormPartners: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            {/* {errors.firstName && (
-              <div className="error">{errors.phoneEmergency}</div>
-            )} */}
+            {errors.phoneEmergency && toast.info(errors.phoneEmergency)}
           </div>
 
           <div className="flex flex-col">
@@ -470,9 +459,7 @@ const FormPartners: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            {/* {errors.lastName && (
-              <div className="error">{errors.phoneEmergencyName}</div>
-            )} */}
+            {errors.phoneEmergencyName && toast.info(errors.phoneEmergencyName)}
           </div>
         </div>
         <div className="flex justify-center mt-4">

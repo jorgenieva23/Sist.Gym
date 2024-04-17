@@ -9,15 +9,15 @@ import Movement from "../models/movement";
 // FUNCION QUE REGISTRA EL INGRESO DEL SOCIO
 export const registerPartnerIncome = async (income: IIncome, req: Request) => {
   try {
-    const { partnerId, stateId, creatorId } = income;
+    const { partnerId, stateId, creatorId, dateOfAdmission } = income;
     const [partner, state, creator] = await Promise.all([
-      Partner.findOne({ firstName: partnerId }).exec(),
+      Partner.findOne({ _id: partnerId }).exec(),
       States.findOne({ name: stateId }).exec(),
       Users.findOne({ email: creatorId }).exec(),
     ]);
-    console.log(partner?.firstName, "partner");
-    console.log(state?.name, "estado");
-    console.log(creator?.name, "creador");
+    console.log(partnerId);
+    console.log(stateId);
+    console.log(creatorId);
 
     if (!partner || !state || !creator) {
       throw new Error("Invalid partner, state, or creator");
@@ -26,6 +26,10 @@ export const registerPartnerIncome = async (income: IIncome, req: Request) => {
         throw new Error("partner status is inactive");
       }
     }
+
+    const admissionDate = dateOfAdmission
+      ? new Date(dateOfAdmission)
+      : new Date();
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -36,7 +40,7 @@ export const registerPartnerIncome = async (income: IIncome, req: Request) => {
       ip: req.ip,
     });
 
-    return await Income.create({ ...income, dateOfAdmission: today });
+    return await Income.create({ ...income, dateOfAdmission: admissionDate });
   } catch (error: any) {
     console.error(error, "error");
     throw new Error(`Error: ${error}`);
@@ -91,21 +95,44 @@ export const getPartnerIncome = async (
 };
 
 // BUSCA EL INGRESO DE UN USUARIO DETERMINADO
-export const getAllIncomeByPartnerID = async (
-  partnerId: string
-): Promise<IIncome[]> => {
+export const getMonthlyIncome = async (partnerId: string) => {
   try {
-    const found = await Income.find({ partnerId }).exec();
-    if (found.length === 0) {
-      console.log(
-        `No se encontraron ingresos para el socio con ID: ${partnerId}`
-      );
-    }
-    return found;
-  } catch (error: any) {
-    throw new Error(
-      `Error al buscar ingresos para el socio con ID: ${partnerId}, ${error.message}`
+    const income = await Income.find({ partnerId }).sort({
+      dateOfAdmission: 1,
+    });
+
+    const monthlyTotals: { [key: number]: number[] } = {};
+
+    let totalAccumulated = 0;
+    let currentMonth = -1;
+    income.forEach((incomes) => {
+      const incomeYear = new Date(incomes.dateOfAdmission).getFullYear();
+      const incomeMonth = new Date(incomes.dateOfAdmission).getMonth();
+
+      if (incomeMonth !== currentMonth) {
+        totalAccumulated = 1;
+        currentMonth = incomeMonth;
+      } else {
+        totalAccumulated += 1;
+      }
+
+      if (!monthlyTotals[incomeYear]) {
+        monthlyTotals[incomeYear] = Array(12).fill(0);
+      }
+      monthlyTotals[incomeYear][incomeMonth] = totalAccumulated;
+    });
+
+    const monthlyincomeArray = Object.entries(monthlyTotals).map(
+      ([year, incomePerMonth]) => ({
+        year: parseInt(year),
+        incomePerMonth: incomePerMonth,
+      })
     );
+
+    return monthlyincomeArray;
+  } catch (error: any) {
+    console.error("ERROR fetching partner income: ", error.message);
+    return [];
   }
 };
 

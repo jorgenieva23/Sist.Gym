@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IPromotion } from "../../../utils/types";
-import { PiNotePencil, PiTrash } from "react-icons/pi";
+import { PiTrash } from "react-icons/pi";
 import { format } from "date-fns";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
 import { usePromotionAction } from "../../../redux/Actions/promotionAction";
 import { toast, Toaster } from "sonner";
-import Modal from "../../Modal/Modal";
 import FormPromotion from "../../Forms/Promotion/PromotionForm";
+import EditButton from "../../Buttons/EditButon";
 
 const TABLE_HEAD = [
   // "#",
@@ -28,9 +28,6 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
   const promotion = useAppSelector((state) => state.promotion.promotions);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
-  const [editingPart, setEditingPart] = useState<string | null | undefined>(
-    null
-  );
 
   const itemsPerPage = 8;
   const indexOfLastItems = currentPage * itemsPerPage;
@@ -89,7 +86,7 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
             const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
 
             const formattedDate = prom.createdAt
-              ? format(new Date(prom.createdAt), "yyyy-MM-dd HH:mm:ss")
+              ? format(new Date(prom.createdAt), "dd-MM-yyyy")
               : "";
 
             const isActive = prom.stateId === "active";
@@ -141,25 +138,10 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
                 </td>
                 <td className="p-3 border border-slate-300">
                   <>
-                    <button
-                      onClick={() => setEditingPart(prom?._id)}
-                      className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded"
-                    >
-                      <PiNotePencil size="30" />
-                    </button>
-                    {editingPart === prom._id && (
-                      <Modal
-                        open={editingPart !== null}
-                        onClose={() => setEditingPart(null)}
-                      >
-                        <div className="flex flex-col z-10 gap-4">
-                          <FormPromotion
-                            promotionToEdit={prom}
-                            setEditingPromotion={() => setEditingPart(null)}
-                          />
-                        </div>
-                      </Modal>
-                    )}
+                    <EditButton
+                      item={prom?._id}
+                      FormComponent={FormPromotion}
+                    />
                   </>
                   <>
                     <button

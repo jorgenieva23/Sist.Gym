@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { useAppSelector } from "../../../redux/hooks";
 import Pagination from "../../Pagination/Pagination";
 import { useUserAction } from "../../../redux/Actions/userAction";
+import { useRolesAction } from "../../../redux/Actions/rolesAction";
 
 const TABLE_HEAD = ["Nombre", "Email", "rol", "Estado", "Creado", "Opciones"];
 
@@ -14,6 +15,7 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
   const users = useAppSelector((state) => state.user.users);
 
   const { getAllUser } = useUserAction();
+  const { getAllRoles } = useRolesAction();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
@@ -34,6 +36,7 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
 
   useEffect(() => {
     getAllUser();
+    getAllRoles();
   }, []);
 
   return (

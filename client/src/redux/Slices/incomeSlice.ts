@@ -42,9 +42,19 @@ export const incomeSlice = createSlice({
         income: action.payload,
       };
     },
+    deleteIncome: (state, action: PayloadAction<string>) => {
+      state.income = state.income.filter(
+        (income) => income._id !== action.payload
+      );
+    },
   },
 });
 
-export const { getIncome, fetchIncome, createIncome, editIncome } =
-  incomeSlice.actions;
+export const {
+  getIncome,
+  fetchIncome,
+  createIncome,
+  editIncome,
+  deleteIncome,
+} = incomeSlice.actions;
 export default incomeSlice.reducer;

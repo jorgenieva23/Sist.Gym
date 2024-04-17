@@ -71,7 +71,6 @@ export const saveAllPermisos = async () => {
     console.error("Error controller durante el procesamiento:", error);
   }
 };
-// saveAllPermisos();
 
 export const getAllPermissionType = async () => {
   try {

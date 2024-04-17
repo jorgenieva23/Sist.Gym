@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Select from "react-select";
+import { toast } from "sonner";
 import { useAppSelector } from "../../../redux/hooks";
 import { usePaymentAction } from "../../../redux/Actions/paymentActions";
 import { IPayments } from "../../../utils/types";
@@ -10,18 +12,23 @@ interface FormProps {
   setEditingPayment?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface OptionType {
+  value: string | undefined;
+  label: string | number | undefined;
+}
+
 const FormPayment: React.FC<FormProps> = ({
   paymentToEdit,
   setEditingPayment,
 }: FormProps): JSX.Element => {
   const { createNewPayment, updatePayment } = usePaymentAction();
-  // getSpecificPromotion
 
   const partners = useAppSelector((state) => state.partner.partners);
   const useAuth = useAppSelector((state) => state.auth.userInfo);
-  const creator = useAuth[0].name;
+  const creator = useAuth.name;
   const promotion = useAppSelector((state) => state.promotion.promotions);
 
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const isEditing = !!paymentToEdit;
@@ -35,6 +42,40 @@ const FormPayment: React.FC<FormProps> = ({
     creatorId: creator || "",
   });
 
+  const optionsPart: OptionType[] = partners.map((part) => ({
+    value: part.firstName,
+    label: `${part.firstName} ${part.lastName} - DNI: ${part.dni}`,
+  }));
+
+  const optionsProm: OptionType[] = promotion.map((part) => ({
+    value: part._id,
+    label: `${part.name} - ${part.percentage}%`,
+  }));
+
+  const validate = (form: IPayments): { [key: string]: string } => {
+    let errors: { [key: string]: string } = {};
+
+    if (!form.amount) {
+      errors.amount = "El monto es requerido.";
+    } else if (form.amount <= 0) {
+      errors.amount = "El monto debe ser mayor a cero.";
+    }
+
+    if (!form.dateFrom) {
+      errors.dateFrom = "La fecha es requerida.";
+    }
+
+    if (!form.promotionId) {
+      errors.promotionId = "La promoción es requerida.";
+    }
+
+    if (!form.partnerId) {
+      errors.partnerId = "El socio es requerido.";
+    }
+
+    return errors;
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -47,6 +88,14 @@ const FormPayment: React.FC<FormProps> = ({
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoadingSubmit(true);
+
+    const errors = validate(form);
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      setLoadingSubmit(false);
+      return;
+    }
+
     if (isEditing && paymentToEdit && paymentToEdit._id) {
       updatePayment(paymentToEdit._id, form).then(() => {
         setLoadingSubmit(false);
@@ -88,9 +137,10 @@ const FormPayment: React.FC<FormProps> = ({
               min="0"
               value={form.amount}
               onChange={(e) => handleChange(e)}
-              required
+              
             />
           </div>
+          {errors.amount && toast.info(errors.amount)}
         </div>
 
         <div className="flex flex-col mt-4">
@@ -101,24 +151,31 @@ const FormPayment: React.FC<FormProps> = ({
             <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
               <PiCalendarLight className="w-7 h-7 text-black" />
             </span>
-            <select
-              className="rounded-none rounded-e-lg bg-gray-50 border
-              border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm
-              p-2.5 "
-              name="promotionId"
-              placeholder="promotionId"
-              value={form.promotionId}
-              onChange={(e) => handleChange(e)}
-              required
-            >
-              <option value="">seleccione la promocion</option>
-              {promotion.map((part) => (
-                <option key={part.name} value={`${part.name}`}>
-                  {part.name} - {part.percentage}%
-                </option>
-              ))}
-            </select>
+            <Select
+              className="rounded-lg border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm"
+              name="partnerId"
+              value={optionsProm.find(
+                (option) => option.value === form.promotionId
+              )}
+              onChange={(selectedOption: OptionType | null) =>
+                setForm({
+                  ...form,
+                  promotionId: selectedOption ? selectedOption.value || "" : "",
+                })
+              }
+              
+              options={optionsProm}
+              menuPortalTarget={document.body} // Añade esta línea
+              styles={{
+                menu: (provided) => ({
+                  ...provided,
+                  maxHeight: 200,
+                  overflow: "auto",
+                }),
+              }}
+            />
           </div>
+          {errors.promotionId && toast.info(errors.promotionId)}
         </div>
 
         <div className="flex flex-col mt-4">
@@ -129,21 +186,31 @@ const FormPayment: React.FC<FormProps> = ({
             <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
               <PiUserCirclePlusLight className=" w-7 h-7 text-black" />
             </span>
-            <select
-              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+            <Select
+              className="rounded-lg border-gray-300 text-gray-900 flex-1 min-w-0 w-full text-sm"
               name="partnerId"
-              value={form.partnerId}
-              onChange={(e) => handleChange(e)}
-              required
-            >
-              <option value="">seleccione al socio</option>
-              {partners.map((part) => (
-                <option key={part.firstName} value={`${part.firstName}`}>
-                  {part.firstName}
-                </option>
-              ))}
-            </select>
+              value={optionsPart.find(
+                (option) => option.value === form.partnerId
+              )}
+              onChange={(selectedOption: OptionType | null) =>
+                setForm({
+                  ...form,
+                  partnerId: selectedOption ? selectedOption.value || "" : "",
+                })
+              }
+              
+              options={optionsPart}
+              menuPortalTarget={document.body} // Añade esta línea
+              styles={{
+                menu: (provided) => ({
+                  ...provided,
+                  maxHeight: 200,
+                  overflow: "auto",
+                }),
+              }}
+            />
           </div>
+          {errors.partnerId && toast.info(errors.partnerId)}
         </div>
 
         <div className="flex flex-col mt-4">
@@ -161,9 +228,10 @@ const FormPayment: React.FC<FormProps> = ({
               placeholder="Fecha de inicio"
               value={form.dateFrom}
               onChange={(e) => handleChange(e)}
-              required
+              
             />
           </div>
+          {errors.dateFrom && toast.info(errors.dateFrom)}
         </div>
 
         <div className="flex justify-center mt-4">

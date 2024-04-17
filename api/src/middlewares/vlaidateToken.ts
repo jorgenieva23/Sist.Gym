@@ -14,6 +14,8 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
 export const auth = (requiredPermissions: string[]) => {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(" ")[1];
+    console.log(token);
+
     if (!token) {
       return res
         .status(401)
@@ -24,6 +26,8 @@ export const auth = (requiredPermissions: string[]) => {
         user_id: string;
         user_rol: string;
       };
+      console.log(decoded);
+
       const role = await Roles.findOne({ name: decoded.user_rol }).exec();
       if (!role?.name) {
         return res

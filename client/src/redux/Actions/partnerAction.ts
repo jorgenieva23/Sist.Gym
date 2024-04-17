@@ -8,6 +8,7 @@ import {
   createPartner,
   // searchPartners,
   editPartner,
+  getHistory,
   deletePartners,
 } from "../Slices/partnerSlice";
 
@@ -28,6 +29,20 @@ export const usePartnerAction = () => {
       const rawData = await axios.get(`/partner/getById/${_id}`);
       const response = rawData.data;
       dispatch(getSpecificPartner(response));
+    } catch (error: any) {
+      console.error("Error fetching specific partner data:", error.message);
+    }
+  };
+  const getHistoryIncomePartner = async (partnerId: string) => {
+    try {
+      console.log(partnerId);
+      const rawData = await axios.get(
+        `/income/allIncomeByPartnerId/${partnerId}`
+      );
+      const response = rawData.data.result;
+      console.log(response);
+
+      dispatch(getHistory(response));
     } catch (error: any) {
       console.error("Error fetching specific partner data:", error.message);
     }
@@ -55,12 +70,12 @@ export const usePartnerAction = () => {
         phoneEmergency: partner.phoneEmergency,
         phoneEmergencyName: partner.phoneEmergencyName,
         stateId: partner.stateId,
+        deleted: partner.deleted,
         userId: partner.userId,
         condition: partner.condition,
         rol: partner.rol,
       });
-      console.log(rawData, "hola");
-
+      console.log(rawData.data.picture);
       return dispatch(createPartner(rawData.data));
     } catch (error: any) {
       console.error(error.message);
@@ -72,10 +87,24 @@ export const usePartnerAction = () => {
         `/partner/update/${_id}`,
         updatedData
       );
-      console.log(updatedPartner.data);
+      console.log(updatedPartner.data.picture);
       return dispatch(editPartner(updatedPartner.data));
     } catch (error: any) {
       console.error(error.message);
+    }
+  };
+  const toggleDeleted = async (_id: string) => {
+    try {
+      const rawData = await axios.get(`/partner/getById/${_id}`);
+      const partner = rawData.data;
+      partner.deleted = !partner.deleted;
+      // Cambiar el estado de 'active'
+      partner.stateId = partner.deleted ? "suspend" : "inactive";
+      const updatedPartner = await axios.put(`/partner/update/${_id}`, partner);
+      dispatch(editPartner(updatedPartner.data));
+      window.location.reload();
+    } catch (error: any) {
+      console.error("Error updating partner data:", error.message);
     }
   };
   const removePartner = async (_id: string) => {
@@ -93,6 +122,8 @@ export const usePartnerAction = () => {
     clearSpecificPartnerById,
     createNewPartner,
     updatePartner,
+    getHistoryIncomePartner,
+    toggleDeleted,
     removePartner,
   };
 };

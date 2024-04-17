@@ -4,12 +4,24 @@ import { IPayments } from "../../utils/types";
 
 interface paymentState {
   payments: IPayments[];
+  paymentExpired: {
+    dueToday: IPayments[];
+    dueTomorrow: IPayments[];
+  };
   specificIPayments: IPayments | null;
+  historyPaymentDay: Array<{ year: number; gainsPerDay: number[] }>;
+  historyPaymentMonth: Array<{ year: number; gainsPerMonth: number[] }>;
 }
 
 const initialState: paymentState = {
   payments: [],
+  paymentExpired: {
+    dueToday: [],
+    dueTomorrow: [],
+  },
   specificIPayments: null,
+  historyPaymentDay: [],
+  historyPaymentMonth: [],
 };
 
 export const paymentSlice = createSlice({
@@ -28,6 +40,25 @@ export const paymentSlice = createSlice({
         specificIPayments: action.payload,
       };
     },
+    PaymentGetStats(state, action) {
+      return {
+        ...state,
+        paymentExpired: action.payload,
+      };
+    },
+    getHistoryPaymentDay(state, action: PayloadAction<[]>) {
+      return {
+        ...state,
+        historyPaymentDay: action.payload,
+      };
+    },
+    getHistoryPaymentMonth(state, action: PayloadAction<[]>) {
+      return {
+        ...state,
+        historyPaymentMonth: action.payload,
+      };
+    },
+
     createPayment: (state, action: PayloadAction<IPayments>) => {
       return {
         ...state,
@@ -51,6 +82,9 @@ export const paymentSlice = createSlice({
 export const {
   getPayment,
   getSpecificPayment,
+  PaymentGetStats,
+  getHistoryPaymentDay,
+  getHistoryPaymentMonth,
   createPayment,
   editPayment,
   deletePayment,

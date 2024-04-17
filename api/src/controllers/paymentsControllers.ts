@@ -1,11 +1,11 @@
 import { IPayment } from "../utils/types";
 import { Request } from "express";
 import Promotion from "../models/promotion";
-import Payments from "../models/payment";
 import Partner from "../models/partner";
 import States from "../models/state";
 import Users from "../models/user";
 import Movement from "../models/movement";
+import Payment from "../models/payment";
 
 // FUNCION REGISTRO DEL PAGO, MOVIMIENTO Y CALCULO DEL TOTAL MEDIANTE PROMOCIONES
 export const registerPaymentController = async (
@@ -47,7 +47,7 @@ export const registerPaymentController = async (
       dateTo.setMonth(dateTo.getMonth() + 1);
     }
 
-    const newPayment = new Payments({
+    const newPayment = new Payment({
       ...payment,
       dateTo: dateTo.toISOString().split("T")[0],
       total,
@@ -72,17 +72,53 @@ export const registerPaymentController = async (
 // FUNCION QUE TRAE TODOS LOS PAGOS
 export const getAllPayment = async () => {
   try {
-    const payment = await Payments.find();
+    const payment = await Payment.find();
     return payment;
   } catch (err) {
     throw new Error("Error when searching for payment in the database");
   }
 };
 
+// export const calculateTotalSum = async (startDate?: Date, endDate?: Date) => {
+//   try {
+//     const currentDate = new Date();
+
+//     const startOfMonth = new Date(
+//       currentDate.getFullYear(),
+//       currentDate.getMonth(),
+//       1
+//     );
+
+//     const endOfMonth = new Date(
+//       currentDate.getFullYear(),
+//       currentDate.getMonth() + 1,
+//       0
+//     );
+
+//     let payments;
+//     if (startDate && endDate) {
+//       payments = await Payments.find({
+//         dateFrom: { $gte: startDate, $lte: endDate },
+//       });
+//     } else {
+//       payments = await Payments.find({
+//         dateFrom: { $gte: startOfMonth, $lte: endOfMonth },
+//       });
+//     }
+//     const totalSum = payments.reduce(
+//       (accumulator, payment) => accumulator + payment.total,
+//       0
+//     );
+//     return totalSum;
+//   } catch (err) {
+//     throw new Error("Error when calculating total sum for the current month");
+//   }
+// };
+
 // FUNCION QUE TRAE PAGOS POR ID
 export const getPaymentById = async (id: any) => {
   try {
-    let payment = await Payments.findOne(id);
+    let payment = await Payment.findOne(id);
     if (!payment) payment = await Users.findOne({ id });
     if (!payment) return { error: true };
     return payment;
@@ -118,30 +154,29 @@ export const updateUserPayment = async ({
   }
 };
 
-// FUNCION QUE TRAE LOS PAGOS DE UN SOCIO POR ID
-export const getPartnerPayments = async (id: any) => {
+// FUNCION QUE TRAE LOS PAGOS POR MES
+export const getAllPaymentsForMonth = async () => {
   try {
-    let payment = await Payments.find({ id, delete: false });
+    let payment = await Payment.find();
     if (!payment || payment.length === 0) {
       throw Error("payment not found by userId or type");
     }
+
     payment = payment.sort(
-      (a, b) => new Date(a.dateTo).getTime() - new Date(b.dateTo).getTime()
+      (a, b) => new Date(a.dateFrom).getTime() - new Date(b.dateFrom).getTime()
     );
     const historyByYear: { [key: number]: number[] } = {};
 
     payment.forEach((pay) => {
-      const payYear = new Date(pay.dateTo).getFullYear();
-      const payMonth = new Date(pay.dateTo).getUTCMonth() + 1;
+      const payYear = new Date(pay.dateFrom).getFullYear();
+      const payMonth = new Date(pay.dateFrom).getUTCMonth() + 1;
 
       if (!historyByYear[payYear]) {
         historyByYear[payYear] = Array(12).fill(0);
       }
-
-      historyByYear[payYear][payMonth - 1] += pay.total;
-
       historyByYear[payYear][payMonth - 1] += pay.total;
     });
+
     const historyArray = Object.entries(historyByYear).map(
       ([year, gainsPerMonth]) => {
         return {
@@ -150,6 +185,7 @@ export const getPartnerPayments = async (id: any) => {
         };
       }
     );
+
     return historyArray;
   } catch (error: any) {
     console.error("ERROR chartController: ", error.message);
@@ -157,9 +193,105 @@ export const getPartnerPayments = async (id: any) => {
   }
 };
 
+// FUNCION QUE TRAE LOS PAGOS POR DIA
+export const getPaymentsForToday = async () => {
+  try {
+    const currentDate = new Date();
+    const currentYear = currentDate.getUTCFullYear();
+    const currentMonth = currentDate.getUTCMonth() + 1;
+
+    let payments = await Payment.find();
+    if (!payments || payments.length === 0) {
+      throw Error("Payments not found by userId or type");
+    }
+
+    payments = payments.sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+
+    const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+    const historyByDay = Array(daysInMonth).fill(0);
+
+    payments.forEach((payment) => {
+      const payDate = new Date(payment.createdAt);
+      const payYear = payDate.getUTCFullYear();
+      const payMonth = payDate.getUTCMonth() + 1;
+      const payDay = payDate.getUTCDate();
+
+      if (payYear === currentYear && payMonth === currentMonth) {
+        historyByDay[payDay - 1] += payment.total;
+      }
+    });
+
+    const monthNames = [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre",
+    ];
+    const monthName = monthNames[currentMonth - 1];
+
+    return [
+      {
+        month: monthName,
+        year: currentYear,
+        gainsPerDay: historyByDay,
+      },
+    ];
+  } catch (error: any) {
+    console.error("ERROR chartController: ", error.message);
+    return [];
+  }
+};
+
+export const expiredPartner = async () => {
+  try {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const tomorrowDate = new Date(currentDate);
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+
+    const allPayment = await Payment.find();
+
+    const dueTodayArray = allPayment.filter(
+      (payment) =>
+        payment.stateId === "active" &&
+        Math.ceil(
+          (new Date(payment.dateTo).getTime() - currentDate.getTime()) /
+            (1000 * 60 * 60 * 24)
+        ) === 0
+    );
+
+    const dueTomorrowArray = allPayment.filter(
+      (payment) =>
+        payment.stateId === "active" &&
+        Math.ceil(
+          (new Date(payment.dateTo).getTime() - tomorrowDate.getTime()) /
+            (1000 * 60 * 60 * 24)
+        ) === 0
+    );
+
+    return {
+      dueToday: dueTodayArray,
+      dueTomorrow: dueTomorrowArray,
+    };
+  } catch (error: any) {
+    throw new Error(`error updating partner ${error.message}`);
+  }
+};
+
 export const deletePayments = async (id: any, req: Request) => {
   try {
-    const payment = await Payments.findByIdAndDelete(id);
+    const payment = await Payment.findByIdAndDelete(id);
     if (!payment) {
       console.log(`No payment found with ID: ${id}`);
     }
@@ -176,44 +308,3 @@ export const deletePayments = async (id: any, req: Request) => {
     console.error(`Error deleting payment ${id}: ${error}`);
   }
 };
-
-async function verifyPaymentsExpiredToday() {
-  const currentDate = new Date();
-  try {
-    const expiredPartnersInfo = [];
-
-    const expiredPaid = await Payments.find({
-      dateTo: { $lte: currentDate },
-    });
-    if (!expiredPaid) {
-      console.log("no hay pagos");
-    }
-    console.log(expiredPaid);
-
-    for (const checkPaid of expiredPaid) {
-      await Payments.findOneAndUpdate(
-        { _id: checkPaid._id },
-        { stateId: "inactive" },
-        { new: true }
-      );
-
-      const updatedPartner = await Partner.findOneAndUpdate(
-        { firstName: checkPaid.partnerId },
-        { stateId: "inactive" },
-        { new: true }
-      );
-
-      expiredPartnersInfo.push({
-        partnerId: updatedPartner?._id,
-        firstName: updatedPartner?.firstName,
-        lastName: updatedPartner?.lastName,
-        email: updatedPartner?.email,
-      });
-    }
-    console.log("Proceso de verificación de pagos vencidos completado.");
-    console.log("Socios cuya suscripción ha vencido:");
-    console.log(expiredPartnersInfo);
-  } catch (error) {
-    console.error(`Error al verificar pagos vencidos: ${error}`);
-  }
-}

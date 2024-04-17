@@ -1,25 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { IIncome } from "../../../utils/types";
-import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
 import { useIncomeAction } from "../../../redux/Actions/incomeAction";
 import { Typography } from "@material-tailwind/react";
 import { PiTrash } from "react-icons/pi";
+import { toast, Toaster } from "sonner";
+import Pagination from "../../Pagination/Pagination";
 
-const TABLE_HEAD = [
-  // "#",
-  "Socio",
-  "Fecha de ingreso",
-  "Estado",
-  "Opciones",
-];
+const TABLE_HEAD = ["Socio", "Fecha de ingreso", "Estado", "Opciones"];
 
 export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
   currentIncome,
 }): JSX.Element => {
-  const { getAllIncomeOfTheDay } = useIncomeAction();
+  const { getAllIncomeOfTheDay, deleteIncomeAction } = useIncomeAction();
+  
   const income = useAppSelector((state) => state.income.income);
+  const partner = useAppSelector((state) => state.partner.partners);
+
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
 
@@ -75,15 +73,19 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
           </tr>
         </thead>
         <tbody>
-          {filteredItems.map(({ partnerId, stateId, createdAt }, index) => {
+          {filteredItems.map((inc, index) => {
+            const partnerItem = partner.find(
+              ({ _id }) => _id === inc.partnerId
+            );
+            if (!partnerItem) return null;
             const isEvenRow = index % 2 === 0;
             const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
 
-            const formattedDate = createdAt
-              ? format(new Date(createdAt), "yyyy-MM-dd HH:mm:ss")
+            const formattedDate = inc.createdAt
+              ? format(new Date(inc.createdAt), "dd-MM-yyyy HH:mm:ss")
               : "";
 
-            const isActive = stateId === "active";
+            const isActive = inc.stateId === "active";
 
             return (
               <tr key={index} className={rowClass}>
@@ -93,15 +95,15 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
                       color="blue-gray"
                       className="cursor-pointer text-blue-500 font-semibold"
                     >
-                      {partnerId}
+                      {partnerItem.firstName} {partnerItem.lastName}
                     </Typography>
                   </div>
                 </td>
-                {/* <td className="p-3 border border-slate-300">
-                    <Typography color="blue-gray" className="font-semibold">
-                      {dateOfAdmission}
-                    </Typography>
-                  </td> */}
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    {formattedDate}
+                  </Typography>
+                </td>
                 <td className="p-3 border border-slate-300">
                   <div
                     className={`rounded-lg w-20 h-8 flex items-center justify-center ${
@@ -113,21 +115,38 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
                     </Typography>
                   </div>
                 </td>
-                <td className="p-3 border border-slate-300">
-                  <Typography color="blue-gray" className="font-semibold">
-                    {formattedDate}
-                  </Typography>
-                </td>
                 <td className="p-3 border border-slate-300 flex ">
-                  <button className="bg-red-500 hover:bg-red-800 text-white font-bolt rounded">
-                    <PiTrash size="30" />
-                  </button>
+                  <>
+                    <button
+                      onClick={() => {
+                        toast.info("Desea borrarla?", {
+                          action: {
+                            label: "Borrar",
+                            onClick: () => {
+                              if (inc._id) {
+                                deleteIncomeAction(inc._id);
+                                toast("Promocion Borrada", {
+                                  description: `La promocion fue borrado del sistema`,
+                                });
+                              } else {
+                                console.error("Error: part._id is undefined");
+                              }
+                            },
+                          },
+                        });
+                      }}
+                      className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded"
+                    >
+                      <PiTrash size="30" />
+                    </button>
+                  </>
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+      <Toaster />
       <div className="flex justify-center mt-4">
         <Pagination
           currentPage={currentPage}

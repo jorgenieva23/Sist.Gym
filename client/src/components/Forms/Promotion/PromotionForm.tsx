@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "sonner";
 import { useAppSelector } from "../../../redux/hooks";
 import { usePromotionAction } from "../../../redux/Actions/promotionAction";
 import { IPromotion } from "../../../utils/types";
@@ -17,7 +18,7 @@ const FormPromotion: React.FC<FormProps> = ({
   const { createNewPromotion, updatePromotion } = usePromotionAction();
 
   const useAuth = useAppSelector((state) => state.auth.userInfo);
-  const creator = useAuth[0].name;
+  const creator = useAuth?.name;
   // const promotion = useAppSelector((state)=> state.promotion.primotion)
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -40,27 +41,15 @@ const FormPromotion: React.FC<FormProps> = ({
     if (!form.name) {
       errors.name = "Debe haber un Precio";
     }
-
     if (!form.percentage) {
       errors.date = "Debe tener una fecha";
     }
-
     if (!form.referredDate) {
       errors.date = "Debe tener una fecha";
     }
-
     if (!form.description) {
       errors.date = "Debe tener una fecha";
     }
-
-    if (!form.stateId) {
-      errors.date = "Debe tener una fecha";
-    }
-
-    if (!form.creatorId) {
-      errors.date = "Debe tener una fecha";
-    }
-
     return errors;
   };
 
@@ -71,38 +60,44 @@ const FormPromotion: React.FC<FormProps> = ({
       ...form,
       [e.target.name]: e.target.value,
     });
-
-    setErrors(
-      validate({
-        ...form,
-        [e.target.name]: e.target.value,
-      })
-    );
   };
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoadingSubmit(true);
-    if (isEditing && promotionToEdit && promotionToEdit._id) {
-      updatePromotion(promotionToEdit._id, form).then(() => {
-        setLoadingSubmit(false);
-        setEditingPromotion && setEditingPromotion(false);
-        window.location.reload();
-      });
-    } else {
-      createNewPromotion(form).then(() => {
-        setLoadingSubmit(false);
-        window.location.reload();
-      });
 
-      setForm({
-        name: "",
-        percentage: 0,
-        referredDate: 0,
-        description: "",
-      });
+    const errors = validate(form);
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      setLoadingSubmit(false);
+      return;
     }
-    console.log(setForm.name);
+
+    try {
+      if (isEditing && promotionToEdit && promotionToEdit._id) {
+        updatePromotion(promotionToEdit._id, form).then(() => {
+          setLoadingSubmit(false);
+          setEditingPromotion && setEditingPromotion(false);
+          window.location.reload();
+        });
+      } else {
+        createNewPromotion(form).then(() => {
+          setLoadingSubmit(false);
+          window.location.reload();
+        });
+        setForm({
+          name: "",
+          percentage: 0,
+          referredDate: 0,
+          description: "",
+        });
+      }
+    } catch (error: any) {
+      console.error(error.message);
+      alert("Ocurrió un error");
+    } finally {
+      setLoadingSubmit(false);
+    }
   };
   return (
     <div>
@@ -125,9 +120,9 @@ const FormPromotion: React.FC<FormProps> = ({
               placeholder="Ej: Media cuota - 15 dias"
               value={form.name}
               onChange={(e) => handleChange(e)}
-              required
             />
           </div>
+          {errors.name && toast.info(errors.name)}
         </div>
 
         <div className="flex flex-col mt-4">
@@ -145,9 +140,9 @@ const FormPromotion: React.FC<FormProps> = ({
               placeholder="0 a 100"
               value={form.percentage}
               onChange={(e) => handleChange(e)}
-              required
             />
           </div>
+          {errors.percentage && toast.info(errors.percentage)}
         </div>
 
         <div className="flex flex-col mt-4">
@@ -165,9 +160,9 @@ const FormPromotion: React.FC<FormProps> = ({
               placeholder="1 a 12 Meses / 15 a 45 Dias"
               value={form.referredDate}
               onChange={(e) => handleChange(e)}
-              required
             />
           </div>
+          {errors.referredDate && toast.info(errors.referredDate)}
         </div>
 
         <div className="flex flex-col mt-4">
@@ -184,9 +179,9 @@ const FormPromotion: React.FC<FormProps> = ({
               name="description"
               value={form.description}
               onChange={(e) => handleChange(e)}
-              required
             />
           </div>
+          {errors.description && toast.info(errors.description)}
         </div>
 
         <div className="flex justify-center mt-4">

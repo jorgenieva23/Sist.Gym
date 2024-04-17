@@ -21,6 +21,20 @@ const Modal: React.FC<propTypes> = ({ open, onClose, children }) => {
     }
   }, [open]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
   return (
     <div
       className={`fixed inset-0 flex justify-center items-center transition-colors ${
@@ -31,7 +45,7 @@ const Modal: React.FC<propTypes> = ({ open, onClose, children }) => {
       <div
         className={`bg-white rounded-lg shadow p-7 transition-all max-w ${
           isVisible ? "scale-100 opacity-100" : "scale-110 opacity-0"
-        }`}
+        } overflow-auto max-h-full`}
         onClick={(e) => e.stopPropagation()}
       >
         <button
