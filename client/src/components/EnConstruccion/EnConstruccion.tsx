@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { VscServerProcess } from "react-icons/vsc";
 import { useNavigate } from "react-router-dom";
 

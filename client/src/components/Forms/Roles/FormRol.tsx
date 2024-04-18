@@ -4,6 +4,7 @@ import { useRolesAction } from "../../../redux/Actions/rolesAction";
 import { newIRol, IRoles } from "../../../utils/types";
 import { ClipLoader } from "react-spinners";
 import { PiCalendarLight } from "react-icons/pi";
+import { toast } from "sonner";
 import "../../../index.css";
 
 interface FormProps {
@@ -53,13 +54,6 @@ const FormRoles: React.FC<FormProps> = ({
       ...form,
       [e.target.name]: e.target.value,
     });
-
-    setErrors(
-      validate({
-        ...form,
-        [e.target.name]: e.target.value,
-      })
-    );
   };
 
   const handleTogglePermission = (permission: string) => {
@@ -77,6 +71,14 @@ const FormRoles: React.FC<FormProps> = ({
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoadingSubmit(true);
+
+    const errors = validate(form);
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      setLoadingSubmit(false);
+      return;
+    }
+
     try {
       if (isEditing && rolToEdit && rolToEdit._id) {
         const addedPermissions = form.permissions.filter(
@@ -136,6 +138,7 @@ const FormRoles: React.FC<FormProps> = ({
               required
             />
           </div>
+          {errors.name && toast.info(errors.name)}
         </div>
 
         <div className="flex mt-4 flex-col">
@@ -156,6 +159,7 @@ const FormRoles: React.FC<FormProps> = ({
               </div>
             ))}
           </div>
+          {errors.permissions && toast.info(errors.permissions)}
         </div>
 
         <div className="flex justify-center mt-4">

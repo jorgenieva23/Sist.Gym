@@ -217,7 +217,7 @@ const FormPartners: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            {errors.firstName && toast.info(errors.amount)}
+            {errors.firstName && toast.info(errors.firstName)}
           </div>
 
           <div className="flex flex-col">
