@@ -35,7 +35,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
   const { getAllPartner, removePartner, toggleDeleted } = usePartnerAction();
   const partners = useAppSelector((state) => state.partner.partners);
   const user = useAppSelector((state) => state.auth.userInfo);
-  console.log(user.rol, "hola");
+
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
@@ -100,7 +100,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
           <thead className="text-lg text-gray-700 uppercase bg-gray-50">
             <tr>
               {TABLE_HEAD.map((head) => (
-                <th key={head} className="p-3 border-b border-slate-300">
+                <th key={head} className="p-3 border-b border border-slate-300">
                   <Typography
                     variant="small"
                     color="blue-gray"
@@ -237,7 +237,9 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
                       <button
                         onClick={() => part._id && toggleDeleted(part._id)}
                         className={`px-1 hover:bg-yellow-800 text-white font-bolt rounded ${
-                          part.deleted ? "bg-green-500" : "bg-yellow-500"
+                          part.deleted
+                            ? "bg-green-500 hover:bg-green-800"
+                            : "bg-yellow-500 hover:bg-yellow-800"
                         }`}
                       >
                         {part.deleted ? (

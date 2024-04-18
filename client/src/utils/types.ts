@@ -4,14 +4,14 @@ export interface IPartner {
   lastName: string;
   dni: string | number;
   address: string;
-  phone: number;
+  phone: string | number;
   email: string;
   picture: string;
   deleted?: boolean | null;
-  date: number;
+  date: string | number;
   datePhysicalAttitude: number;
   medicalCoverage: string;
-  phoneEmergency: number;
+  phoneEmergency: string | number;
   phoneEmergencyName: string;
   stateId?: string | null;
   userId?: string | null;

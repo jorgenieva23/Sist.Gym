@@ -31,7 +31,7 @@ export const Payment: React.FC = (): JSX.Element => {
         <Sidebar />
         <div className="m-2 rounded-lg bg-white border-4 border-t-gray-500 w-full">
           <div className="flex justify-between">
-            <div className="text-3xl mt-2 text-blue-700  ml-7">Payments</div>
+            <div className="text-3xl mt-2 text-blue-700  ml-7">Pagos</div>
             <button
               className="border border-neutral-300 rounded-lg py-2 px-5 my-2 mr-6 bg-green-500 hover:bg-green-700 text-white"
               onClick={() => setOpenModal(true)}

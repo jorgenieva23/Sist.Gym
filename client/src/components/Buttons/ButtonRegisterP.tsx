@@ -18,7 +18,7 @@ const ButtonRegister: React.FC<ButtonRegisterProps> = ({
   return (
     <>
       <button
-        className="border border-neutral-300 rounded-lg py-2 px-5 mr-6 bg-gradient-to-r from-yellow-500 from-10% via-orange-500 via-50% to-amber-500  text-white flex items-center"
+        className="border border-neutral-300 rounded-lg py-2 px-5 mr-6 bg-green-500 text-white flex items-center"
         onClick={() => setOpenModal(true)}
       >
         <FaPlus className="mr-2" />

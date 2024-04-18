@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { toast } from "sonner";
 import { useAppSelector } from "../../../redux/hooks";
@@ -28,6 +28,7 @@ const FormPayment: React.FC<FormProps> = ({
   const creator = useAuth.name;
   const promotion = useAppSelector((state) => state.promotion.promotions);
 
+  const [totalAmount, setTotalAmount] = useState<number>(0);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
@@ -115,6 +116,20 @@ const FormPayment: React.FC<FormProps> = ({
     }
   };
 
+  useEffect(() => {
+    calculateTotal();
+  }, [form.amount, form.promotionId]);
+
+  const calculateTotal = () => {
+    const selectedPromotion = promotion.find((p) => p._id === form.promotionId);
+    const promotionPercentage = selectedPromotion
+      ? selectedPromotion.percentage
+      : 0;
+    const amount = form.amount || 0;
+    const total = amount - (amount * promotionPercentage) / 100;
+    setTotalAmount(total);
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-semibold">
@@ -137,7 +152,6 @@ const FormPayment: React.FC<FormProps> = ({
               min="0"
               value={form.amount}
               onChange={(e) => handleChange(e)}
-              
             />
           </div>
           {errors.amount && toast.info(errors.amount)}
@@ -163,7 +177,6 @@ const FormPayment: React.FC<FormProps> = ({
                   promotionId: selectedOption ? selectedOption.value || "" : "",
                 })
               }
-              
               options={optionsProm}
               menuPortalTarget={document.body} // Añade esta línea
               styles={{
@@ -198,7 +211,6 @@ const FormPayment: React.FC<FormProps> = ({
                   partnerId: selectedOption ? selectedOption.value || "" : "",
                 })
               }
-              
               options={optionsPart}
               menuPortalTarget={document.body} // Añade esta línea
               styles={{
@@ -228,11 +240,13 @@ const FormPayment: React.FC<FormProps> = ({
               placeholder="Fecha de inicio"
               value={form.dateFrom}
               onChange={(e) => handleChange(e)}
-              
             />
           </div>
           {errors.dateFrom && toast.info(errors.dateFrom)}
         </div>
+        <p className="mt-2 text-lg font-medium text-gray-900">
+          Total: <span className="text-green-600">${totalAmount}</span>
+        </p>
 
         <div className="flex justify-center mt-4">
           {!loadingSubmit ? (

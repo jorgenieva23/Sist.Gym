@@ -11,7 +11,7 @@ interface ExpiredPaymentProps {
   selectedButton: string;
 }
 
-const TABLE_HEAD = ["Email", "vencimiento", "telefono"];
+const TABLE_HEAD = ["Socio", "Email", "vencimiento", "telefono"];
 
 export const ExpiredPayment: React.FC<ExpiredPaymentProps> = ({
   selectedButton,
@@ -101,6 +101,11 @@ export const ExpiredPayment: React.FC<ExpiredPaymentProps> = ({
                       </Typography>
                     </NavLink>
                   </div>
+                </td>
+                <td className="p-3 border border-slate-300">
+                  <Typography color="blue-gray" className="font-semibold">
+                    {partnerItem?.email}
+                  </Typography>
                 </td>
                 <td className="p-3 border border-slate-300">
                   <Typography color="blue-gray" className="font-semibold">

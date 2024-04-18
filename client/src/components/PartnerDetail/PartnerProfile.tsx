@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import FormatDate from "../../utils/FormatDate";
 import { useAppSelector } from "../../redux/hooks";
-import { Footer, Navbar, Sidebar } from "../../components";
+import { Footer, Navbar, Sidebar } from "..";
 import { usePartnerAction } from "../../redux/Actions/partnerAction";
 import img from "../../assets/img.jpeg";
 import BarsChart from "../Chart/BarChart";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
-export const PartnerDetail: React.FC = (): JSX.Element => {
+export const PartnerProfile: React.FC = (): JSX.Element => {
   const { _id } = useParams<{ _id: string }>();
   const {
     getSpecificPartnerById,

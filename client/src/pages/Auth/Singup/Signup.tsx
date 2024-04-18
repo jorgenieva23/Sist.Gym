@@ -3,7 +3,14 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { registerUser } from "../../../redux/Actions/authActions";
 import { IUser } from "../../../utils/types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import {
+  PiEyeSlash,
+  PiEye,
+  PiPassword,
+  PiEnvelopeLight,
+  PiUserCirclePlusLight,
+} from "react-icons/pi";
 
 export const Signup: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -12,6 +19,7 @@ export const Signup: React.FC = () => {
   );
   const redirect = useNavigate();
 
+  const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState<IUser>({
     name: "",
     email: "",
@@ -25,6 +33,10 @@ export const Signup: React.FC = () => {
     });
   };
 
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(registerUser(user)).then(() => {
@@ -33,74 +45,100 @@ export const Signup: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold"></h2>
-      <form onSubmit={handleSubmit} className="max-w mx-auto">
-        <div className="flex flex-col mt-4">
-          <label className="block mb-1 text-sm font-medium text-gray-900">
-            Nombre
-          </label>
-          <div className="flex">
-            <input
-              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-              type="text"
-              name="name"
-              value={user.name}
-              placeholder="Nombre"
-              onChange={(e) => handleChange(e)}
-              required
-            />
+    <div className="justify-center h-screen flex items-center bg-gray-200">
+      <div className="bg-white p-8 rounded-lg w-full md:w-96">
+        <div className="mb-5">
+          <h1 className="sm:text-sm md:text-2xl lg:text-4xl xl:text-4xl text-center text-slate-900 font-bold mb-7 transition-all duration-300">
+            Registrate
+          </h1>
+        </div>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {!!error && (
+            <div className="text-slate-100 errorMessage">{error}</div>
+          )}
+
+          <div className="flex flex-col mt-4">
+            <div className="flex">
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+                <PiUserCirclePlusLight className="w-7 h-7 text-black" />
+              </span>
+              <input
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+                type="text"
+                name="name"
+                value={user.name}
+                placeholder="Nombre"
+                onChange={(e) => handleChange(e)}
+                required
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col mt-4">
-          <label className="block mb-1 text-sm font-medium text-gray-900">
-            Correo Electrónico
-          </label>
-          <div className="flex">
-            {/* <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
-              <PiEnvelope className="w-7 h-7 text-black" />
-            </span> */}
-            <input
-              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-              type="email"
-              name="email"
-              value={user.email}
-              placeholder="Correo Electrónico"
-              onChange={(e) => handleChange(e)}
-              required
-            />
+
+          <div className="relative mt-2">
+            <div className="flex">
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+                <PiEnvelopeLight className="w-7 h-7 text-black" />
+              </span>
+              <input
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+                type="email"
+                name="email"
+                value={user.email}
+                placeholder="Correo Electrónico"
+                onChange={(e) => handleChange(e)}
+                required
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col mt-4">
-          <label className="block mb-1 text-sm font-medium text-gray-900">
-            Contraseña
-          </label>
-          <div className="flex">
-            <input
-              className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-              type="password"
-              id="psw"
-              name="psw"
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-              onChange={(e) => handleChange(e)}
-              required
-            />
+
+          <div className="relative mt-2">
+            <div className="flex">
+              <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
+                <PiPassword className="w-7 h-7 text-black" />
+              </span>
+              <input
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                onChange={(e) => handleChange(e)}
+                required
+              />
+              {showPassword ? (
+                <PiEye
+                  onClick={handleShowPassword}
+                  className="absolute right-2 text-xl top-1/2 -translate-y-1/2 text-gray-800 cursor-pointer"
+                />
+              ) : (
+                <PiEyeSlash
+                  onClick={handleShowPassword}
+                  className="absolute right-2 text-xl top-1/2 -translate-y-1/2 text-gray-800 cursor-pointer"
+                />
+              )}
+            </div>
           </div>
+
+          <div>
+            <button
+              className="mt-5 bg-sky-600 text-white w-full py-2 px-6 rounded-lg hover:scale-105 transition-all"
+              type="submit"
+            >
+              Registrarte
+            </button>
+          </div>
+        </form>
+        {loading && <p>Loading...</p>}
+        {error && <p>Error: {error}</p>}
+        {success && <p>Registration successful!</p>}
+        <div className="text-center mt-2">
+          ¿ya tenes cuenta?{" "}
+          <Link to="/login" className="font-bold text-sky-500 hover:underline">
+            Ingresa
+          </Link>
         </div>
-        <div className="flex justify-center mt-4">
-          (
-          <button
-            className="px-4 py-2 rounded-none rounded-e-lg text-sm font-semibold text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md hover:bg-gray-400"
-            type="submit"
-          >
-            {" Añadir socio"}
-          </button>
-          )
-        </div>
-      </form>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      {success && <p>Registration successful!</p>}
+      </div>
     </div>
   );
 };

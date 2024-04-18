@@ -58,6 +58,23 @@ export const usePromotionAction = () => {
       console.error(error.message);
     }
   };
+  const toggleDeletedProm = async (_id: string) => {
+    try {
+      const rawData = await axios.get(`/promotion/getById/${_id}`);
+      const promotion = rawData.data;
+      promotion.deleted = !promotion.deleted;
+      // Cambiar el estado de 'active'
+      promotion.stateId = promotion.deleted ? "suspend" : "inactive";
+      const updatedPartner = await axios.put(
+        `/promotion/upDateProm/${_id}`,
+        promotion
+      );
+      dispatch(editPromotion(updatedPartner.data));
+      window.location.reload();
+    } catch (error: any) {
+      console.error("Error updating promotion data:", error.message);
+    }
+  };
   const removePromotion = async (_id: string) => {
     try {
       await axios.delete(`/promotion/deletePromo/${_id}`);
@@ -71,6 +88,7 @@ export const usePromotionAction = () => {
     getSpecificPromotionById,
     createNewPromotion,
     updatePromotion,
+    toggleDeletedProm,
     removePromotion,
   };
 };

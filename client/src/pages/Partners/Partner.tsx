@@ -15,7 +15,7 @@ export const Partner: React.FC = (): JSX.Element => {
         <Sidebar />
         <div className="mt-8 m-2 rounded-lg bg-white border-4 border-t-gray-500 w-full">
           <div className="flex mt-2 justify-between">
-            <div className="text-3xl text-blue-700 ml-7">Partners</div>
+            <div className="text-3xl text-blue-700 ml-7">Socios</div>
             <ButtonRegister
               FormComponent={FormPartners}
               buttonText="Registrar"

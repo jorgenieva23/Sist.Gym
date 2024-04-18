@@ -19,7 +19,7 @@ export const Movement: React.FC = (): JSX.Element => {
         <Sidebar />
         <div className="mt-8 m-2 rounded-lg bg-white border-4 border-t-gray-500 w-full">
           <div className="flex justify-between">
-            <div className="text-3xl mt-2 text-blue-700  ml-7">Movements</div>
+            <div className="text-3xl mt-2 text-blue-700  ml-7">Movimientos</div>
           </div>
 
           <div className="m-5">

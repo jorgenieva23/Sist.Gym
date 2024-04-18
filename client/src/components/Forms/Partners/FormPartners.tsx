@@ -40,15 +40,15 @@ const FormPartners: React.FC<FormProps> = ({
   const [form, setForm] = useState<IPartner>({
     firstName: isEditing ? partnerToEdit?.firstName : "",
     lastName: isEditing ? partnerToEdit?.lastName : "",
-    dni: isEditing ? partnerToEdit?.dni : 0,
+    dni: isEditing ? partnerToEdit?.dni : "",
     address: isEditing ? partnerToEdit?.address : "",
-    phone: isEditing ? partnerToEdit?.phone : 0,
+    phone: isEditing ? partnerToEdit?.phone : "",
     email: isEditing ? partnerToEdit?.email : "",
     picture: isEditing ? partnerToEdit?.picture : "",
-    date: isEditing ? partnerToEdit?.date : 0,
+    date: isEditing ? partnerToEdit?.date : "",
     datePhysicalAttitude: isEditing ? partnerToEdit?.datePhysicalAttitude : 0,
     medicalCoverage: isEditing ? partnerToEdit?.medicalCoverage : "",
-    phoneEmergency: isEditing ? partnerToEdit?.phoneEmergency : 0,
+    phoneEmergency: isEditing ? partnerToEdit?.phoneEmergency : "",
     phoneEmergencyName: isEditing ? partnerToEdit?.phoneEmergencyName : "",
     stateId: isEditing ? partnerToEdit?.stateId : "inactive",
     condition: isEditing ? partnerToEdit?.condition : "",
@@ -211,9 +211,9 @@ const FormPartners: React.FC<FormProps> = ({
               <input
                 className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5  "
                 type="text"
-                name="firstName"
+                name="Ej. Juan"
                 value={form.firstName}
-                placeholder="Nombre"
+                placeholder="Ej. Juan"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -231,9 +231,9 @@ const FormPartners: React.FC<FormProps> = ({
               <input
                 className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-90 block flex-1 min-w-0 w-full text-sm p-2.5 "
                 type="text"
-                name="lastName"
+                name="Ej. Pérez"
                 value={form.lastName}
-                placeholder="Apellido del Socio"
+                placeholder="Ej. Péres"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -253,7 +253,7 @@ const FormPartners: React.FC<FormProps> = ({
                 type="number"
                 name="phone"
                 value={form.phone}
-                placeholder="Telefono"
+                placeholder="Ej. 038165875"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -277,7 +277,7 @@ const FormPartners: React.FC<FormProps> = ({
                 type="dni"
                 name="dni"
                 value={form.dni}
-                placeholder="DNI del Socio"
+                placeholder="Ej. 36432567"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -299,7 +299,6 @@ const FormPartners: React.FC<FormProps> = ({
                 type="date"
                 name="date"
                 value={form.date}
-                placeholder="fecha de hoy"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -319,7 +318,7 @@ const FormPartners: React.FC<FormProps> = ({
                 type="email"
                 name="email"
                 value={form.email}
-                placeholder="Correo Electrónico"
+                placeholder="Ej. admin@gmail.com"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -340,7 +339,7 @@ const FormPartners: React.FC<FormProps> = ({
               type="string"
               name="address"
               value={form.address}
-              placeholder="Direccion del usuario"
+              placeholder="B° Sur, calle Jujuy 123"
               onChange={(e) => handleChange(e)}
             />
           </div>
@@ -393,7 +392,6 @@ const FormPartners: React.FC<FormProps> = ({
                 type="date"
                 name="datePhysicalAttitude"
                 value={form.datePhysicalAttitude}
-                placeholder="Segundo Nombre"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -413,7 +411,7 @@ const FormPartners: React.FC<FormProps> = ({
                 type="text"
                 name="medicalCoverage"
                 value={form.medicalCoverage}
-                placeholder="Obra social"
+                placeholder="Swiss Medical"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -432,7 +430,7 @@ const FormPartners: React.FC<FormProps> = ({
                 type="number"
                 name="phoneEmergency"
                 value={form.phoneEmergency}
-                placeholder="Telefono"
+                placeholder="Ej. 36432567"
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -455,7 +453,6 @@ const FormPartners: React.FC<FormProps> = ({
                 type="text"
                 name="phoneEmergencyName"
                 value={form.phoneEmergencyName}
-                placeholder="Nombre de contacto"
                 onChange={(e) => handleChange(e)}
               />
             </div>

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { PartnerDetail } from "./components/PartnerDetail/PartnerDetail";
+import { PartnerProfile } from "./components/PartnerDetail/PartnerProfile";
 import ProtectedRoute from "./context/ProtectedRouted";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { setCredentials } from "./redux/Slices/authSlice";
@@ -59,7 +59,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/home" element={<Home />} />
             <Route path="/partner" element={<Partner />} />
-            <Route path="/partner/:_id" element={<PartnerDetail />} />
+            <Route path="/partner/:_id" element={<PartnerProfile />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/promotions" element={<Promotion />} />
             <Route path="/income" element={<Income />} />
@@ -85,7 +85,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/home" element={<Home />} />
             <Route path="/partner" element={<Partner />} />
-            <Route path="/partner/:_id" element={<PartnerDetail />} />
+            <Route path="/partner/:_id" element={<PartnerProfile />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/promotions" element={<Promotion />} />
             <Route path="/income" element={<Income />} />

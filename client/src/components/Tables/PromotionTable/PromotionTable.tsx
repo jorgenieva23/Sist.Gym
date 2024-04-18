@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IPromotion } from "../../../utils/types";
-import { PiTrash } from "react-icons/pi";
+// import { PiTrash } from "react-icons/pi";
 import { format } from "date-fns";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
 import { usePromotionAction } from "../../../redux/Actions/promotionAction";
-import { toast, Toaster } from "sonner";
+import {
+  // toast,
+  Toaster,
+} from "sonner";
 import FormPromotion from "../../Forms/Promotion/PromotionForm";
 import EditButton from "../../Buttons/EditButon";
+import {
+  AiOutlineCheckCircle as ReactivateIcon,
+  AiOutlineCloseCircle as SuspendIcon,
+} from "react-icons/ai";
 
 const TABLE_HEAD = [
   // "#",
@@ -24,8 +31,13 @@ const TABLE_HEAD = [
 export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
   currentPromotions,
 }): JSX.Element => {
-  const { getAllPromotion, removePromotion } = usePromotionAction();
+  const {
+    getAllPromotion,
+    //  removePromotion,
+    toggleDeletedProm,
+  } = usePromotionAction();
   const promotion = useAppSelector((state) => state.promotion.promotions);
+  const user = useAppSelector((state) => state.auth.userInfo);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
 
@@ -42,10 +54,21 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
     setCurrentPage(1);
   };
 
-  const filteredItems = currentItems.filter((promotion) =>
-    `${promotion.name} ${promotion.percentage}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
+  const shouldShowPromotion = (promotion: IPromotion): boolean => {
+    if (user.rol === "admin") {
+      return true;
+    } else if (user.rol === "partner") {
+      return promotion.deleted !== true;
+    } else {
+      return false;
+    }
+  };
+
+  const filteredItems = currentItems.filter(
+    (promotion) =>
+      `${promotion.name} ${promotion.percentage}`
+        .toLowerCase()
+        .includes(search.toLowerCase()) && shouldShowPromotion(promotion)
   );
 
   useEffect(() => {
@@ -90,6 +113,7 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
               : "";
 
             const isActive = prom.stateId === "active";
+            const suspent = prom.stateId === "suspend";
 
             return (
               <tr key={index} className={rowClass}>
@@ -122,12 +146,20 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
                 </td>
                 <td className="p-3 border border-slate-300">
                   <div
-                    className={`rounded-lg w-20 h-8 flex items-center justify-center ${
-                      isActive ? "bg-green-500 text-lg" : "bg-red-500"
+                    className={`rounded-lg w-24 h-8 flex items-center justify-center ${
+                      isActive
+                        ? "bg-green-500 text-lg"
+                        : suspent
+                        ? "bg-yellow-500"
+                        : "bg-red-500"
                     }`}
                   >
                     <Typography color="white">
-                      {isActive ? "Activo" : "Inactivo"}
+                      {isActive
+                        ? "Activo"
+                        : suspent
+                        ? "Suspendido"
+                        : "Inactivo"}
                     </Typography>
                   </div>
                 </td>
@@ -144,6 +176,22 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
                     />
                   </>
                   <>
+                    <button
+                      onClick={() => prom._id && toggleDeletedProm(prom._id)}
+                      className={`px-1 hover:bg-yellow-800 text-white font-bolt rounded ${
+                        prom.deleted
+                          ? "bg-green-500 hover:bg-green-800"
+                          : "bg-yellow-500 hover:bg-yellow-800"
+                      }`}
+                    >
+                      {prom.deleted ? (
+                        <ReactivateIcon size="30" />
+                      ) : (
+                        <SuspendIcon size="30" />
+                      )}
+                    </button>
+                  </>
+                  {/* <>
                     <button
                       onClick={() => {
                         toast.info("Desea borrarla?", {
@@ -166,7 +214,7 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
                     >
                       <PiTrash size="30" />
                     </button>
-                  </>
+                  </> */}
                 </td>
               </tr>
             );

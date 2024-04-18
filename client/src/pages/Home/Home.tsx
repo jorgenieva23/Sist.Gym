@@ -36,7 +36,7 @@ export const Home: React.FC = (): JSX.Element => {
         <div className="flex-grow md:flex-col bg-zinc-200">
           <div className="grid md:grid-cols-1 lg:grid-cols-2 m-4 gap-4">
             <div className="bg-white shadow rounded-lg">
-              <div className="text-2xl rounded-t-lg bg-zinc-900 font-semibold py-2 text-white">
+              <div className="text-xl rounded-t-lg bg-zinc-900 font-semibold py-1 text-white">
                 <h1 className="mx-3 ">Ingresos</h1>
               </div>
               <div className="mb-4 ">
@@ -45,7 +45,7 @@ export const Home: React.FC = (): JSX.Element => {
             </div>
 
             <div className="bg-white mb-12 shadow rounded-lg">
-              <div className="text-2xl text-white shadow rounded-t-lg bg-zinc-900 font-semibold py-2">
+              <div className="text-xl text-white shadow rounded-t-lg bg-zinc-900 font-semibold py-1">
                 <h1 className="mx-2 ">Acciones rapidas</h1>
               </div>
               <div className="flex flex-grow mt-6 mx-2">
@@ -61,7 +61,7 @@ export const Home: React.FC = (): JSX.Element => {
             </div>
 
             <div className="bg-white shadow rounded-lg">
-              <div className="text-2xl text-white bg-zinc-900 font-semibold rounded-t-lg py-2">
+              <div className="text-xl text-white bg-zinc-900 font-semibold rounded-t-lg py-1">
                 {Birthday.length > 0 ? (
                   <h1 className="mx-2">Socios que cumplen años hoy</h1>
                 ) : (
@@ -75,19 +75,19 @@ export const Home: React.FC = (): JSX.Element => {
           </div>
 
           <div className="bg-white shadow rounded-lg mx-4">
-            <div className="text-2xl rounded-t-lg bg-zinc-900 font-semibold py-2 text-white">
+            <div className="text-xl rounded-t-lg bg-zinc-900 font-semibold py-1 text-white">
               <h1 className="mx-3">Cuotas</h1>
             </div>
             <div className="m-4 gap-4">
               <button
                 onClick={() => setSelectedButton("vencen hoy")}
-                className="border border-neutral-300 rounded-lg py-2 mr-6 w-32 bg-gradient-to-r from-yellow-500 from-10% via-orange-500 via-50% to-amber-500  text-white items-center"
+                className="border border-neutral-300 rounded-lg py-2 mr-6 w-32 bg-green-500  text-white items-center"
               >
                 Vencen Hoy
               </button>
               <button
                 onClick={() => setSelectedButton("a vencer mañana")}
-                className="border border-neutral-300 rounded-lg py-2 mr-6 w-32 bg-gradient-to-r from-yellow-500 from-10% via-orange-500 via-50% to-amber-500  text-white items-center"
+                className="border border-neutral-300 rounded-lg py-2 mr-6 w-32 bg-green-500   text-white items-center"
               >
                 Vencen mañana
               </button>
