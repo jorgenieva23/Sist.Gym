@@ -36,7 +36,7 @@ export const Home: React.FC = (): JSX.Element => {
         <div className="flex-grow md:flex-col bg-zinc-200">
           <div className="grid md:grid-cols-1 lg:grid-cols-2 m-4 gap-4">
             <div className="bg-white shadow rounded-lg">
-              <div className="text-xl rounded-t-lg bg-zinc-900 font-semibold py-1 text-white">
+              <div className="text-xl rounded-t-lg bg-gray-800 font-semibold py-1 text-white">
                 <h1 className="mx-3 ">Ingresos</h1>
               </div>
               <div className="mb-4 ">
@@ -45,7 +45,7 @@ export const Home: React.FC = (): JSX.Element => {
             </div>
 
             <div className="bg-white mb-12 shadow rounded-lg">
-              <div className="text-xl text-white shadow rounded-t-lg bg-zinc-900 font-semibold py-1">
+              <div className="text-xl text-white shadow rounded-t-lg bg-gray-800 font-semibold py-1">
                 <h1 className="mx-2 ">Acciones rapidas</h1>
               </div>
               <div className="flex flex-grow mt-6 mx-2">
@@ -61,7 +61,7 @@ export const Home: React.FC = (): JSX.Element => {
             </div>
 
             <div className="bg-white shadow rounded-lg">
-              <div className="text-xl text-white bg-zinc-900 font-semibold rounded-t-lg py-1">
+              <div className="text-xl text-white bg-gray-800 font-semibold rounded-t-lg py-1">
                 {Birthday.length > 0 ? (
                   <h1 className="mx-2">Socios que cumplen años hoy</h1>
                 ) : (
@@ -75,7 +75,7 @@ export const Home: React.FC = (): JSX.Element => {
           </div>
 
           <div className="bg-white shadow rounded-lg mx-4">
-            <div className="text-xl rounded-t-lg bg-zinc-900 font-semibold py-1 text-white">
+            <div className="text-xl rounded-t-lg bg-gray-800 font-semibold py-1 text-white">
               <h1 className="mx-3">Cuotas</h1>
             </div>
             <div className="m-4 gap-4">

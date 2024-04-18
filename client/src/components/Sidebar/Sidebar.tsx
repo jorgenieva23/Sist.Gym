@@ -105,7 +105,7 @@ const Sidebar = () => {
       <div
         className={`${
           open ? "w-64" : "w-20"
-        } duration-300 p-5 pt-5 bg-zinc-900 relative`}
+        } duration-300 p-5 pt-5 bg-gray-800 relative`}
       >
         <img
           src={controlImage}
