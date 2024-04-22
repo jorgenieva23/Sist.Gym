@@ -3,20 +3,18 @@ import { Typography } from "@material-tailwind/react";
 import { IPartner } from "../../../utils/types";
 import corazonRoto from "../../../Images/corazonRoto.png";
 import corazonSano from "../../../Images/corazonSano.png";
-import { PiImage, PiTrash } from "react-icons/pi";
+import { PiImage, PiNotePencil } from "react-icons/pi";
 import { format } from "date-fns";
 import { NavLink } from "react-router-dom";
 import FormPartners from "../../Forms/Partners/FormPartners";
 import Modal from "../../Modal/Modal";
 import Pagination from "../../Pagination/Pagination";
-import EditButton from "../../Buttons/EditButon";
+// import EditButton from "../../Buttons/EditButon";
+import ToggleButton from "../../Buttons/ToggleButton";
+import DeleteButton from "../../Buttons/DeleteButton";
 import { useAppSelector } from "../../../redux/hooks";
 import { usePartnerAction } from "../../../redux/Actions/partnerAction";
 import { Toaster, toast } from "sonner";
-import {
-  AiOutlineCheckCircle as ReactivateIcon,
-  AiOutlineCloseCircle as SuspendIcon,
-} from "react-icons/ai";
 
 const TABLE_HEAD = [
   // "#",
@@ -34,9 +32,14 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
 }): JSX.Element => {
   const { getAllPartner, removePartner, toggleDeleted } = usePartnerAction();
   const partners = useAppSelector((state) => state.partner.partners);
+  const roles = useAppSelector((state) => state.roles.roles);
   const user = useAppSelector((state) => state.auth.userInfo);
 
+  const userRole = roles.find((role) => role.name === user.rol);
 
+  const [editingPart, setEditingPart] = useState<string | null | undefined>(
+    null
+  );
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState<string | null | undefined>(
@@ -227,51 +230,64 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
                     </Typography>
                   </td>
                   <td className="p-3 border border-slate-300">
-                    <>
+                    {/* <>
                       <EditButton
                         item={part?._id}
                         FormComponent={FormPartners}
+                        userRole={userRole}
+                        requiredPermission="EditarSocio"
+                      />
+                    </> */}
+                    <>
+                      <button
+                        disabled={
+                          !userRole ||
+                          !userRole.permissions.includes("EditarSocio")
+                        }
+                        onClick={() => setEditingPart(part?._id)}
+                        className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded"
+                      >
+                        <PiNotePencil size="30" />
+                      </button>
+                      {editingPart === part._id && (
+                        <Modal
+                          open={editingPart !== null}
+                          onClose={() => setEditingPart(null)}
+                        >
+                          <div className="flex flex-col z-10 gap-4">
+                            <FormPartners
+                              partnerToEdit={part}
+                              setEditingPartner={() => setEditingPart(null)}
+                            />
+                          </div>
+                        </Modal>
+                      )}
+                    </>
+                    <>
+                      <ToggleButton
+                        partId={part?._id}
+                        isDeleted={part.deleted}
+                        toggleDeleted={toggleDeleted}
+                        userRole={userRole}
+                        requiredPermission="suspenderSocio"
                       />
                     </>
                     <>
-                      <button
-                        onClick={() => part._id && toggleDeleted(part._id)}
-                        className={`px-1 hover:bg-yellow-800 text-white font-bolt rounded ${
-                          part.deleted
-                            ? "bg-green-500 hover:bg-green-800"
-                            : "bg-yellow-500 hover:bg-yellow-800"
-                        }`}
-                      >
-                        {part.deleted ? (
-                          <ReactivateIcon size="30" />
-                        ) : (
-                          <SuspendIcon size="30" />
-                        )}
-                      </button>
-                    </>
-                    <>
-                      <button
-                        onClick={() => {
-                          toast.info("Desea borrarlo?", {
-                            action: {
-                              label: "Borrar",
-                              onClick: () => {
-                                if (part._id) {
-                                  removePartner(part._id);
-                                  toast("Socio Borrado", {
-                                    description: `El Socio ${part.firstName} ${part.lastName} fue borrado del sistema`,
-                                  });
-                                } else {
-                                  console.error("Error: part._id is undefined");
-                                }
-                              },
-                            },
-                          });
+                      <DeleteButton
+                        onDelete={() => {
+                          if (part._id) {
+                            removePartner(part._id);
+                            toast("Socio Borrado", {
+                              description: `El Socio ${part.firstName} ${part.lastName} fue borrado del sistema`,
+                            });
+                          } else {
+                            console.error("Error: part._id is undefined");
+                          }
                         }}
-                        className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded"
-                      >
-                        <PiTrash size="30" />
-                      </button>
+                        confirmationMessage="Desea borrarlo?"
+                        userRole={userRole}
+                        requiredPermission="eliminarSocio"
+                      />
                     </>
                   </td>
                 </tr>

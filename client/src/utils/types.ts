@@ -88,7 +88,7 @@ export interface IPayments {
   promotionId: string;
   stateId?: string | undefined;
   creatorId?: string | undefined;
-  partnerId: string;
+  partnerId: string | undefined;
   createdAt?: Date;
   updatedAt?: Date;
 }

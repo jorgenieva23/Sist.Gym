@@ -54,8 +54,6 @@ const FormIncome: React.FC<FormProps> = ({
     } catch (error: any) {
       console.error(error.message);
       alert("Ocurrió un error");
-    } finally {
-      setLoadingSubmit(false);
     }
   };
 

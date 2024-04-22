@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IPromotion } from "../../../utils/types";
-// import { PiTrash } from "react-icons/pi";
+import { PiNotePencil } from "react-icons/pi";
 import { format } from "date-fns";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
@@ -10,12 +10,11 @@ import {
   // toast,
   Toaster,
 } from "sonner";
+import Modal from "../../Modal/Modal";
 import FormPromotion from "../../Forms/Promotion/PromotionForm";
-import EditButton from "../../Buttons/EditButon";
-import {
-  AiOutlineCheckCircle as ReactivateIcon,
-  AiOutlineCloseCircle as SuspendIcon,
-} from "react-icons/ai";
+// import EditButton from "../../Buttons/EditButon";
+import ToggleButton from "../../Buttons/ToggleButton";
+// import DeleteButton from "../../Buttons/DeleteButton";
 
 const TABLE_HEAD = [
   // "#",
@@ -33,11 +32,18 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
 }): JSX.Element => {
   const {
     getAllPromotion,
-    //  removePromotion,
+    // removePromotion,
     toggleDeletedProm,
   } = usePromotionAction();
   const promotion = useAppSelector((state) => state.promotion.promotions);
+  const roles = useAppSelector((state) => state.roles.roles);
   const user = useAppSelector((state) => state.auth.userInfo);
+
+  const userRole = roles.find((role) => role.name === user.rol);
+
+  const [editingPart, setEditingPart] = useState<string | null | undefined>(
+    null
+  );
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
 
@@ -170,50 +176,55 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
                 </td>
                 <td className="p-3 border border-slate-300">
                   <>
-                    <EditButton
-                      item={prom?._id}
-                      FormComponent={FormPromotion}
-                    />
+                    <button
+                      disabled={
+                        !userRole ||
+                        !userRole.permissions.includes("editarPromocion")
+                      }
+                      onClick={() => setEditingPart(prom?._id)}
+                      className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded"
+                    >
+                      <PiNotePencil size="30" />
+                    </button>
+                    {editingPart === prom._id && (
+                      <Modal
+                        open={editingPart !== null}
+                        onClose={() => setEditingPart(null)}
+                      >
+                        <div className="flex flex-col z-10 gap-4">
+                          <FormPromotion
+                            promotionToEdit={prom}
+                            setEditingPromotion={() => setEditingPart(null)}
+                          />
+                        </div>
+                      </Modal>
+                    )}
                   </>
                   <>
-                    <button
-                      onClick={() => prom._id && toggleDeletedProm(prom._id)}
-                      className={`px-1 hover:bg-yellow-800 text-white font-bolt rounded ${
-                        prom.deleted
-                          ? "bg-green-500 hover:bg-green-800"
-                          : "bg-yellow-500 hover:bg-yellow-800"
-                      }`}
-                    >
-                      {prom.deleted ? (
-                        <ReactivateIcon size="30" />
-                      ) : (
-                        <SuspendIcon size="30" />
-                      )}
-                    </button>
+                    <ToggleButton
+                      partId={prom._id}
+                      isDeleted={prom.deleted}
+                      toggleDeleted={toggleDeletedProm}
+                      userRole={userRole}
+                      requiredPermission="suspenderPromocion"
+                    />
                   </>
                   {/* <>
-                    <button
-                      onClick={() => {
-                        toast.info("Desea borrarla?", {
-                          action: {
-                            label: "Borrar",
-                            onClick: () => {
-                              if (prom._id) {
-                                removePromotion(prom._id);
-                                toast("Promocion Borrado", {
-                                  description: `${prom.name} fue borrado del sistema`,
-                                });
-                              } else {
-                                console.error("Error: prom._id is undefined");
-                              }
-                            },
-                          },
-                        });
+                    <DeleteButton
+                      onDelete={() => {
+                        if (prom._id) {
+                          removePromotion(prom._id);
+                          toast("Promocion Borrada", {
+                            description: `${prom.name} fue borrado del sistema`,
+                          });
+                        } else {
+                          console.error("Error: paym._id is undefined");
+                        }
                       }}
-                      className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded"
-                    >
-                      <PiTrash size="30" />
-                    </button>
+                      confirmationMessage="Desea borrarla?"
+                      userRole={userRole}
+                      requiredPermission="eliminarPromocion"
+                    />
                   </> */}
                 </td>
               </tr>

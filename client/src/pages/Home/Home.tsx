@@ -8,10 +8,16 @@ import FormPayment from "../../components/Forms/Payment/FormPayment";
 import FormIncomePanel from "../../components/Forms/Income/FormIncomePanel";
 import CardPartner from "../../components/Card/Card";
 import { ExpiredPayment } from "../../components/Tables/ExpiredTable/ExpiredTable";
+import { useRolesAction } from "../../redux/Actions/rolesAction";
 
 export const Home: React.FC = (): JSX.Element => {
   const { getAllPartner } = usePartnerAction();
+  const { getAllRoles } = useRolesAction();
   const partners = useAppSelector((state) => state.partner.partners);
+  const roles = useAppSelector((state) => state.roles.roles);
+  const user = useAppSelector((state) => state.auth.userInfo);
+
+  const userRole = roles.find((role) => role.name === user.rol);
 
   const [selectedButton, setSelectedButton] = useState("usuarios");
 
@@ -24,8 +30,11 @@ export const Home: React.FC = (): JSX.Element => {
     );
   });
 
+  console.log(userRole);
+
   useEffect(() => {
     getAllPartner();
+    getAllRoles();
   }, []);
 
   return (
@@ -48,15 +57,25 @@ export const Home: React.FC = (): JSX.Element => {
               <div className="text-xl text-white shadow rounded-t-lg bg-gray-800 font-semibold py-1">
                 <h1 className="mx-2 ">Acciones rapidas</h1>
               </div>
-              <div className="flex flex-grow mt-6 mx-2">
-                <ButtonRegister
-                  FormComponent={FormPartners}
-                  buttonText="Registrar socio"
-                />
-                <ButtonRegister
-                  FormComponent={FormPayment}
-                  buttonText="Registrar socio"
-                />
+              <div className="flex flex-grow mt-6 mx-5 space-x-5">
+                <div>
+                  <ButtonRegister
+                    FormComponent={FormPartners}
+                    buttonText="Registrar socio"
+                    disabled={
+                      !userRole || !userRole.permissions.includes("EditarSocio")
+                    }
+                  />
+                </div>
+                <div>
+                  <ButtonRegister
+                    FormComponent={FormPayment}
+                    buttonText="Registrar pagos"
+                    disabled={
+                      !userRole || !userRole.permissions.includes("asd")
+                    }
+                  />
+                </div>
               </div>
             </div>
 

@@ -5,17 +5,33 @@ import Modal from "../Modal/Modal";
 interface EditButtonProps {
   item: string | undefined;
   FormComponent: any;
+  userRole: any;
+  requiredPermission: string;
 }
 
-const EditButton: FC<EditButtonProps> = ({ item, FormComponent }) => {
+const EditButton: FC<EditButtonProps> = ({
+  item,
+  FormComponent,
+  userRole,
+  requiredPermission,
+}) => {
   const [editingPart, setEditingPart] = useState<string | null | undefined>(
     null
   );
+
+  const isDisabled =
+    !userRole || !userRole.permissions.includes(requiredPermission);
+
   return (
     <>
       <button
-        onClick={() => setEditingPart(item)}
-        className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded"
+        disabled={isDisabled}
+        className={`${
+          isDisabled
+            ? "opacity-50 bg-blue-500 px-1 rounded font-bold"
+            : "bg-blue-500 px-1 hover:bg-blue-800 text-white font-bold rounded"
+        }`}
+        onClick={() => !isDisabled && setEditingPart(item)}
       >
         <PiNotePencil size="30" />
       </button>
@@ -23,8 +39,8 @@ const EditButton: FC<EditButtonProps> = ({ item, FormComponent }) => {
         <Modal open={editingPart !== null} onClose={() => setEditingPart(null)}>
           <div className="flex flex-col gap-4">
             <FormComponent
-              itemToEdit={item}
-              setEditingItem={() => setEditingPart(null)}
+              partnerToEdit={item}
+              setEditingPartner={() => setEditingPart(null)}
             />
           </div>
         </Modal>
@@ -34,3 +50,26 @@ const EditButton: FC<EditButtonProps> = ({ item, FormComponent }) => {
 };
 
 export default EditButton;
+
+{
+  /* <EditButton
+                        item={part?._id}
+                        FormComponent={FormPartners}
+                        userRole={userRole}
+                        requiredPermission="EditarSocio"
+                      /> */
+}
+
+// {editingPart === part._id && (
+//   <Modal
+//     open={editingPart !== null}
+//     onClose={() => setEditingPart(null)}
+//   >
+//     <div className="flex flex-col z-10 gap-4">
+//       <FormPartners
+//         partnerToEdit={part}
+//         setEditingPartner={() => setEditingPart(null)}
+//       />
+//     </div>
+//   </Modal>
+//   )}

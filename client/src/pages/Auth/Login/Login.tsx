@@ -79,9 +79,11 @@ export const Login: React.FC = (): JSX.Element => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
               {showPassword ? (
                 <PiEye

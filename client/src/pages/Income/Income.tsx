@@ -9,6 +9,7 @@ import { useAppSelector } from "../../redux/hooks";
 
 export const Income: React.FC = (): JSX.Element => {
   const { getAllPartner } = usePartnerAction();
+  
   const incomes = useAppSelector((state) => state.income.income);
 
   const [openModal, setOpenModal] = useState<boolean>(false);

@@ -5,7 +5,6 @@ import { Typography } from "@material-tailwind/react";
 import { useAppSelector } from "../../../redux/hooks";
 import { NavLink } from "react-router-dom";
 import { usePaymentAction } from "../../../redux/Actions/paymentActions";
-import { usePartnerAction } from "../../../redux/Actions/partnerAction";
 
 interface ExpiredPaymentProps {
   selectedButton: string;
@@ -17,7 +16,6 @@ export const ExpiredPayment: React.FC<ExpiredPaymentProps> = ({
   selectedButton,
 }) => {
   const { getAllExpiredPayment } = usePaymentAction();
-  const { getAllPartner } = usePartnerAction();
   const expired = useAppSelector((state) => state.payment.paymentExpired);
   const partner = useAppSelector((state) => state.partner.partners);
 
@@ -44,7 +42,6 @@ export const ExpiredPayment: React.FC<ExpiredPaymentProps> = ({
 
   useEffect(() => {
     getAllExpiredPayment();
-    getAllPartner();
   }, []);
 
   // Calcula los índices de los usuarios a mostrar en la página actual

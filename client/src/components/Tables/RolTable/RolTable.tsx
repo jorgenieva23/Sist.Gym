@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IRoles } from "../../../utils/types";
-import EditButton from "../../Buttons/EditButon";
+import { PiNotePencil } from "react-icons/pi";
+import Modal from "../../Modal/Modal";
+// import EditButton from "../../Buttons/EditButon";
 import FormRoles from "../../Forms/Roles/FormRol";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
@@ -14,6 +16,13 @@ export const RolesTable: React.FC<{ currentRoles: IRoles[] }> = ({
 }): JSX.Element => {
   const { getAllRoles } = useRolesAction();
   const roles = useAppSelector((state) => state.roles.roles);
+  const user = useAppSelector((state) => state.auth.userInfo);
+
+  const userRole = roles.find((role) => role.name === user.rol);
+
+  const [editingPart, setEditingPart] = useState<string | null | undefined>(
+    null
+  );
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
 
@@ -85,7 +94,29 @@ export const RolesTable: React.FC<{ currentRoles: IRoles[] }> = ({
 
                 <td className="p-3 border border-slate-300">
                   <>
-                    <EditButton item={role?._id} FormComponent={FormRoles} />
+                    <button
+                      disabled={
+                        !userRole ||
+                        !userRole.permissions.includes("EditarSocio")
+                      }
+                      onClick={() => setEditingPart(role?._id)}
+                      className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded"
+                    >
+                      <PiNotePencil size="30" />
+                    </button>
+                    {editingPart === role._id && (
+                      <Modal
+                        open={editingPart !== null}
+                        onClose={() => setEditingPart(null)}
+                      >
+                        <div className="flex flex-col z-10 gap-4">
+                          <FormRoles
+                            rolToEdit={role}
+                            setEditingRoles={() => setEditingPart(null)}
+                          />
+                        </div>
+                      </Modal>
+                    )}
                   </>
                 </td>
               </tr>

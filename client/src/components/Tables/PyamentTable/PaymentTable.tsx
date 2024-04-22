@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IPayments } from "../../../utils/types";
-import { PiTrash } from "react-icons/pi";
+import { PiNotePencil } from "react-icons/pi";
 import { format } from "date-fns";
 import FormatDate from "../../../utils/FormatDate";
 import Pagination from "../../Pagination/Pagination";
 import { useAppSelector } from "../../../redux/hooks";
 import { usePaymentAction } from "../../../redux/Actions/paymentActions";
 import { toast, Toaster } from "sonner";
+import Modal from "../../Modal/Modal";
 import FormPayment from "../../Forms/Payment/FormPayment";
-import EditButton from "../../Buttons/EditButon";
+// import ToggleButton from "../../Buttons/ToggleButton";
+import DeleteButton from "../../Buttons/DeleteButton";
 
 const TABLE_HEAD = [
   // "#",
@@ -29,6 +31,14 @@ export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
 }): JSX.Element => {
   const { getAllPayment, removePayment } = usePaymentAction();
   const payment = useAppSelector((state) => state.payment.payments);
+  const roles = useAppSelector((state) => state.roles.roles);
+  const user = useAppSelector((state) => state.auth.userInfo);
+
+  const userRole = roles.find((role) => role.name === user.rol);
+
+  const [editingPart, setEditingPart] = useState<string | null | undefined>(
+    null
+  );
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
 
@@ -39,7 +49,6 @@ export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
     indexOfFirstCourse,
     indexOfLastItems
   );
-  console.log(currentPayments);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -153,32 +162,47 @@ export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
                 <td className="p-3 border border-slate-300">
                   {/* Boton que edita el pago */}
                   <>
-                    <EditButton item={paym?._id} FormComponent={FormPayment} />
+                    <button
+                      disabled={
+                        !userRole ||
+                        !userRole.permissions.includes("EditarSocio")
+                      }
+                      onClick={() => setEditingPart(paym?._id)}
+                      className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded"
+                    >
+                      <PiNotePencil size="30" />
+                    </button>
+                    {editingPart === paym._id && (
+                      <Modal
+                        open={editingPart !== null}
+                        onClose={() => setEditingPart(null)}
+                      >
+                        <div className="flex flex-col z-10 gap-4">
+                          <FormPayment
+                            paymentToEdit={paym}
+                            setEditingPayment={() => setEditingPart(null)}
+                          />
+                        </div>
+                      </Modal>
+                    )}
                   </>
                   {/* Boton que borra el pago */}
                   <>
-                    <button
-                      onClick={() => {
-                        toast.info("Desea borrarla?", {
-                          action: {
-                            label: "Borrar",
-                            onClick: () => {
-                              if (paym._id) {
-                                removePayment(paym._id);
-                                toast("Promocion Borrada", {
-                                  description: `La promocion fue borrado del sistema`,
-                                });
-                              } else {
-                                console.error("Error: part._id is undefined");
-                              }
-                            },
-                          },
-                        });
+                    <DeleteButton
+                      onDelete={() => {
+                        if (paym._id) {
+                          removePayment(paym._id);
+                          toast("Promocion Borrada", {
+                            description: `La promocion fue borrado del sistema`,
+                          });
+                        } else {
+                          console.error("Error: part._id is undefined");
+                        }
                       }}
-                      className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded"
-                    >
-                      <PiTrash size="30" />
-                    </button>
+                      confirmationMessage="Desea borrarlo?"
+                      userRole={userRole}
+                      requiredPermission="eliminarSocio"
+                    />
                   </>
                 </td>
               </tr>

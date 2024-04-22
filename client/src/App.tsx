@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { PartnerProfile } from "./components/PartnerDetail/PartnerProfile";
 import ProtectedRoute from "./context/ProtectedRouted";
@@ -23,12 +23,14 @@ import {
 function App() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.userInfo);
+  const [userLoaded, setUserLoaded] = useState(false);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       dispatch(setCredentials(JSON.parse(userInfo)));
     }
+    setUserLoaded(true);
   }, [dispatch]);
 
   const hasAccess = (role: string): boolean => {
@@ -48,6 +50,10 @@ function App() {
     }
     return false;
   };
+
+  if (!userLoaded) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -100,7 +106,8 @@ function App() {
             <Route path="/roles" element={<Roles />} />
           </Route>
         )}
-        <Route path="*" element={<Navigate to="/home" replace />} />
+        <Route path="*" element={<Navigate to="/not-found" replace />} />
+        {/* <Route path="/not-found" element={<NotFoundPage />} /> */}
       </Routes>
     </div>
   );

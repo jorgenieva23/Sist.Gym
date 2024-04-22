@@ -4,7 +4,7 @@ import { IIncome } from "../../../utils/types";
 import { useAppSelector } from "../../../redux/hooks";
 import { useIncomeAction } from "../../../redux/Actions/incomeAction";
 import { Typography } from "@material-tailwind/react";
-import { PiTrash } from "react-icons/pi";
+import DeleteButton from "../../Buttons/DeleteButton";
 import { toast, Toaster } from "sonner";
 import Pagination from "../../Pagination/Pagination";
 
@@ -14,9 +14,13 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
   currentIncome,
 }): JSX.Element => {
   const { getAllIncomeOfTheDay, deleteIncomeAction } = useIncomeAction();
-  
+
   const income = useAppSelector((state) => state.income.income);
   const partner = useAppSelector((state) => state.partner.partners);
+  const roles = useAppSelector((state) => state.roles.roles);
+  const user = useAppSelector((state) => state.auth.userInfo);
+
+  const userRole = roles.find((role) => role.name === user.rol);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
@@ -117,28 +121,21 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
                 </td>
                 <td className="p-3 border border-slate-300 flex ">
                   <>
-                    <button
-                      onClick={() => {
-                        toast.info("Desea borrarla?", {
-                          action: {
-                            label: "Borrar",
-                            onClick: () => {
-                              if (inc._id) {
-                                deleteIncomeAction(inc._id);
-                                toast("Promocion Borrada", {
-                                  description: `La promocion fue borrado del sistema`,
-                                });
-                              } else {
-                                console.error("Error: part._id is undefined");
-                              }
-                            },
-                          },
-                        });
+                    <DeleteButton
+                      onDelete={() => {
+                        if (partnerItem._id) {
+                          deleteIncomeAction(partnerItem._id);
+                          toast("Socio Borrado", {
+                            description: `El Socio ${partnerItem.firstName} ${partnerItem.lastName} fue borrado del sistema`,
+                          });
+                        } else {
+                          console.error("Error: part._id is undefined");
+                        }
                       }}
-                      className="bg-red-500 px-1 hover:bg-red-800 text-white font-bolt rounded"
-                    >
-                      <PiTrash size="30" />
-                    </button>
+                      confirmationMessage="Desea borrarlo?"
+                      userRole={userRole}
+                      requiredPermission="EliminarIngresos"
+                    />
                   </>
                 </td>
               </tr>

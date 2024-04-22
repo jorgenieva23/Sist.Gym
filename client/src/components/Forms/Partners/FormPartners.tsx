@@ -229,7 +229,7 @@ const FormPartners: React.FC<FormProps> = ({
                 <PiUserCirclePlusLight className="w-7 h-7 text-black" />
               </span>
               <input
-                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-90 block flex-1 min-w-0 w-full text-sm p-2.5 "
+                className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
                 type="text"
                 name="Ej. Pérez"
                 value={form.lastName}
