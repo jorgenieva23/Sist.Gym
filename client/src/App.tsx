@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { PartnerProfile } from "./components/PartnerDetail/PartnerProfile";
 import ProtectedRoute from "./context/ProtectedRouted";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
@@ -11,6 +11,7 @@ import {
   Income,
   MonthlyPayment,
   Movement,
+  NotFound,
   Partner,
   Roles,
   User,
@@ -22,7 +23,12 @@ import {
 
 function App() {
   const dispatch = useAppDispatch();
+
+  const roles = useAppSelector((state) => state.roles.roles);
   const user = useAppSelector((state) => state.auth.userInfo);
+
+  const userRole = roles.find((role) => role.name === user.rol);
+
   const [userLoaded, setUserLoaded] = useState(false);
 
   useEffect(() => {
@@ -33,22 +39,8 @@ function App() {
     setUserLoaded(true);
   }, [dispatch]);
 
-  const hasAccess = (role: string): boolean => {
-    if (user && user.rol) {
-      switch (role) {
-        case "admin":
-          return user.rol === "admin";
-        case "user":
-          return ["admin", "user"].includes(user.rol);
-        case "partner":
-          return ["admin", "partner"].includes(user.rol);
-        case "developer":
-          return ["admin", "developer"].includes(user.rol);
-        default:
-          return false;
-      }
-    }
-    return false;
+  const hasPermission = (requiredPermission: any) => {
+    return userRole && userRole.permissions.includes(requiredPermission);
   };
 
   if (!userLoaded) {
@@ -60,53 +52,80 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        {hasAccess("admin") && (
-          <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/partner" element={<Partner />} />
-            <Route path="/partner/:_id" element={<PartnerProfile />} />
-            <Route path="/payment" element={<Payment />} />
-            <Route path="/promotions" element={<Promotion />} />
-            <Route path="/income" element={<Income />} />
-            <Route path="/user" element={<User />} />
-            <Route path="/balance" element={<Balance />} />
-            <Route path="/movements" element={<Movement />} />
-            <Route path="/monthlyPayment" element={<MonthlyPayment />} />
-            <Route path="/roles" element={<Roles />} />
-          </Route>
-        )}
-        {hasAccess("user") && (
-          <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/payment" element={<Payment />} />
-            <Route path="/promotions" element={<Promotion />} />
-            <Route path="/income" element={<Income />} />
-            <Route path="/user" element={<User />} />
-          </Route>
-        )}
-        {hasAccess("partner") && (
-          <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/partner" element={<Partner />} />
-            <Route path="/partner/:_id" element={<PartnerProfile />} />
-            <Route path="/payment" element={<Payment />} />
-            <Route path="/promotions" element={<Promotion />} />
-            <Route path="/income" element={<Income />} />
-          </Route>
-        )}
-        {hasAccess("developer") && (
-          <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/movements" element={<Movement />} />
-            <Route path="/monthlyPayment" element={<MonthlyPayment />} />
-            <Route path="/roles" element={<Roles />} />
-          </Route>
-        )}
-        <Route path="*" element={<Navigate to="/not-found" replace />} />
+        <Route path="/" element={<ProtectedRoute />}>
+          <Route
+            path="/profile"
+            element={hasPermission("ShowSocio") ? <Profile /> : <NotFound />}
+          />
+
+          <Route
+            path="/home"
+            element={hasPermission("index_panel") ? <Home /> : <NotFound />}
+          />
+
+          <Route
+            path="/partner"
+            element={hasPermission("indeSocio") ? <Partner /> : <NotFound />}
+          />
+
+          <Route
+            path="/partner/:_id"
+            element={
+              hasPermission("ShowSocio") ? <PartnerProfile /> : <NotFound />
+            }
+          />
+
+          <Route
+            path="/payment"
+            element={hasPermission("indexCuota") ? <Payment /> : <NotFound />}
+          />
+
+          <Route
+            path="/promotions"
+            element={
+              hasPermission("indexPromocion") ? <Promotion /> : <NotFound />
+            }
+          />
+
+          <Route
+            path="/income"
+            element={hasPermission("indexIngresos") ? <Income /> : <NotFound />}
+          />
+
+          <Route
+            path="/user"
+            element={hasPermission("indexUsuario") ? <User /> : <NotFound />}
+          />
+
+          <Route
+            path="/balance"
+            element={hasPermission("indexBalande") ? <Balance /> : <NotFound />}
+          />
+
+          <Route
+            path="/movements"
+            element={
+              hasPermission("indexMovimiento") ? <Movement /> : <NotFound />
+            }
+          />
+
+          <Route
+            path="/monthlyPayment"
+            element={
+              hasPermission("indexMensualidad") ? (
+                <MonthlyPayment />
+              ) : (
+                <NotFound />
+              )
+            }
+          />
+
+          <Route
+            path="/roles"
+            element={hasPermission("indexjob") ? <Roles /> : <NotFound />}
+          />
+        </Route>
+        <Route path="*" element={<NotFound />} />
         {/* <Route path="/not-found" element={<NotFoundPage />} /> */}
       </Routes>
     </div>

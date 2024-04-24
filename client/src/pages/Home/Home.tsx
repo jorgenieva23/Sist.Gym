@@ -63,7 +63,7 @@ export const Home: React.FC = (): JSX.Element => {
                     FormComponent={FormPartners}
                     buttonText="Registrar socio"
                     disabled={
-                      !userRole || !userRole.permissions.includes("EditarSocio")
+                      !userRole || !userRole.permissions.includes("crearSocio")
                     }
                   />
                 </div>
@@ -72,7 +72,7 @@ export const Home: React.FC = (): JSX.Element => {
                     FormComponent={FormPayment}
                     buttonText="Registrar pagos"
                     disabled={
-                      !userRole || !userRole.permissions.includes("asd")
+                      !userRole || !userRole.permissions.includes("crearCuota")
                     }
                   />
                 </div>

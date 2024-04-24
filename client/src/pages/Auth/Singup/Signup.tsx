@@ -33,7 +33,7 @@ export const Signup: React.FC = () => {
   useEffect(() => {
     if (isAuthenticated && userInfo) {
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
-      navigate("/home");
+      navigate("/login");
     }
   }, [isAuthenticated, userInfo, navigate]);
 

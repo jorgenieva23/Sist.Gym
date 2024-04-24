@@ -11,6 +11,7 @@ import { Payment } from "./Payment/Payment";
 import { Login } from "./Auth/Login/Login";
 import { Signup } from "./Auth/Singup/Signup";
 import { Profile } from "./Profile/Profile";
+import { NotFound } from "./NotFount/NotFound";
 
 export {
   Profile,
@@ -21,6 +22,7 @@ export {
   Income,
   MonthlyPayment,
   Movement,
+  NotFound,
   Partner,
   Roles,
   User,
