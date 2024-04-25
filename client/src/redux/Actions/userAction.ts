@@ -37,6 +37,8 @@ export const useUserAction = () => {
         email: user.email,
         password: user.password,
         rol: user.rol,
+        token: user.token,
+        stateId: user.stateId,
         creatorId: user.creatorId,
       };
       const rawData = await axios.post(`/user/create`, data);

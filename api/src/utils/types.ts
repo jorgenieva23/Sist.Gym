@@ -36,7 +36,7 @@ export interface IUser extends Document {
   rol: string;
   active: boolean;
   deleted: boolean;
-  token: string | undefined;
+  token: string;
   updatedAt: Date;
   createdAt: Date;
   lastConnection: Date;

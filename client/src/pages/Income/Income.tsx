@@ -24,7 +24,7 @@ export const Income: React.FC = (): JSX.Element => {
       <Navbar />
       <div className="flex flex-grow bg-slate-200">
         <Sidebar />
-        <div className="m-2 rounded-lg bg-white border-4 border-t-gray-500 w-full">
+        <div className="m-2 overflow-auto rounded-lg bg-white border-4 border-t-gray-500 w-full">
           <div className="flex justify-between">
             <div className="text-3xl mt-2 text-blue-700  ml-7">Ingresos</div>
             <div className="py-2 my-2 mr-5">

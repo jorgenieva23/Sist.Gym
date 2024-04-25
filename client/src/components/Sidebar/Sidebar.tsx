@@ -100,7 +100,7 @@ const Sidebar = () => {
       permission: "indexMovimiento",
     },
     {
-      name: "MonthlyPayment",
+      name: "Movimiento",
       link: "/monthlyPayment",
       icon: FaMoneyBillAlt,
       permission: "indexMensualidad",
@@ -112,7 +112,7 @@ const Sidebar = () => {
     <div className="flex border-r-2 border-gray-600">
       <div
         className={`${
-          open ? "w-64" : "w-20"
+          open ? " w-44" : "w-20"
         } duration-300 p-5 pt-5 bg-gray-800 relative`}
       >
         <img

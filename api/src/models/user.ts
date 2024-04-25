@@ -36,12 +36,11 @@ const userSchema = new Schema<IUser>({
 
   token: {
     type: String,
-    default: null,
+    default: "",
   },
   stateId: {
     type: String,
     ref: "States",
-    default: "active",
   },
   deleted: {
     type: Boolean,

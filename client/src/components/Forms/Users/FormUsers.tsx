@@ -32,6 +32,7 @@ const FormUsers: React.FC<FormProps> = ({
 
   const users = useAppSelector((state) => state.user.users);
   const roles = useAppSelector((state) => state.roles.roles);
+  const auth = useAppSelector((state) => state.auth.userInfo);
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -41,6 +42,9 @@ const FormUsers: React.FC<FormProps> = ({
     email: isEditing ? userToEdit?.email : "",
     password: isEditing ? userToEdit?.password : "",
     rol: isEditing ? userToEdit?.rol : "",
+    stateId: "active",
+    token: "",
+    creatorId: isEditing ? userToEdit?.creatorId : auth.email,
   });
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -120,25 +124,31 @@ const FormUsers: React.FC<FormProps> = ({
     });
   };
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoadingSubmit(true);
-    if (isEditing && userToEdit && userToEdit._id) {
-      updateUser(userToEdit._id, form).then(() => {
-        setLoadingSubmit(false);
-        setEditingUser && setEditingUser(false);
-        window.location.reload();
-      });
-    } else {
-      createNewUser(form).then(() => {
-        setLoadingSubmit(false);
-      });
-      setForm({
-        name: "",
-        email: "",
-        password: "",
-        rol: "",
-      });
+    try {
+      if (isEditing && userToEdit && userToEdit._id) {
+        updateUser(userToEdit._id, form).then(() => {
+          setLoadingSubmit(false);
+          setEditingUser && setEditingUser(false);
+          window.location.reload();
+        });
+      } else {
+        await createNewUser(form).then(() => {
+          setLoadingSubmit(false);
+          console.log(form.stateId);
+        });
+        setForm({
+          name: "",
+          email: "",
+          password: "",
+          rol: "",
+        });
+      }
+    } catch (error: any) {
+      console.error(error.message);
+      alert("Ocurrió un error");
     }
   };
 
