@@ -111,9 +111,9 @@ export const Home: React.FC = (): JSX.Element => {
                 Vencen mañana
               </button>
             </div>
-            {/* <div>
+            <div>
               <ExpiredPayment selectedButton={selectedButton} />
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
