@@ -42,7 +42,7 @@ export const Home: React.FC = (): JSX.Element => {
       <Navbar />
       <div className="flex flex-grow">
         <Sidebar />
-        <div className="flex-grow md:flex-col overflow-auto bg-zinc-200">
+        <div className="flex-grow md:flex-col overflow-auto bg-zinc-300">
           <div className="grid md:grid-cols-1 lg:grid-cols-2 m-4 gap-4">
             <div className="bg-white shadow rounded-lg">
               <div className="text-xl rounded-t-lg bg-gray-800 font-semibold py-1 text-white">
