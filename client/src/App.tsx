@@ -53,10 +53,10 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<ProtectedRoute />}>
-          {/* <Route
+          <Route
             path="/profile"
             element={hasPermission("ShowSocio") ? <Profile /> : <NotFound />}
-          /> */}
+          />
 
           <Route
             path="/home"
