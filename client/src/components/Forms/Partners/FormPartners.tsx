@@ -211,7 +211,7 @@ const FormPartners: React.FC<FormProps> = ({
               <input
                 className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5  "
                 type="text"
-                name="Ej. Juan"
+                name="firstName"
                 value={form.firstName}
                 placeholder="Ej. Juan"
                 onChange={(e) => handleChange(e)}
@@ -231,7 +231,7 @@ const FormPartners: React.FC<FormProps> = ({
               <input
                 className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
                 type="text"
-                name="Ej. Pérez"
+                name="lastName"
                 value={form.lastName}
                 placeholder="Ej. Péres"
                 onChange={(e) => handleChange(e)}
