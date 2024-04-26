@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { PartnerProfile } from "./components/PartnerDetail/PartnerProfile";
 import ProtectedRoute from "./context/ProtectedRouted";
@@ -28,8 +28,6 @@ function App() {
   const user = useAppSelector((state) => state.auth.userInfo);
 
   const userRole = roles.find((role) => role.name === user.rol);
-
-  // const [userLoaded, setUserLoaded] = useState(false);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
