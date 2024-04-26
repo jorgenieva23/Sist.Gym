@@ -158,7 +158,7 @@ const FormUsers: React.FC<FormProps> = ({
         {!isEditing ? "crear un usuario nuevo" : "editar usuario"}
       </h2>
       <form onSubmit={handleFormSubmit} className="max-w mx-auto">
-        <div className="flex flex-col mt-4">
+        <div className="flex flex-col mt-4 w-80">
           <label className="block mb-1 text-sm font-medium text-gray-900">
             Nombre
           </label>
@@ -178,6 +178,7 @@ const FormUsers: React.FC<FormProps> = ({
             />
           </div>
         </div>
+
         <div className="flex flex-col mt-4">
           <label className="block mb-1 text-sm font-medium text-gray-900">
             Correo Electrónico

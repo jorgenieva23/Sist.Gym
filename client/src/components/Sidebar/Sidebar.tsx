@@ -37,10 +37,10 @@ const Sidebar = () => {
   const handleLogout = () => {
     if (user && user?._id) {
       dispatch(logout(user?._id));
-      setTimeout;
       setTimeout(() => {
         navigate("/");
-      }, 1000); // Redirigir después de 2 segundos (2000 milisegundos)
+        localStorage.removeItem("userInfo");
+      }, 1000);
     }
   };
 
@@ -112,7 +112,7 @@ const Sidebar = () => {
     <div className="flex border-r-2 border-gray-600">
       <div
         className={`${
-          open ? " w-44" : "w-20"
+          open ? " w-64" : "w-20"
         } duration-300 p-5 pt-5 bg-gray-800 relative`}
       >
         <img

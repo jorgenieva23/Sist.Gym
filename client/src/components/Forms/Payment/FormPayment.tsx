@@ -136,7 +136,7 @@ const FormPayment: React.FC<FormProps> = ({
         {!isEditing ? "Crear nuevo pago" : "Editar pago"}
       </h2>
       <form onSubmit={handleFormSubmit} className="max-w mx-auto">
-        <div className="flex flex-col mt-4">
+        <div className="flex flex-col mt-4 w-96">
           <label className="block mb-1 text-sm font-medium text-gray-900">
             Monto
           </label>
@@ -192,7 +192,7 @@ const FormPayment: React.FC<FormProps> = ({
         </div>
 
         <div className="flex flex-col mt-4">
-          <label className="block w-96 mb-1 text-sm font-medium text-gray-900">
+          <label className="block mb-1 text-sm font-medium text-gray-900">
             Socio
           </label>
           <div className="flex">
@@ -244,7 +244,7 @@ const FormPayment: React.FC<FormProps> = ({
           </div>
           {errors.dateFrom && toast.info(errors.dateFrom)}
         </div>
-        <p className="mt-2 text-lg font-medium text-gray-900">
+        <p className="mt-2 text-xl font-medium text-gray-900">
           Total: <span className="text-green-600">${totalAmount}</span>
         </p>
 

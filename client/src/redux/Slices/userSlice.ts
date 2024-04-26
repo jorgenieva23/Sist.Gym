@@ -47,11 +47,8 @@ export const userSlice = createSlice({
         users: action.payload,
       };
     },
-    deleteUser: (state, action: PayloadAction<IUser[]>) => {
-      return {
-        ...state,
-        users: action.payload,
-      };
+    deleteUser: (state, action: PayloadAction<string>) => {
+      state.users = state.users.filter((part) => part._id !== action.payload);
     },
   },
 });

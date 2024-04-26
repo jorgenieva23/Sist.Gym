@@ -30,8 +30,6 @@ export const Home: React.FC = (): JSX.Element => {
     );
   });
 
-  console.log(userRole);
-
   useEffect(() => {
     getAllPartner();
     getAllRoles();

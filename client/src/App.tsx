@@ -29,23 +29,18 @@ function App() {
 
   const userRole = roles.find((role) => role.name === user.rol);
 
-  const [userLoaded, setUserLoaded] = useState(false);
+  // const [userLoaded, setUserLoaded] = useState(false);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       dispatch(setCredentials(JSON.parse(userInfo)));
     }
-    setUserLoaded(true);
   }, [dispatch]);
 
   const hasPermission = (requiredPermission: any) => {
     return userRole && userRole.permissions.includes(requiredPermission);
   };
-
-  if (!userLoaded) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div>
@@ -60,7 +55,7 @@ function App() {
 
           <Route
             path="/home"
-            element={hasPermission("index_panel") ? <Home /> : <NotFound />}
+            element={hasPermission("index_anel") ? <Home /> : <NotFound />}
           />
 
           <Route

@@ -8,7 +8,7 @@ import {
   createUser,
   // searchUser,
   editUser,
-  // deleteUser,
+  deleteUser,
 } from "../Slices/userSlice";
 import { IUser } from "../../utils/types";
 
@@ -59,10 +59,10 @@ export const useUserAction = () => {
       console.error(error.message);
     }
   };
-  const deleteUser = async (_id: IUser) => {
+  const deleteUserAction = async (_id: string) => {
     try {
-      const deleted = await axios.delete(`/delete/:${_id}`);
-      return dispatch(getUser(deleted.data));
+      await axios.delete(`/user/delete/${_id}`);
+      dispatch(deleteUser(_id));
     } catch (error: any) {
       console.error(error.message);
     }
@@ -74,6 +74,6 @@ export const useUserAction = () => {
     specificUser,
     createNewUser,
     updateUser,
-    deleteUser,
+    deleteUserAction,
   };
 };

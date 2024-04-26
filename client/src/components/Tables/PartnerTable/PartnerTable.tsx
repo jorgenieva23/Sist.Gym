@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { IPartner } from "../../../utils/types";
-import corazonRoto from "../../../Images/corazonRoto.png";
-import corazonSano from "../../../Images/corazonSano.png";
+// import corazonRoto from "../../../Images/corazonRoto.png";
+// import corazonSano from "../../../Images/corazonSano.png";
 import { PiImage, PiNotePencil } from "react-icons/pi";
 import { format } from "date-fns";
 import { NavLink } from "react-router-dom";
@@ -86,12 +86,12 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
   }, []);
 
   return (
-    <div>
-      <form className="flex items-center mb-2">
+    <div className="relative overflow-x-auto sm:rounded-lg">
+      <form className="flex items-center">
         <input
           value={search}
           name="search"
-          className="px-4 py-2 border border-blue-400 rounded-md focus:outline-none focus:border-blue-800 "
+          className="px-4 py-2 border border-blue-400 rounded-md focus:outline-none focus:border-blue-800"
           type="text"
           placeholder="Search for Partners..."
           onChange={handleSearchChange}
@@ -145,7 +145,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
                           {part.firstName} {part.lastName}
                         </Typography>
                       </NavLink>
-                      <div className="flex items-center ml-2">
+                      {/* <div className="flex items-center ml-2">
                         {part.condition === "fit" ? (
                           <>
                             <span className="text-green-600 w-10 font-semibold">
@@ -167,7 +167,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
                             />
                           </>
                         )}
-                      </div>
+                      </div> */}
                     </div>
                   </td>
                   <td className="p-3 border border-slate-300">
