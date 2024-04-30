@@ -46,7 +46,6 @@ const FormIncome: React.FC<FormProps> = ({
     setLoadingSubmit(true);
     try {
       await createNewIncome(form as IIncome);
-      console.log(form.creatorId);
       setForm({
         partnerId: "",
       });

@@ -41,10 +41,10 @@ export function cronJobs() {
       console.error(`Error al verificar pagos vencidos: ${error}`);
     }
   }
-  // cron.schedule("*/5 * * * *", () => {
-  //   console.log("Ejecutando tareas diarias...");
-  //   verifyPaymentsExpiredToday();
-  // });
+  cron.schedule("0 0 * * *", () => {
+    console.log("Ejecutando tareas diarias...");
+    verifyPaymentsExpiredToday();
+  });
 
   console.log("Tareas cron leídas.");
 }

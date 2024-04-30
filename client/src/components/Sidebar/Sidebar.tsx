@@ -39,6 +39,7 @@ const Sidebar = () => {
       dispatch(logout(user?._id));
       setTimeout(() => {
         navigate("/");
+        window.location.reload();
       }, 1000);
     }
   };

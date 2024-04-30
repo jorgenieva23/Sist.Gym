@@ -36,7 +36,7 @@ const FormIncomePanel: React.FC = (): JSX.Element => {
     try {
       const updatedForm = { ...form, creatorId: creator };
       await createNewIncome(updatedForm as IIncome);
-      console.log(updatedForm.creatorId);
+      
       setForm({
         partnerId: "",
         creatorId: creator,

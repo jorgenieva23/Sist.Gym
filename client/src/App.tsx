@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { PartnerProfile } from "./components/PartnerDetail/PartnerProfile";
 import ProtectedRoute from "./context/ProtectedRouted";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { setCredentials } from "./redux/Slices/authSlice";
 import { useRolesAction } from "./redux/Actions/rolesAction";
+import { LoadingOrNotFound } from "./components/LoadingOrNotFound/LoadingOrNotFound";
 import {
   Profile,
   Home,
@@ -27,11 +28,9 @@ function App() {
   const { getAllRoles } = useRolesAction();
 
   const roles = useAppSelector((state) => state.roles.roles);
-  const { userInfo, loading } = useAppSelector((state) => state.auth);
+  const { userInfo } = useAppSelector((state) => state.auth);
 
   const userRole = roles.find((role) => role.name === userInfo.rol);
-
-  const [, setUserLoaded] = useState(false);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
@@ -39,15 +38,19 @@ function App() {
       dispatch(setCredentials(JSON.parse(userInfo)));
       getAllRoles();
     }
-    setUserLoaded(true);
   }, [dispatch]);
+
   const hasPermission = (requiredPermission: any) => {
     return userRole && userRole.permissions.includes(requiredPermission);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading || !userLoaded) {
+  //   return (
+  //     <div>
+  //       <Spinner />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
@@ -62,69 +65,123 @@ function App() {
 
           <Route
             path="/home"
-            element={hasPermission("index_panel") ? <Home /> : <NotFound />}
+            element={
+              <LoadingOrNotFound
+                hasPermission={hasPermission("index_panel")}
+                Component={Home}
+                NotFound={NotFound}
+              />
+            }
           />
 
           <Route
             path="/partner"
-            element={hasPermission("indeSocio") ? <Partner /> : <NotFound />}
+            element={
+              <LoadingOrNotFound
+                hasPermission={hasPermission("indeSocio")}
+                Component={Partner}
+                NotFound={NotFound}
+              />
+            }
           />
 
           <Route
             path="/partner/:_id"
             element={
-              hasPermission("ShowSocio") ? <PartnerProfile /> : <NotFound />
+              <LoadingOrNotFound
+                hasPermission={hasPermission("ShowSocio")}
+                Component={PartnerProfile}
+                NotFound={NotFound}
+              />
             }
           />
 
           <Route
             path="/payment"
-            element={hasPermission("indexCuota") ? <Payment /> : <NotFound />}
+            element={
+              <LoadingOrNotFound
+                hasPermission={hasPermission("indexCuota")}
+                Component={Payment}
+                NotFound={NotFound}
+              />
+            }
           />
 
           <Route
             path="/promotions"
             element={
-              hasPermission("indexPromocion") ? <Promotion /> : <NotFound />
+              <LoadingOrNotFound
+                hasPermission={hasPermission("indexPromocion")}
+                Component={Promotion}
+                NotFound={NotFound}
+              />
             }
           />
 
           <Route
             path="/income"
-            element={hasPermission("indexIngresos") ? <Income /> : <NotFound />}
+            element={
+              <LoadingOrNotFound
+                hasPermission={hasPermission("indexIngresos")}
+                Component={Income}
+                NotFound={NotFound}
+              />
+            }
           />
 
           <Route
             path="/user"
-            element={hasPermission("indexUsuario") ? <User /> : <NotFound />}
+            element={
+              <LoadingOrNotFound
+                hasPermission={hasPermission("indexUsuario")}
+                Component={User}
+                NotFound={NotFound}
+              />
+            }
           />
 
           <Route
             path="/balance"
-            element={hasPermission("indexBalande") ? <Balance /> : <NotFound />}
+            element={
+              <LoadingOrNotFound
+                hasPermission={hasPermission("indexBalande")}
+                Component={Balance}
+                NotFound={NotFound}
+              />
+            }
           />
 
           <Route
             path="/movements"
             element={
-              hasPermission("indexMovimiento") ? <Movement /> : <NotFound />
+              <LoadingOrNotFound
+                hasPermission={hasPermission("indexMovimiento")}
+                Component={Movement}
+                NotFound={NotFound}
+              />
             }
           />
 
           <Route
             path="/monthlyPayment"
             element={
-              hasPermission("indexMensualidad") ? (
-                <MonthlyPayment />
-              ) : (
-                <NotFound />
-              )
+              <LoadingOrNotFound
+                hasPermission={hasPermission("indexMensualidad")}
+                Component={MonthlyPayment}
+                NotFound={NotFound}
+              />
             }
           />
 
           <Route
             path="/roles"
-            element={hasPermission("indexjob") ? <Roles /> : <NotFound />}
+            element={
+              <LoadingOrNotFound
+                hasPermission={hasPermission("indexjob")}
+                Component={Roles}
+                NotFound={NotFound}
+              />
+            }
           />
         </Route>
         <Route path="*" element={<NotFound />} />

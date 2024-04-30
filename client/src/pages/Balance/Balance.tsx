@@ -12,7 +12,6 @@ export const Balance: React.FC = (): JSX.Element => {
     usePaymentAction();
 
   const payment = useAppSelector((state) => state.payment.payments);
-  console.log(payment);
   const historyPaymentsDay = useAppSelector(
     (state) => state.payment.historyPaymentDay
   );

@@ -46,10 +46,8 @@ export const Signup: React.FC = () => {
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem("userInfo");
-    console.log(isAuthenticated);
-
     if (storedUserInfo || isAuthenticated) {
-      navigate("/home");
+      navigate("/");
     }
   }, [isAuthenticated, navigate]);
 
@@ -61,7 +59,7 @@ export const Signup: React.FC = () => {
     e.preventDefault();
     try {
       dispatch(registerUser(user)).then(() => {
-        navigate("/home");
+        navigate("/");
         setIsAuthenticated(true);
       });
     } catch (error: any) {
@@ -193,7 +191,7 @@ export const Signup: React.FC = () => {
         {success && <p>Registration successful!</p>}
         <div className="text-center mt-2">
           ¿ya tenes cuenta?{" "}
-          <Link to="/login" className="font-bold text-sky-500 hover:underline">
+          <Link to="/" className="font-bold text-sky-500 hover:underline">
             Ingresa
           </Link>
         </div>

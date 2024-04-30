@@ -137,7 +137,7 @@ const FormUsers: React.FC<FormProps> = ({
       } else {
         await createNewUser(form).then(() => {
           setLoadingSubmit(false);
-          console.log(form.stateId);
+          
         });
         setForm({
           name: "",

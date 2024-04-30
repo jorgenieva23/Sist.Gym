@@ -8,8 +8,6 @@ import FormUsers from "../../components/Forms/Users/FormUsers";
 
 export const User: React.FC = (): JSX.Element => {
   const users = useAppSelector((state) => state.user.users);
-  const roles = useAppSelector((state) => state.roles.roles);
-  console.log(roles);
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 

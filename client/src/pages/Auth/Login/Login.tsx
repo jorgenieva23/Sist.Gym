@@ -31,6 +31,7 @@ export const Login: React.FC = (): JSX.Element => {
     e.preventDefault();
     try {
       await dispatch(userLogin({ email, password }));
+      window.location.reload();
       setIsAuthenticated(true);
     } catch (error: any) {
       console.error(error.message);
@@ -39,9 +40,6 @@ export const Login: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem("userInfo");
-    console.log(isAuthenticated);
-    console.log(storedUserInfo);
-
     if (storedUserInfo || isAuthenticated) {
       navigate("/home");
     }
