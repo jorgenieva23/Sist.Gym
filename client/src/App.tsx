@@ -31,7 +31,7 @@ function App() {
 
   const userRole = roles.find((role) => role.name === userInfo.rol);
 
-  const [userLoaded, setUserLoaded] = useState(false);
+  const [, setUserLoaded] = useState(false);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
