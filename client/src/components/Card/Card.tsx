@@ -43,7 +43,7 @@ const CardPartner: React.FC<CardPartnerProps> = ({ partner }) => {
               >
                 <div className=" overflow-x-hidden rounded-2xl relative">
                   <img
-                    className="h-40 rounded-2xl w-full object-cover"
+                    className="h-24 rounded-2xl w-full object-cover"
                     src={partner.picture ? partner.picture : img}
                     alt="Imagen"
                   />

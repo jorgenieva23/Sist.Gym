@@ -32,7 +32,7 @@ paymentRouter.get(
   "/partnerPaymentsDay",
   getAllPaymentsForDayHandler as IPaymentHandler
 );
-paymentRouter.put("/update/:partnerId", upDatePaymentById as IPaymentHandler);
+paymentRouter.put("/update/:id", upDatePaymentById as IPaymentHandler);
 paymentRouter.delete("/delete/:id", deletePaymentHandler as IPaymentHandler);
 
 export default paymentRouter;

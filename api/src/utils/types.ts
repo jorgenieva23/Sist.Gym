@@ -3,7 +3,7 @@ import { Request } from "express";
 import { Schema, Document } from "mongoose";
 
 export interface IPartner extends Document {
-  _id: Schema.Types.ObjectId;
+  // _id?: Schema.Types.ObjectId;
   firstName: string;
   lastName: string;
   dni: number;
@@ -15,7 +15,7 @@ export interface IPartner extends Document {
   date: Date;
   datePhysicalAttitude: Date;
   medicalCoverage: string;
-  phoneEmergency: number;
+  phoneEmergency: number | string;
   phoneEmergencyName: string;
   stateId: string;
   userId: string;

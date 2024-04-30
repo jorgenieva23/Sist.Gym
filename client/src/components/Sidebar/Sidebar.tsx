@@ -39,7 +39,6 @@ const Sidebar = () => {
       dispatch(logout(user?._id));
       setTimeout(() => {
         navigate("/");
-        localStorage.removeItem("userInfo");
       }, 1000);
     }
   };
@@ -117,7 +116,7 @@ const Sidebar = () => {
       >
         <img
           src={controlImage}
-          className={`absolute cursor-pointer -right-3 top-7 w-7 border-2 border-silver rounded-full ${
+          className={`absolute cursor-pointer -right-3 top-7 w-7 rounded-full ${
             !open && "rotate-180"
           }`}
           onClick={() => setOpen(!open)}

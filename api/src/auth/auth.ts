@@ -15,11 +15,11 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     const user = await Users.findOne({ email });
     if (!user) {
-      return res.status(400).json({ error: "User or password incorrect" });
+      return res.status(400).json({ error: "User incorrect" });
     }
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-      return res.status(400).json({ error: "User or password incorrect" });
+      return res.status(400).json({ error: "password incorrect" });
     }
     const accessToken = createAccessToken(user);
     user.token = accessToken;

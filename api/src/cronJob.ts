@@ -14,7 +14,6 @@ export function cronJobs() {
       if (!expiredPaid) {
         console.log("no hay pagos");
       }
-      console.log(expiredPaid);
 
       for (const checkPaid of expiredPaid) {
         await Payment.findOneAndUpdate(
@@ -30,7 +29,6 @@ export function cronJobs() {
         );
 
         expiredPartnersInfo.push({
-          partnerId: updatedPartner?._id,
           firstName: updatedPartner?.firstName,
           lastName: updatedPartner?.lastName,
           email: updatedPartner?.email,
@@ -43,7 +41,7 @@ export function cronJobs() {
       console.error(`Error al verificar pagos vencidos: ${error}`);
     }
   }
-  // cron.schedule("* * * * *", () => {
+  // cron.schedule("*/5 * * * *", () => {
   //   console.log("Ejecutando tareas diarias...");
   //   verifyPaymentsExpiredToday();
   // });

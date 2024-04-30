@@ -44,6 +44,15 @@ export const Signup: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    const storedUserInfo = localStorage.getItem("userInfo");
+    console.log(isAuthenticated);
+
+    if (storedUserInfo || isAuthenticated) {
+      navigate("/home");
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };

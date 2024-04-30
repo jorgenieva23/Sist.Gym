@@ -14,7 +14,7 @@ interface IPromotionHandler {
 
 promotionRouter.post("/createProm", postPromotion as IPromotionHandler);
 promotionRouter.get("/getAllProm", getPromotionHandler as IPromotionHandler);
-promotionRouter.put("/upDateProm", updatePromotionById as IPromotionHandler);
+promotionRouter.put("/upDateProm/:id", updatePromotionById as IPromotionHandler);
 promotionRouter.delete(
   "/deletePromo/:id",
   deleteParterHandler as IPromotionHandler

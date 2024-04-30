@@ -6,7 +6,7 @@ import { PiEyeSlash, PiEye, PiPasswordBold, PiEnvelope } from "react-icons/pi";
 // import backgroundImage from "../../../assets/trueno2.png";
 
 export const Login: React.FC = (): JSX.Element => {
-  const { userInfo, error, loading } = useAppSelector((state) => state.auth);
+  const { userInfo, error } = useAppSelector((state) => state.auth);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -38,10 +38,14 @@ export const Login: React.FC = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (userInfo) {
+    const storedUserInfo = localStorage.getItem("userInfo");
+    console.log(isAuthenticated);
+    console.log(storedUserInfo);
+
+    if (storedUserInfo || isAuthenticated) {
       navigate("/home");
     }
-  }, [userInfo, loading]);
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="justify-center h-screen flex items-center bg-gray-200">

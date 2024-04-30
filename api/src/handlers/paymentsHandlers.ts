@@ -3,7 +3,7 @@ import {
   registerPaymentController,
   getAllPayment,
   // calculateTotalSum,
-  updateUserPayment,
+  updatePayment,
   getPaymentById,
   getAllPaymentsForMonth,
   getPaymentsForToday,
@@ -73,7 +73,7 @@ export const upDatePaymentById = async (
   try {
     const { id } = req.params;
     const dataToUpdate = req.body;
-    const updatedPaymen = await updateUserPayment({
+    const updatedPaymen = await updatePayment({
       id,
       updatedData: dataToUpdate,
       req,

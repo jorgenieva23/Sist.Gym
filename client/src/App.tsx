@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { PartnerProfile } from "./components/PartnerDetail/PartnerProfile";
 import ProtectedRoute from "./context/ProtectedRouted";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { setCredentials } from "./redux/Slices/authSlice";
+import { useRolesAction } from "./redux/Actions/rolesAction";
 import {
   Profile,
   Home,
@@ -23,22 +24,30 @@ import {
 
 function App() {
   const dispatch = useAppDispatch();
+  const { getAllRoles } = useRolesAction();
 
   const roles = useAppSelector((state) => state.roles.roles);
-  const user = useAppSelector((state) => state.auth.userInfo);
+  const { userInfo, loading } = useAppSelector((state) => state.auth);
 
-  const userRole = roles.find((role) => role.name === user.rol);
+  const userRole = roles.find((role) => role.name === userInfo.rol);
+
+  const [userLoaded, setUserLoaded] = useState(false);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       dispatch(setCredentials(JSON.parse(userInfo)));
+      getAllRoles();
     }
+    setUserLoaded(true);
   }, [dispatch]);
-
   const hasPermission = (requiredPermission: any) => {
     return userRole && userRole.permissions.includes(requiredPermission);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -53,7 +62,7 @@ function App() {
 
           <Route
             path="/home"
-            element={hasPermission("index_anel") ? <Home /> : <NotFound />}
+            element={hasPermission("index_panel") ? <Home /> : <NotFound />}
           />
 
           <Route

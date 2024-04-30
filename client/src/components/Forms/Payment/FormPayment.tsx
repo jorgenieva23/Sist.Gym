@@ -213,13 +213,13 @@ const FormPayment: React.FC<FormProps> = ({
               }
               options={optionsPart}
               menuPortalTarget={document.body} // Añade esta línea
-              styles={{
-                menu: (provided) => ({
-                  ...provided,
-                  maxHeight: 200,
-                  overflow: "auto",
-                }),
-              }}
+              // styles={{
+              //   menu: (provided) => ({
+              //     ...provided,
+              //     maxHeight: 200,
+              //     overflow: "auto",
+              //   }),
+              // }}
             />
           </div>
           {errors.partnerId && toast.info(errors.partnerId)}

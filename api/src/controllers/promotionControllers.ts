@@ -68,7 +68,9 @@ export const updatePromotion = async ({
       new: true,
     });
     return updatePromotion;
-  } catch (error) {}
+  } catch (error) {
+    throw new Error("Error when searching for payment in the database");
+  }
 };
 
 export const deletePayment = async (id: any, req: Request) => {

@@ -51,9 +51,9 @@ export const ExpiredPayment: React.FC<ExpiredPaymentProps> = ({
   const currentItems = dataToShow.slice(indexOfFirstCourse, indexOfLastItems);
 
   return (
-    <div>
-      <table className="w-full text-sm shadow-md text-left text-gray-500">
-        <thead className="text-lg  text-gray-700 uppercase bg-gray-50 ">
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm shadow-md text-left text-gray-500 divide-y divide-gray-200">
+        <thead className="text-lg text-gray-700 uppercase bg-gray-50 ">
           <tr>
             {TABLE_HEAD.map((head) => (
               <th key={head} className="border-b border border-slate-300 p-4">

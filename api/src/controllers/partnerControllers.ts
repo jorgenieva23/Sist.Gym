@@ -2,7 +2,7 @@ import { Request } from "express";
 import { IPartner } from "../utils/types";
 import Partner from "../models/partner";
 import Movement from "../models/movement";
-import Payment from "../models/payment";
+import { faker } from "@faker-js/faker";
 
 export const getAllPartner = async () => {
   try {
@@ -156,3 +156,49 @@ export const deletePartner = async (id: any, req: Request) => {
     console.error(`Error deleting partner ${id}: ${error}`);
   }
 };
+
+// const createRandomPartners = async (count: number): Promise<void> => {
+//   for (let i = 0; i < count; i++) {
+//     let contador = 0;
+//     const partner = new Partner({
+//       firstName: faker.person.firstName(),
+//       lastName: faker.person.lastName(),
+//       dni: faker.number.int({ min: 25000000, max: 45999999 }),
+//       address: faker.location.secondaryAddress(),
+//       phone: faker.number.int({ min: 3810000000, max: 3819999999 }),
+//       email: faker.internet.email(),
+//       picture: faker.image.avatar(),
+//       deleted: false,
+//       date: faker.date.between({
+//         from: "1985-01-01T00:00:00.000Z",
+//         to: "2004-12-29T00:00:00.000Z",
+//       }),
+//       datePhysicalAttitude: faker.date.future(),
+//       medicalCoverage: faker.company.name(),
+//       phoneEmergency: faker.number.int({ min: 3810000000, max: 3819999999 }),
+//       phoneEmergencyName: faker.person.firstName(),
+//       stateId: "inactive",
+//       userId: "jorge@gmail.com",
+//       rol: "partner",
+//       condition: "fit",
+//       createdAt: faker.date.between({
+//         from: "2021-01-01T00:00:00.000Z",
+//         to: "2024-04-29T00:00:00.000Z",
+//       }),
+//       updatedAt: faker.date.between({
+//         from: "2021-01-01T00:00:00.000Z",
+//         to: "2024-04-29T00:00:00.000Z",
+//       }),
+//     });
+
+//     try {
+//       await partner.save();
+//       contador++;
+//       console.log(`vuelta creada N: ${contador} `);
+//     } catch (error) {
+//       console.error(`Error creating partner: ${error}`);
+//     }
+//   }
+// };
+
+// createRandomPartners(24);

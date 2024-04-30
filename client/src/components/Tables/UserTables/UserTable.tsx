@@ -10,7 +10,7 @@ import { useUserAction } from "../../../redux/Actions/userAction";
 import { useRolesAction } from "../../../redux/Actions/rolesAction";
 import Modal from "../../Modal/Modal";
 import DeleteButton from "../../Buttons/DeleteButton";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 
 const TABLE_HEAD = ["Nombre", "Email", "rol", "Estado", "Creado", "Opciones"];
 
@@ -168,7 +168,7 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
                       <DeleteButton
                         onDelete={() => {
                           if (user._id) {
-                            deleteUserAction(user?._id);
+                            deleteUserAction(user._id);
                             toast("Socio Borrado", {
                               description: `El Socio ${user.name} fue borrado del sistema`,
                             });
@@ -188,6 +188,7 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
           </tbody>
         </table>
       </div>
+      <Toaster richColors position="bottom-center" />
       <div className="flex justify-center mt-4">
         <Pagination
           currentPage={currentPage}

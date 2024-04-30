@@ -6,6 +6,7 @@ import States from "../models/state";
 import Users from "../models/user";
 import Movement from "../models/movement";
 import Payment from "../models/payment";
+import { faker } from "@faker-js/faker";
 
 // FUNCION REGISTRO DEL PAGO, MOVIMIENTO Y CALCULO DEL TOTAL MEDIANTE PROMOCIONES
 export const registerPaymentController = async (
@@ -21,7 +22,6 @@ export const registerPaymentController = async (
       Users.findOne({ name: creatorId }).exec(),
       Promotion.findOne({ name: promotionId }).exec(),
     ]);
-    console.log(promotion);
 
     if (!partner || !state || !creator) {
       throw new Error("Invalid partner, state, creator or promotion");
@@ -128,7 +128,7 @@ export const getPaymentById = async (id: any) => {
 };
 
 // FUNCION QUE ACTUALIZA PAGOS MEDIANTE ID
-export const updateUserPayment = async ({
+export const updatePayment = async ({
   req,
   id,
   updatedData,
@@ -138,19 +138,48 @@ export const updateUserPayment = async ({
   req: Request;
 }) => {
   try {
-    const updatePayment = await Users.findByIdAndUpdate(
-      id,
-      { $set: updatedData },
-      { new: true }
-    );
+    const payment = await Payment.findById(id);
+    const promotion = await Promotion.findById(id);
+    console.log(payment);
+
+    if (!payment) {
+      throw new Error("Payment not found");
+    }
+
+    // Si dateFrom se actualiza, también actualizamos dateTo
+    if (updatedData.dateFrom) {
+      const dateTo = new Date(updatedData.dateFrom);
+      if (promotion && promotion?.referredDate) {
+        if (promotion.referredDate > 0 && promotion.referredDate <= 12) {
+          dateTo.setMonth(dateTo.getMonth() + promotion.referredDate);
+        } else {
+          dateTo.setDate(dateTo.getDate() + promotion.referredDate);
+        }
+      } else {
+        dateTo.setMonth(dateTo.getMonth() + 1);
+      }
+      updatedData.dateTo = dateTo;
+    }
+
+    if (updatedData.amount && promotion?.percentage) {
+      const discount = (promotion.percentage / 100) * updatedData.amount;
+      updatedData.total = updatedData.amount - discount;
+    }
+
+    const updatedPayment = await Payment.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+
     await Movement.create({
       movementType: "UPDATE_PARTNER",
-      creatorId: updatePayment?.creatorId,
+      creatorId: payment.creatorId,
       ip: req.ip,
     });
-    return updatePayment;
+
+    return updatedPayment;
   } catch (err) {
-    throw new Error("Error when searching for payment in the database");
+    console.error(err);
+    throw new Error("Error when updating payment in the database");
   }
 };
 
@@ -308,3 +337,51 @@ export const deletePayments = async (id: any, req: Request) => {
     console.error(`Error deleting payment ${id}: ${error}`);
   }
 };
+
+const createRandomPayment = async () => {
+  try {
+    const partners = await Partner.find();
+    const promotions = await Promotion.find();
+
+    if (partners.length > 0) {
+      const randomPromotion =
+        promotions.length > 0
+          ? promotions[Math.floor(Math.random() * promotions.length)]
+          : null;
+
+      for (const partner of partners) {
+        const amount = faker.number.int({ min: 10000, max: 15000 });
+
+        let discount = 0;
+        if (randomPromotion?.percentage) {
+          discount = (randomPromotion.percentage / 100) * amount;
+        }
+
+        const payment = new Payment({
+          partnerId: partner.firstName,
+          stateId: "active",
+          creatorId: "jorge@gmail.com",
+          promotionId: randomPromotion ? randomPromotion._id : null,
+          dateFrom: faker.date.between({
+            from: "2021-01-01T00:00:00.000Z",
+            to: "2024-04-29T00:00:00.000Z",
+          }),
+          dateTo: faker.date.between({
+            from: "2021-01-01T00:00:00.000Z",
+            to: "2024-06-29T00:00:00.000Z",
+          }),
+          amount: amount,
+          total: amount - discount,
+        });
+
+        await payment.save();
+      }
+    } else {
+      console.log("No hay suficientes datos para crear un pago aleatorio");
+    }
+  } catch (error) {
+    console.error(`Error creating payment: ${error}`);
+  }
+};
+
+// createRandomPayment();
