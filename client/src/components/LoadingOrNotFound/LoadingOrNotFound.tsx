@@ -1,5 +1,5 @@
 import { useState, useEffect, FC } from "react";
-import Spinner from "../Spiner/Spiner";
+import Spinner from "../Spinner/Spinner";
 
 interface LoadingOrNotFoundProps {
   hasPermission: boolean | undefined;
