@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 import { registerUser } from "../../../redux/Actions/authActions";
 import { IUser } from "../../../utils/types";
+import { toast, Toaster } from "sonner";
 import Modal2 from "../../../components/Modal/Modal2";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -21,9 +22,12 @@ export const Signup: React.FC = () => {
   const { userInfo } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
+  const users = useAppSelector((state) => state.user.users);
+
   const [showPassword, setShowPassword] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [user, setUser] = useState<IUser>({
     name: "",
     email: "",
@@ -32,6 +36,45 @@ export const Signup: React.FC = () => {
     creatorId: "jorge_4755@hotmail.com",
     rol: "admin",
   });
+
+  const validate = (user: IUser): { [key: string]: string } => {
+    let errors: { [key: string]: string } = {};
+
+    if (!user.name) {
+      errors.name = "El socio debe tener un nombre";
+    } else if (user.name.length < 1 || user.name.length > 25) {
+      errors.name = "Nombre inválido";
+    }
+
+    if (!user.email) {
+      errors.email = "El socio debe tener un correo electrónico";
+    } else {
+      const existingPartner = users.find(
+        (e) => e.email.toLowerCase() === user.email.toLowerCase()
+      );
+      if (existingPartner) {
+        errors.email = `El socio con el correo ${user.email} ya existe.`;
+      } else {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(user.email)) {
+          errors.email = "Formato de correo electrónico inválido";
+        }
+      }
+    }
+
+    if (!user.password) {
+      errors.password = "El socio debe tener una contraseña";
+    } else if (user.password.length < 6) {
+      errors.password = "La contraseña debe tener al menos 6 caracteres";
+    } else if (!/[A-Z]/.test(user.password)) {
+      errors.password =
+        "La contraseña debe tener al menos un carácter en mayúscula";
+    } else if (!/\d/.test(user.password)) {
+      errors.password =
+        "La contraseña debe tener al menos un carácter numérico";
+    }
+    return errors;
+  };
 
   useEffect(() => {
     if (isAuthenticated && userInfo) {
@@ -60,6 +103,12 @@ export const Signup: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const errors = validate(user);
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
     try {
       dispatch(registerUser(user)).then(() => {
         navigate("/");
@@ -70,14 +119,43 @@ export const Signup: React.FC = () => {
     }
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+  // const handleOpenModal = () => {
+  //   setIsModalOpen(true);
+  // };
 
-  // Función para cerrar el modal
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  // // Función para cerrar el modal
+  // const handleCloseModal = () => {
+  //   setIsModalOpen(false);
+  // };
+
+  // <div
+  //             className="text-sm text-blue-500 cursor-pointer"
+  //             onClick={handleOpenModal}
+  //           >
+  //             recomendacion
+  //           </div>
+  //           <Modal2 open={isModalOpen} onClose={handleCloseModal}>
+  //             <p className="text-lg">
+  //               Como sugerencia, si estás utilizando la aplicación por primera
+  //               vez, te recomendamos seguir estos pasos:
+  //             </p>
+
+  //             <ol className="text-lg">
+  //               <li>1) Accede a la cuenta que has creado.</li>
+  //               <li>2) Navega hasta la sección de usuarios.</li>
+  //               <li>3) Crea un perfil con el rol de 'usuario'.</li>
+  //               <li>
+  //                 4) Abre la aplicación en modo incógnito y accede a la cuenta
+  //                 que acabas de crear.
+  //               </li>
+  //             </ol>
+
+  //             <p className="text-lg">
+  //               Esto te permitirá apreciar las diferencias entre los perfiles de
+  //               'administrador' y 'usuario'. ¡Esperamos que disfrutes explorando
+  //               la aplicación!
+  //             </p>
+  //           </Modal2>
 
   return (
     <div className="justify-center h-screen flex items-center bg-gray-200">
@@ -85,31 +163,6 @@ export const Signup: React.FC = () => {
         <div className="mb-2">
           <div className="sm:text-sm md:text-2xl lg:text-4xl xl:text-4xl text-center text-slate-900 font-bold transition-all duration-300">
             Registrate
-            <div className="text-sm text-blue-500 cursor-pointer" onClick={handleOpenModal}>
-              recomendacion
-            </div>
-            <Modal2 open={isModalOpen} onClose={handleCloseModal}>
-              <p className="text-lg">
-                Como sugerencia, si estás utilizando la aplicación por primera
-                vez, te recomendamos seguir estos pasos:
-              </p>
-
-              <ol className="text-lg">
-                <li>1) Accede a la cuenta que has creado.</li>
-                <li>2) Navega hasta la sección de usuarios.</li>
-                <li>3) Crea un perfil con el rol de 'usuario'.</li>
-                <li>
-                  4) Abre la aplicación en modo incógnito y accede a la cuenta
-                  que acabas de crear.
-                </li>
-              </ol>
-
-              <p className="text-lg">
-                Esto te permitirá apreciar las diferencias entre los perfiles de
-                'administrador' y 'usuario'. ¡Esperamos que disfrutes explorando
-                la aplicación!
-              </p>
-            </Modal2>
           </div>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -132,6 +185,7 @@ export const Signup: React.FC = () => {
                 required
               />
             </div>
+            {errors.name && toast.info(errors.name)}
           </div>
 
           <div className="relative mt-2">
@@ -149,6 +203,7 @@ export const Signup: React.FC = () => {
                 required
               />
             </div>
+            {errors.email && toast.info(errors.email)}
           </div>
 
           <div className="relative mt-2">
@@ -162,9 +217,9 @@ export const Signup: React.FC = () => {
                 id="password"
                 name="password"
                 placeholder="Password"
+                value={user.password}
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 onChange={(e) => handleChange(e)}
-                required
               />
               {showPassword ? (
                 <PiEye
@@ -178,8 +233,22 @@ export const Signup: React.FC = () => {
                 />
               )}
             </div>
+            {errors.password && toast.info(errors.password)}
           </div>
-
+          <ol className="mt-2 text-sm text-gray-600">
+            <li className="mb-1">
+              Debe tener al menos{" "}
+              <span className="font-semibold">6 caracteres</span>.
+            </li>
+            <li className="mb-1">
+              Debe contener al menos{" "}
+              <span className="font-semibold">una mayúscula</span>.
+            </li>
+            <li>
+              Debe incluir al menos{" "}
+              <span className="font-semibold">un número</span>.
+            </li>
+          </ol>
           <div>
             <button
               className="mt-5 bg-sky-600 text-white w-full py-2 px-6 rounded-lg hover:scale-105 transition-all"
@@ -199,6 +268,7 @@ export const Signup: React.FC = () => {
           </Link>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };

@@ -89,6 +89,12 @@ const FormUsers: React.FC<FormProps> = ({
           errorMessage = "El socio debe tener una contraseña";
         } else if (fieldValue.length < 6) {
           errorMessage = "La contraseña debe tener al menos 6 caracteres";
+        } else if (!/[A-Z]/.test(fieldValue)) {
+          errorMessage =
+            "La contraseña debe tener al menos un carácter en mayúscula";
+        } else if (!/\d/.test(fieldValue)) {
+          errorMessage =
+            "La contraseña debe tener al menos un carácter numérico";
         }
         break;
       case "rol":
@@ -137,7 +143,6 @@ const FormUsers: React.FC<FormProps> = ({
       } else {
         await createNewUser(form).then(() => {
           setLoadingSubmit(false);
-          
         });
         setForm({
           name: "",
