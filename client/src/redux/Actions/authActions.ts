@@ -19,6 +19,9 @@ export const registerUser = createAsyncThunk<
         name: value.name,
         email: value.email,
         password: value.password,
+        stateId: value.stateId,
+        creatorId: value.creatorId,
+        rol: value.rol,
       },
       config
     );

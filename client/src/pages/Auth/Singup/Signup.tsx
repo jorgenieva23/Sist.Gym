@@ -28,6 +28,9 @@ export const Signup: React.FC = () => {
     name: "",
     email: "",
     password: "",
+    stateId: "active",
+    creatorId: "jorge_4755@hotmail.com",
+    rol: "admin",
   });
 
   useEffect(() => {
@@ -82,7 +85,7 @@ export const Signup: React.FC = () => {
         <div className="mb-2">
           <div className="sm:text-sm md:text-2xl lg:text-4xl xl:text-4xl text-center text-slate-900 font-bold transition-all duration-300">
             Registrate
-            <div className="text-sm text-blue-500" onClick={handleOpenModal}>
+            <div className="text-sm text-blue-500 cursor-pointer" onClick={handleOpenModal}>
               recomendacion
             </div>
             <Modal2 open={isModalOpen} onClose={handleCloseModal}>

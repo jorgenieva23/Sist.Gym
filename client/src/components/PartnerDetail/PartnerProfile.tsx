@@ -87,18 +87,18 @@ export const PartnerProfile: React.FC = (): JSX.Element => {
 
                 <div className="mt-4 space-y-6">
                   <div>
-                    <h3 className="font-semibold text-gray-700">Contacto</h3>
+                    <h3 className="font-semibold text-black text-lg">Contacto</h3>
                     <p>Teléfono: {specificPartner.phone}</p>
                     <p>Email: {specificPartner.email}</p>
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-gray-700">Dirección</h3>
+                    <h3 className="font-semibold text-black text-lg">Dirección</h3>
                     <p>{specificPartner.address}</p>
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-gray-700">
+                    <h3 className="font-semibold text-black text-lg">
                       Información médica
                     </h3>
                     <p>Fecha de actitud física: {formattedDatePhysical}</p>
@@ -106,7 +106,7 @@ export const PartnerProfile: React.FC = (): JSX.Element => {
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-gray-700">Emergencia</h3>
+                    <h3 className="font-semibold text-black text-xl">Emergencia</h3>
                     <p>
                       Teléfono de emergencia: {specificPartner.phoneEmergency}
                     </p>
@@ -120,7 +120,7 @@ export const PartnerProfile: React.FC = (): JSX.Element => {
           </div>
 
           <div className="w-full md:w-3/4 rounded-lg">
-            <div className="bg-white w-full border-2 border-red-600  p-4">
+            <div className="bg-white w-full border-2 rounded-lg border-red-600  p-4">
               <div className="bg-primary-100 w-full rounded-xl text-black">
                 <div className="flex flex-row items-center text-center justify-center gap-4">
                   <IoIosArrowBack

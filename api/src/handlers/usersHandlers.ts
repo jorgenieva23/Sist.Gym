@@ -81,9 +81,9 @@ export const postUserHandler = async (
     const user: IUser = {
       ...req.body,
       password: hashedPassword,
-      rol: role?.name || null,
-      stateId: state?.name || null,
-      creatorId: admin?.email || null,
+      rol: role?.name,
+      stateId: state?.name,
+      creatorId: admin?.email,
     };
     await Movement.create({
       movementType: "CREAR_USER",
