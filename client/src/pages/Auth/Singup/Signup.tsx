@@ -25,7 +25,6 @@ export const Signup: React.FC = () => {
   const users = useAppSelector((state) => state.user.users);
 
   const [showPassword, setShowPassword] = useState(false);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [user, setUser] = useState<IUser>({
@@ -35,6 +34,11 @@ export const Signup: React.FC = () => {
     stateId: "active",
     creatorId: "jorge_4755@hotmail.com",
     rol: "admin",
+  });
+  const [passwordCriteria, setPasswordCriteria] = useState({
+    minLength: false,
+    uppercase: false,
+    number: false,
   });
 
   const validate = (user: IUser): { [key: string]: string } => {
@@ -76,6 +80,14 @@ export const Signup: React.FC = () => {
     return errors;
   };
 
+  const validatePassword = (password: string) => {
+    setPasswordCriteria({
+      minLength: password.length >= 6,
+      uppercase: /[A-Z]/.test(password),
+      number: /\d/.test(password),
+    });
+  };
+
   useEffect(() => {
     if (isAuthenticated && userInfo) {
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
@@ -88,6 +100,7 @@ export const Signup: React.FC = () => {
       ...user,
       [e.target.name]: e.target.value,
     });
+    validatePassword(e.target.value);
   };
 
   useEffect(() => {
@@ -118,44 +131,6 @@ export const Signup: React.FC = () => {
       console.error(error.message);
     }
   };
-
-  // const handleOpenModal = () => {
-  //   setIsModalOpen(true);
-  // };
-
-  // // Función para cerrar el modal
-  // const handleCloseModal = () => {
-  //   setIsModalOpen(false);
-  // };
-
-  // <div
-  //             className="text-sm text-blue-500 cursor-pointer"
-  //             onClick={handleOpenModal}
-  //           >
-  //             recomendacion
-  //           </div>
-  //           <Modal2 open={isModalOpen} onClose={handleCloseModal}>
-  //             <p className="text-lg">
-  //               Como sugerencia, si estás utilizando la aplicación por primera
-  //               vez, te recomendamos seguir estos pasos:
-  //             </p>
-
-  //             <ol className="text-lg">
-  //               <li>1) Accede a la cuenta que has creado.</li>
-  //               <li>2) Navega hasta la sección de usuarios.</li>
-  //               <li>3) Crea un perfil con el rol de 'usuario'.</li>
-  //               <li>
-  //                 4) Abre la aplicación en modo incógnito y accede a la cuenta
-  //                 que acabas de crear.
-  //               </li>
-  //             </ol>
-
-  //             <p className="text-lg">
-  //               Esto te permitirá apreciar las diferencias entre los perfiles de
-  //               'administrador' y 'usuario'. ¡Esperamos que disfrutes explorando
-  //               la aplicación!
-  //             </p>
-  //           </Modal2>
 
   return (
     <div className="justify-center h-screen flex items-center bg-gray-200">
@@ -235,18 +210,39 @@ export const Signup: React.FC = () => {
             </div>
             {errors.password && toast.info(errors.password)}
           </div>
-          <ol className="mt-2 text-sm text-gray-600">
-            <li className="mb-1">
+          <ol className="mt-2 text-sm">
+            <li className="mb-1 text-gray-600">
               Debe tener al menos{" "}
-              <span className="font-semibold">6 caracteres</span>.
+              <span
+                className={` ${
+                  passwordCriteria.minLength ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                6 caracteres
+              </span>
+              .
             </li>
-            <li className="mb-1">
+            <li className="mb-1 text-gray-600">
               Debe contener al menos{" "}
-              <span className="font-semibold">una mayúscula</span>.
+              <span
+                className={`${
+                  passwordCriteria.uppercase ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                una mayúscula
+              </span>
+              .
             </li>
-            <li>
+            <li className="mb-1 text-gray-600">
               Debe incluir al menos{" "}
-              <span className="font-semibold">un número</span>.
+              <span
+                className={`${
+                  passwordCriteria.number ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                un número
+              </span>
+              .
             </li>
           </ol>
           <div>
@@ -272,3 +268,41 @@ export const Signup: React.FC = () => {
     </div>
   );
 };
+
+// const handleOpenModal = () => {
+//   setIsModalOpen(true);
+// };
+
+// // Función para cerrar el modal
+// const handleCloseModal = () => {
+//   setIsModalOpen(false);
+// };
+
+// <div
+//             className="text-sm text-blue-500 cursor-pointer"
+//             onClick={handleOpenModal}
+//           >
+//             recomendacion
+//           </div>
+//           <Modal2 open={isModalOpen} onClose={handleCloseModal}>
+//             <p className="text-lg">
+//               Como sugerencia, si estás utilizando la aplicación por primera
+//               vez, te recomendamos seguir estos pasos:
+//             </p>
+
+//             <ol className="text-lg">
+//               <li>1) Accede a la cuenta que has creado.</li>
+//               <li>2) Navega hasta la sección de usuarios.</li>
+//               <li>3) Crea un perfil con el rol de 'usuario'.</li>
+//               <li>
+//                 4) Abre la aplicación en modo incógnito y accede a la cuenta
+//                 que acabas de crear.
+//               </li>
+//             </ol>
+
+//             <p className="text-lg">
+//               Esto te permitirá apreciar las diferencias entre los perfiles de
+//               'administrador' y 'usuario'. ¡Esperamos que disfrutes explorando
+//               la aplicación!
+//             </p>
+//           </Modal2>
