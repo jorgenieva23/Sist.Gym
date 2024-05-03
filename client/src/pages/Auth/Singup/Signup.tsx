@@ -4,7 +4,7 @@ import { RootState } from "../../../redux/store";
 import { registerUser } from "../../../redux/Actions/authActions";
 import { IUser } from "../../../utils/types";
 import { toast, Toaster } from "sonner";
-import Modal2 from "../../../components/Modal/Modal2";
+// import Modal2 from "../../../components/Modal/Modal2";
 import { useNavigate, Link } from "react-router-dom";
 import {
   PiEyeSlash,
@@ -25,7 +25,7 @@ export const Signup: React.FC = () => {
   const users = useAppSelector((state) => state.user.users);
 
   const [showPassword, setShowPassword] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [user, setUser] = useState<IUser>({
