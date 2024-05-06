@@ -10,7 +10,6 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY as string;
 const createAccessToken = (user: IUser) => {
   const expToken = new Date();
   expToken.setHours(expToken.getHours() + 3);
-
   const payload = {
     token_type: "access",
     user_id: user._id,
@@ -18,6 +17,7 @@ const createAccessToken = (user: IUser) => {
     iat: Date.now(),
     exp: expToken.getTime(),
   };
+  console.log(payload);
 
   return jwt.sign(payload, JWT_SECRET_KEY);
 };
@@ -29,6 +29,7 @@ const createRefreshToken = (user: IUser) => {
   const payload = {
     token_type: "refresh",
     user_id: user._id,
+    user_rol: user.rol,
     iat: Date.now(),
     exp: expToken.getTime(),
   };

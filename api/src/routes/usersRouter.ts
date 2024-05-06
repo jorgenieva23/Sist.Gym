@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
-import { auth } from "../middlewares/vlaidateToken";
+import { auth } from "../middlewares/validateToken";
+import { checkPaymentStatus } from "../middlewares/validatePayment";
 import {
   getUserHandler,
   getUserId,
@@ -29,7 +30,12 @@ usersRouter.delete("/delete/:id", deleteUserHandler as IusersHandler);
 // Autenticacion
 usersRouter.post("/login", loginUser as IusersHandler);
 usersRouter.post("/logout/:id", logoutUser as IusersHandler);
-usersRouter.get("/profile", auth(["indexCuota"]), profile as IusersHandler);
+usersRouter.get(
+  "/profile",
+  auth(["indexUsuario"]),
+  checkPaymentStatus(),
+  profile as IusersHandler
+);
 usersRouter.post("/refreshToken", refreshAccessToken as IusersHandler);
 
 export default usersRouter;

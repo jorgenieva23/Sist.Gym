@@ -80,6 +80,19 @@ export interface IPromotion extends Document {
   updatedAt: Date;
 }
 
+export interface IMonthlyPayment extends Document {
+  _id: Schema.Types.ObjectId;
+  subscriptionService: any;
+  amount: number;
+  dateFrom: Date;
+  dateTo: Date;
+  description: string;
+  creatorId: Types.ObjectId | string | null;
+  stateId: Types.ObjectId | string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface IMovement extends Document {
   _id: Schema.Types.ObjectId;
   movementType: Types.ObjectId | string | null;
