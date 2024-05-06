@@ -160,7 +160,7 @@ export const Signup: React.FC = () => {
                 required
               />
             </div>
-            {errors.name && toast.info(errors.name)}
+            {/* {errors.name && toast.info(errors.name)} */}
           </div>
 
           <div className="relative mt-2">
