@@ -19,7 +19,7 @@ const FormRoles: React.FC<FormProps> = ({
   const { createNewRol, updateRol, getAllPermission } = useRolesAction();
   const perm = useAppSelector((state) => state.roles.permissions);
 
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors] = useState<{ [key: string]: string }>({});
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const isEditing = !!rolToEdit;
 
@@ -74,7 +74,8 @@ const FormRoles: React.FC<FormProps> = ({
 
     const errors = validate(form);
     if (Object.keys(errors).length > 0) {
-      setErrors(errors);
+      const errorMessages = Object.values(errors);
+      errorMessages.forEach((errorMessage) => toast.error(errorMessage));
       setLoadingSubmit(false);
       return;
     }

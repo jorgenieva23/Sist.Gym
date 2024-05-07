@@ -296,7 +296,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
           </tbody>
         </table>
       </div>
-      <Toaster richColors position="bottom-center" />
+      <Toaster richColors position="bottom-right" />
       <div className="flex justify-center mt-4">
         {partners.length < 7 ? (
           `N°. de socios: ${partners.length} `

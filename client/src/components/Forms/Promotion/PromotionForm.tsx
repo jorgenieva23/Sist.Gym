@@ -21,7 +21,7 @@ const FormPromotion: React.FC<FormProps> = ({
   const creator = useAuth?.name;
   // const promotion = useAppSelector((state)=> state.promotion.primotion)
 
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors] = useState<{ [key: string]: string }>({});
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const isEditing = !!promotionToEdit;
@@ -68,7 +68,8 @@ const FormPromotion: React.FC<FormProps> = ({
 
     const errors = validate(form);
     if (Object.keys(errors).length > 0) {
-      setErrors(errors);
+      const errorMessages = Object.values(errors);
+      errorMessages.forEach((errorMessage) => toast.error(errorMessage));
       setLoadingSubmit(false);
       return;
     }

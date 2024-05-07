@@ -31,7 +31,7 @@ const FormPartners: React.FC<FormProps> = ({
   const useAuth = useAppSelector((state) => state.auth.userInfo);
   const creator = useAuth?.email;
 
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors] = useState<{ [key: string]: string }>({});
 
   const [loadingSubmit, setLoadingSubmit] = useState(false);
 
@@ -129,7 +129,8 @@ const FormPartners: React.FC<FormProps> = ({
     }
 
     if (!form.phoneEmergencyName) {
-      errors.phoneEmergencyName = "El socio debe tener un nombre";
+      errors.phoneEmergencyName =
+        "Debe tener un nombre de contacto de emergencia";
     } else if (
       form.phoneEmergencyName.length < 1 ||
       form.phoneEmergencyName.length > 25
@@ -153,7 +154,8 @@ const FormPartners: React.FC<FormProps> = ({
 
     const errors = validate(form);
     if (Object.keys(errors).length > 0) {
-      setErrors(errors);
+      const errorMessages = Object.values(errors);
+      errorMessages.forEach((errorMessage) => toast.error(errorMessage));
       setLoadingSubmit(false);
       return;
     }
@@ -343,7 +345,7 @@ const FormPartners: React.FC<FormProps> = ({
               onChange={(e) => handleChange(e)}
             />
           </div>
-          {errors.date && toast.info(errors.email)}
+          {errors.date && toast.info(errors.address)}
         </div>
 
         <div className="flex flex-col my-2">
@@ -395,7 +397,8 @@ const FormPartners: React.FC<FormProps> = ({
                 onChange={(e) => handleChange(e)}
               />
             </div>
-            {errors.date && toast.info(errors.date)}
+            {errors.datePhysicalAttitude &&
+              toast.info(errors.datePhysicalAttitude)}
           </div>
 
           <div className="flex flex-col">
