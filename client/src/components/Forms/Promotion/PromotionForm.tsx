@@ -39,7 +39,7 @@ const FormPromotion: React.FC<FormProps> = ({
     let errors: { [key: string]: string } = {};
 
     if (!form.name) {
-      errors.name = "Debe haber un Precio";
+      errors.name = "Debe haber un nombre";
     }
     // if (!form.percentage) {
     //   errors.date = "Debe tener una fecha";
@@ -47,9 +47,9 @@ const FormPromotion: React.FC<FormProps> = ({
     if (!form.referredDate) {
       errors.date = "Debe tener una fecha";
     }
-    if (!form.description) {
-      errors.date = "Debe tener una fecha";
-    }
+    // if (!form.description) {
+    //   errors.date = "Debe tener una fecha";
+    // }
     return errors;
   };
 
