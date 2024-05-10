@@ -199,7 +199,7 @@ export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
                           console.error("Error: part._id is undefined");
                         }
                       }}
-                      confirmationMessage="Desea borrarlo?"
+                      
                       userRole={userRole}
                       requiredPermission="eliminarSocio"
                     />

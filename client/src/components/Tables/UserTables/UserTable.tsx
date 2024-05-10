@@ -176,7 +176,6 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
                             console.error("Error: part._id is undefined");
                           }
                         }}
-                        confirmationMessage="Desea borrarlo?"
                         userRole={userRole}
                         requiredPermission="eliminarSocio"
                       />

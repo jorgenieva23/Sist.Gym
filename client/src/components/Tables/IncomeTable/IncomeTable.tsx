@@ -132,7 +132,7 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
                           console.error("Error: part._id is undefined");
                         }
                       }}
-                      confirmationMessage="Desea borrarlo?"
+                    
                       userRole={userRole}
                       requiredPermission="EliminarIngresos"
                     />
