@@ -41,9 +41,9 @@ const FormPromotion: React.FC<FormProps> = ({
     if (!form.name) {
       errors.name = "Debe haber un Precio";
     }
-    if (!form.percentage) {
-      errors.date = "Debe tener una fecha";
-    }
+    // if (!form.percentage) {
+    //   errors.date = "Debe tener una fecha";
+    // }
     if (!form.referredDate) {
       errors.date = "Debe tener una fecha";
     }

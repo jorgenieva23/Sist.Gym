@@ -184,7 +184,7 @@ export const Signup: React.FC = () => {
                 name="password"
                 placeholder="Password"
                 value={user.password}
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
                 onChange={(e) => handleChange(e)}
               />
               {showPassword ? (

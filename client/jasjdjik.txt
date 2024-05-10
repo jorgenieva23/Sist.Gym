@@ -1,3 +1,0 @@
-implementar reactSelec en los seleccione
-en los select mostrar ukltimos socios agregados
-implementar un borrado logico partner/promociones/
