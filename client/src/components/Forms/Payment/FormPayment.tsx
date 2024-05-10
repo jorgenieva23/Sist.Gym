@@ -97,23 +97,30 @@ const FormPayment: React.FC<FormProps> = ({
       setLoadingSubmit(false);
       return;
     }
-
-    if (isEditing && paymentToEdit && paymentToEdit._id) {
-      updatePayment(paymentToEdit._id, form).then(() => {
-        setLoadingSubmit(false);
-        setEditingPayment && setEditingPayment(false);
-        window.location.reload();
-      });
-    } else {
-      await createNewPayment(form).then(() => {
-        setLoadingSubmit(false);
-      });
-      setForm({
-        amount: 0,
-        dateFrom: 0,
-        promotionId: "",
-        partnerId: "",
-      });
+    try {
+      if (isEditing && paymentToEdit && paymentToEdit._id) {
+        updatePayment(paymentToEdit._id, form).then(() => {
+          setLoadingSubmit(false);
+          setEditingPayment && setEditingPayment(false);
+          window.location.reload();
+        });
+      } else {
+        await createNewPayment(form).then(() => {
+          setLoadingSubmit(false);
+          window.location.reload();
+        });
+        setForm({
+          amount: 0,
+          dateFrom: 0,
+          promotionId: "",
+          partnerId: "",
+        });
+      }
+    } catch (error: any) {
+      console.error(error.message);
+      alert("Ocurrió un error");
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
