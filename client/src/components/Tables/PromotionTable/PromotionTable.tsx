@@ -112,7 +112,7 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
         <tbody>
           {filteredItems.map((prom, index) => {
             const isEvenRow = index % 2 === 0;
-            const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
+            const rowClass = isEvenRow ? "bg-gray-200" : "";
 
             const formattedDate = prom.createdAt
               ? format(new Date(prom.createdAt), "dd-MM-yyyy")

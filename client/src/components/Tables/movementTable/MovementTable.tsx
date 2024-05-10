@@ -71,7 +71,7 @@ export const MovementTable: React.FC<{ currentMovement: IMovement[] }> = ({
           {filteredItems.map(
             ({ movementType, creatorId, createdAt, ip }, index) => {
               const isEvenRow = index % 2 === 0;
-              const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
+              const rowClass = isEvenRow ? "bg-gray-200" : "";
 
               const formattedDate = createdAt
                 ? format(new Date(createdAt), "dd-MM-yyyy HH:mm:ss")

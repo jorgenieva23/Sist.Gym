@@ -85,7 +85,7 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
           <tbody>
             {filteredItems.map((user, index) => {
               const isEven = index % 2 === 0;
-              const rowClass = isEven ? "bg-silver dark:bg-[#676768]" : "";
+              const rowClass = isEven ? "bg-gray-200" : "";
 
               const formattedDate = user.createdAt
                 ? format(new Date(user.createdAt), "yyyy-MM-dd HH:mm:ss")

@@ -118,7 +118,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
           <tbody>
             {filteredItems.map((part, index) => {
               const isEvenRow = index % 2 === 0;
-              const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768] " : "";
+              const rowClass = isEvenRow ? "bg-gray-200" : "";
 
               const formattedDate = part.createdAt
                 ? format(new Date(part.createdAt), "dd-MM-yyyy")

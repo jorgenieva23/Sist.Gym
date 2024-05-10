@@ -74,7 +74,7 @@ export const RolesTable: React.FC<{ currentRoles: IRoles[] }> = ({
         <tbody>
           {filteredItems.map((role, index) => {
             const isEvenRow = index % 2 === 0;
-            const rowClass = isEvenRow ? "bg-silver dark:bg-[#676768]" : "";
+            const rowClass = isEvenRow ? "bg-gray-200" : "";
 
             return (
               <tr key={index} className={rowClass}>
