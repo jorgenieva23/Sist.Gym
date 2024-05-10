@@ -3,7 +3,7 @@ import { PiNotePencil } from "react-icons/pi";
 import Modal from "../Modal/Modal";
 
 interface EditButtonProps {
-  item: string | undefined;
+  item: any;
   FormComponent: any;
   userRole: any;
   requiredPermission: string;
@@ -35,6 +35,7 @@ const EditButton: FC<EditButtonProps> = ({
       >
         <PiNotePencil size="30" />
       </button>
+
       {editingPart === item && (
         <Modal open={editingPart !== null} onClose={() => setEditingPart(null)}>
           <div className="flex flex-col gap-4">

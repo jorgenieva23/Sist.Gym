@@ -65,18 +65,6 @@ export const Signup: React.FC = () => {
         }
       }
     }
-
-    if (!user.password) {
-      errors.password = "El socio debe tener una contraseña";
-    } else if (user.password.length < 6) {
-      errors.password = "La contraseña debe tener al menos 6 caracteres";
-    } else if (!/[A-Z]/.test(user.password)) {
-      errors.password =
-        "La contraseña debe tener al menos un carácter en mayúscula";
-    } else if (!/\d/.test(user.password)) {
-      errors.password =
-        "La contraseña debe tener al menos un carácter numérico";
-    }
     return errors;
   };
 
@@ -100,7 +88,9 @@ export const Signup: React.FC = () => {
       ...user,
       [e.target.name]: e.target.value,
     });
-    validatePassword(e.target.value);
+    if (e.target.name === "password") {
+      validatePassword(e.target.value);
+    }
   };
 
   useEffect(() => {
@@ -122,6 +112,7 @@ export const Signup: React.FC = () => {
       setErrors(errors);
       return;
     }
+
     try {
       dispatch(registerUser(user)).then(() => {
         navigate("/");

@@ -3,10 +3,16 @@ import { useParams } from "react-router-dom";
 import FormatDate from "../../utils/FormatDate";
 import { useAppSelector } from "../../redux/hooks";
 import { Footer, Navbar, Sidebar } from "..";
+// import { PiImage, PiNotePencil } from "react-icons/pi";
+// import movementSlice from "../../redux/Slices/movementSlice";
+import FormPartners from "../Forms/Partners/FormPartners";
 import { usePartnerAction } from "../../redux/Actions/partnerAction";
 import img from "../../assets/img.jpeg";
 import BarsChart from "../Chart/BarChart";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+// import Modal from "../Modal/Modal";
+import EditButton from "../Buttons/EditButon";
+import DeleteButton from "../Buttons/DeleteButton";
 
 export const PartnerProfile: React.FC = (): JSX.Element => {
   const { _id } = useParams<{ _id: string }>();
@@ -14,6 +20,7 @@ export const PartnerProfile: React.FC = (): JSX.Element => {
     getSpecificPartnerById,
     clearSpecificPartnerById,
     getHistoryIncomePartner,
+    removePartner,
   } = usePartnerAction();
   const historyIncome = useAppSelector((state) => state.partner.historyIncome);
   const specificPartner = useAppSelector(
@@ -21,6 +28,14 @@ export const PartnerProfile: React.FC = (): JSX.Element => {
   );
   let actualYear = new Date().getFullYear();
 
+  const roles = useAppSelector((state) => state.roles.roles);
+  const user = useAppSelector((state) => state.auth.userInfo);
+
+  const userRole = roles.find((role) => role.name === user.rol);
+
+  // const [editingPart, setEditingPart] = useState<string | null | undefined>(
+  //   null
+  // );
   const [chartYear, setChartYear] = useState(actualYear);
   const [maxYear, setMaxYear] = useState(actualYear);
   const [minYear, setMinYear] = useState(actualYear);
@@ -59,9 +74,9 @@ export const PartnerProfile: React.FC = (): JSX.Element => {
       <div className="flex flex-grow bg-slate-200 ">
         <Sidebar />
         <div className="flex flex-col gap-2 m-2 md:flex-row flex-grow">
-          <div className="w-1/3">
+          <div className="w-full md:w-1/3">
             {specificPartner && (
-              <div className="bg-white shadow rounded-lg">
+              <div className="bg-white shadow rounded-lg p-4">
                 <div className="flex items-center space-x-4">
                   <img
                     src={
@@ -87,13 +102,17 @@ export const PartnerProfile: React.FC = (): JSX.Element => {
 
                 <div className="mt-4 space-y-6">
                   <div>
-                    <h3 className="font-semibold text-black text-lg">Contacto</h3>
+                    <h3 className="font-semibold text-black text-lg">
+                      Contacto
+                    </h3>
                     <p>Teléfono: {specificPartner.phone}</p>
                     <p>Email: {specificPartner.email}</p>
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-black text-lg">Dirección</h3>
+                    <h3 className="font-semibold text-black text-lg">
+                      Dirección
+                    </h3>
                     <p>{specificPartner.address}</p>
                   </div>
 
@@ -106,7 +125,9 @@ export const PartnerProfile: React.FC = (): JSX.Element => {
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-black text-xl">Emergencia</h3>
+                    <h3 className="font-semibold text-black text-xl">
+                      Emergencia
+                    </h3>
                     <p>
                       Teléfono de emergencia: {specificPartner.phoneEmergency}
                     </p>
@@ -115,12 +136,55 @@ export const PartnerProfile: React.FC = (): JSX.Element => {
                     </p>
                   </div>
                 </div>
+                <div className="flex justify-end">
+                  <EditButton
+                    item={specificPartner}
+                    FormComponent={FormPartners}
+                    userRole={userRole}
+                    requiredPermission="EditarSocio"
+                  />
+
+                  <DeleteButton
+                    onDelete={() => {
+                      if (specificPartner?._id) {
+                        removePartner(specificPartner?._id);
+                      } else {
+                        console.error("Error: part._id is undefined");
+                      }
+                    }}
+                    userRole={userRole}
+                    requiredPermission="eliminarSocio"
+                  />
+
+                  {/* <button
+                    disabled={
+                      !userRole || !userRole.permissions.includes("EditarSocio")
+                    }
+                    onClick={() => setEditingPart(specificPartner?._id)}
+                    className="bg-blue-500 px-1 hover:bg-blue-800 text-white font-bolt rounded"
+                  >
+                    <PiNotePencil size="30" />
+                  </button>
+                  {editingPart === specificPartner._id && (
+                    <Modal
+                      open={editingPart !== null}
+                      onClose={() => setEditingPart(null)}
+                    >
+                      <div className="flex flex-col z-10 gap-4">
+                        <FormPartners
+                          partnerToEdit={specificPartner}
+                          setEditingPartner={() => setEditingPart(null)}
+                        />
+                      </div>
+                    </Modal>
+                  )} */}
+                </div>
               </div>
             )}
           </div>
 
-          <div className="w-full md:w-3/4 rounded-lg">
-            <div className="bg-white w-full border-2 rounded-lg border-red-600  p-4">
+          <div className="w-full md:w-2/3">
+            <div className="bg-white w-full border-2 rounded-lg p-4">
               <div className="bg-primary-100 w-full rounded-xl text-black">
                 <div className="flex flex-row items-center text-center justify-center gap-4">
                   <IoIosArrowBack

@@ -35,13 +35,10 @@ export const usePartnerAction = () => {
   };
   const getHistoryIncomePartner = async (partnerId: string) => {
     try {
-      console.log(partnerId);
       const rawData = await axios.get(
         `/income/allIncomeByPartnerId/${partnerId}`
       );
       const response = rawData.data.result;
-      console.log(response);
-
       dispatch(getHistory(response));
     } catch (error: any) {
       console.error("Error fetching specific partner data:", error.message);
@@ -55,7 +52,6 @@ export const usePartnerAction = () => {
   const createNewPartner = async (partner: IPartner) => {
     try {
       console.log(partner);
-
       const rawData = await axios.post(`/partner/create`, {
         firstName: partner.firstName,
         lastName: partner.lastName,
@@ -75,7 +71,6 @@ export const usePartnerAction = () => {
         condition: partner.condition,
         rol: partner.rol,
       });
-      console.log(rawData.data.picture);
       return dispatch(createPartner(rawData.data));
     } catch (error: any) {
       console.error(error.message);
