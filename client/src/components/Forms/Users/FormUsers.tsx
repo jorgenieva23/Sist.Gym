@@ -84,19 +84,19 @@ const FormUsers: React.FC<FormProps> = ({
           }
         }
         break;
-      case "password":
-        if (!fieldValue) {
-          errorMessage = "El socio debe tener una contraseña";
-        } else if (fieldValue.length < 6) {
-          errorMessage = "La contraseña debe tener al menos 6 caracteres";
-        } else if (!/[A-Z]/.test(fieldValue)) {
-          errorMessage =
-            "La contraseña debe tener al menos un carácter en mayúscula";
-        } else if (!/\d/.test(fieldValue)) {
-          errorMessage =
-            "La contraseña debe tener al menos un carácter numérico";
-        }
-        break;
+      // case "password":
+      //   if (!fieldValue) {
+      //     errorMessage = "El socio debe tener una contraseña";
+      //   } else if (fieldValue.length < 6) {
+      //     errorMessage = "La contraseña debe tener al menos 6 caracteres";
+      //   } else if (!/[A-Z]/.test(fieldValue)) {
+      //     errorMessage =
+      //       "La contraseña debe tener al menos un carácter en mayúscula";
+      //   } else if (!/\d/.test(fieldValue)) {
+      //     errorMessage =
+      //       "La contraseña debe tener al menos un carácter numérico";
+      //   }
+      //   break;
       case "rol":
         if (!fieldValue) {
           errorMessage = "El socio debe tener un rol asignado";
@@ -200,7 +200,7 @@ const FormUsers: React.FC<FormProps> = ({
               placeholder="Correo Electrónico"
               onChange={(e) => handleChange(e)}
               onBlur={(e) => handleBlur(e)}
-              required
+              // required
             />
           </div>
         </div>
