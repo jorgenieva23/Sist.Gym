@@ -44,9 +44,13 @@ export const upDateUserById = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { _id } = req.params;
+    const { id } = req.params;
     const dataToUpdate = req.body;
-    const updatedUser = await upDateUserControllers(_id, dataToUpdate);
+    const updatedUser = await upDateUserControllers({
+      id,
+      updatedData: dataToUpdate,
+      req,
+    });
     res.status(200).json(updatedUser);
   } catch (error: any) {
     res.status(500).send(error.message);

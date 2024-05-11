@@ -46,9 +46,13 @@ export const ExpiredPayment: React.FC<ExpiredPaymentProps> = ({
 
   // Calcula los índices de los usuarios a mostrar en la página actual
   const itemsPerPage = 8;
+  const reversedUsers = [...dataToShow].reverse();
   const indexOfLastItems = currentPage * itemsPerPage;
   const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
-  const currentItems = dataToShow.slice(indexOfFirstCourse, indexOfLastItems);
+  const currentItems = reversedUsers.slice(
+    indexOfFirstCourse,
+    indexOfLastItems
+  );
 
   return (
     <div className="overflow-x-auto">

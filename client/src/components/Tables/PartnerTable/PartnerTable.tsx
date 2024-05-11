@@ -48,20 +48,6 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
   const [selectedImage, setSelectedImage] = useState<string | null | undefined>(
     null
   );
-
-  const itemsPerPage = 8;
-  const indexOfLastItems = currentPage * itemsPerPage;
-  const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
-  const currentItems = currentPartner.slice(
-    indexOfFirstCourse,
-    indexOfLastItems
-  );
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    setCurrentPage(1);
-  };
-
   const shouldShowPartner = (partner: IPartner): boolean => {
     if (user.rol === "admin") {
       return true;
@@ -72,14 +58,26 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
     }
   };
 
-  const filteredItems = currentItems
-    .filter(
-      (partner) =>
-        `${partner.firstName} ${partner.lastName} ${partner.dni}`
-          .toLowerCase()
-          .includes(search.toLowerCase()) && shouldShowPartner(partner)
-    )
-    .reverse();
+  const filteredItems = currentPartner.filter(
+    (partner) =>
+      `${partner.firstName} ${partner.lastName} ${partner.dni}`
+        .toLowerCase()
+        .includes(search.toLowerCase()) && shouldShowPartner(partner)
+  );
+
+  const itemsPerPage = 8;
+  const reversedPartner = [...filteredItems].reverse();
+  const indexOfLastItems = currentPage * itemsPerPage;
+  const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
+  const currentItems = reversedPartner.slice(
+    indexOfFirstCourse,
+    indexOfLastItems
+  );
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setCurrentPage(1);
+  };
 
   useEffect(() => {
     getAllPartner();
@@ -93,7 +91,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
           name="search"
           className="px-4 py-2 border border-blue-400 rounded-md focus:outline-none focus:border-blue-800"
           type="text"
-          placeholder="Search for Partners..."
+          placeholder="Buscador"
           onChange={handleSearchChange}
         />
         {/* <h1>{`socios activos : ${filteredItems.length}`}</h1> */}
@@ -116,7 +114,7 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
             </tr>
           </thead>
           <tbody>
-            {filteredItems.map((part, index) => {
+            {currentItems.map((part, index) => {
               const isEvenRow = index % 2 === 0;
               const rowClass = isEvenRow ? "bg-gray-200" : "";
 

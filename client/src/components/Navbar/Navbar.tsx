@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
         </div>
       </NavLink>
       <p className="px-2 py-1 font-bold bg-green-500 text-zinc-900 rounded-md">
-        Service Active
+        Servicio activo
       </p>
     </nav>
   );

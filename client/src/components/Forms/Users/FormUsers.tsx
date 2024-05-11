@@ -62,20 +62,20 @@ const FormUsers: React.FC<FormProps> = ({
     switch (fieldName) {
       case "name":
         if (!fieldValue) {
-          errorMessage = "El socio debe tener un nombre";
+          errorMessage = "El usuario debe tener un nombre";
         } else if (fieldValue.length < 1 || fieldValue.length > 25) {
           errorMessage = "Nombre inválido";
         }
         break;
       case "email":
         if (!fieldValue) {
-          errorMessage = "El socio debe tener un correo electrónico";
+          errorMessage = "El usuario debe tener un correo electrónico";
         } else {
           const existingPartner = users.find(
             (e) => e.email.toLowerCase() === fieldValue.toLowerCase()
           );
           if (existingPartner && !userToEdit) {
-            errorMessage = `El socio con el correo ${fieldValue} ya existe.`;
+            errorMessage = `El usuario con el correo ${fieldValue} ya existe.`;
           } else {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(fieldValue)) {
@@ -84,22 +84,22 @@ const FormUsers: React.FC<FormProps> = ({
           }
         }
         break;
-      // case "password":
-      //   if (!fieldValue) {
-      //     errorMessage = "El socio debe tener una contraseña";
-      //   } else if (fieldValue.length < 6) {
-      //     errorMessage = "La contraseña debe tener al menos 6 caracteres";
-      //   } else if (!/[A-Z]/.test(fieldValue)) {
-      //     errorMessage =
-      //       "La contraseña debe tener al menos un carácter en mayúscula";
-      //   } else if (!/\d/.test(fieldValue)) {
-      //     errorMessage =
-      //       "La contraseña debe tener al menos un carácter numérico";
-      //   }
-      //   break;
+      case "password":
+        if (!fieldValue) {
+          errorMessage = "El usuario debe tener una contraseña";
+        } else if (fieldValue.length < 6) {
+          errorMessage = "La contraseña debe tener al menos 6 caracteres";
+        } else if (!/[A-Z]/.test(fieldValue)) {
+          errorMessage =
+            "La contraseña debe tener al menos un carácter en mayúscula";
+        } else if (!/\d/.test(fieldValue)) {
+          errorMessage =
+            "La contraseña debe tener al menos un carácter numérico";
+        }
+        break;
       case "rol":
         if (!fieldValue) {
-          errorMessage = "El socio debe tener un rol asignado";
+          errorMessage = "El usuario debe tener un rol asignado";
         }
         break;
       default:
@@ -135,7 +135,7 @@ const FormUsers: React.FC<FormProps> = ({
     setLoadingSubmit(true);
     try {
       if (isEditing && userToEdit && userToEdit._id) {
-        updateUser(userToEdit._id, form).then(() => {
+        await updateUser(userToEdit._id, form).then(() => {
           setLoadingSubmit(false);
           setEditingUser && setEditingUser(false);
           window.location.reload();
@@ -143,6 +143,7 @@ const FormUsers: React.FC<FormProps> = ({
       } else {
         await createNewUser(form).then(() => {
           setLoadingSubmit(false);
+          window.location.reload();
         });
         setForm({
           name: "",
@@ -154,6 +155,8 @@ const FormUsers: React.FC<FormProps> = ({
     } catch (error: any) {
       console.error(error.message);
       alert("Ocurrió un error");
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
@@ -200,7 +203,7 @@ const FormUsers: React.FC<FormProps> = ({
               placeholder="Correo Electrónico"
               onChange={(e) => handleChange(e)}
               onBlur={(e) => handleBlur(e)}
-              // required
+              required
             />
           </div>
         </div>
@@ -217,10 +220,9 @@ const FormUsers: React.FC<FormProps> = ({
               type="password"
               id="psw"
               name="psw"
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
               onChange={(e) => handleChange(e)}
               onBlur={(e) => handleBlur(e)}
-              required
             />
           </div>
         </div>
@@ -264,7 +266,7 @@ const FormUsers: React.FC<FormProps> = ({
               className="px-4 py-2 rounded-none rounded-e-lg text-sm font-semibold text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md hover:bg-gray-400"
               type="submit"
             >
-              {!isEditing ? " Añadir socio" : "Guardar cambios"}
+              {!isEditing ? " Añadir usuario" : "Guardar cambios"}
             </button>
           ) : (
             <button

@@ -51,9 +51,8 @@ export const useUserAction = () => {
   };
   const updateUser = async (_id: string | null, updatedData: IUser) => {
     try {
-      const updatedUser = await axios.put(`/user/update/${_id}`, {
-        updatedData,
-      });
+      const updatedUser = await axios.put(`/user/update/${_id}`, updatedData);
+      console.log(updatedUser.data);
       return dispatch(editUser(updatedUser.data));
     } catch (error: any) {
       console.error(error.message);

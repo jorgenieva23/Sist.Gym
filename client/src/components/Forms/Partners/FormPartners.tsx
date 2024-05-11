@@ -84,9 +84,10 @@ const FormPartners: React.FC<FormProps> = ({
 
     if (!form.phone) {
       errors.phone = "El socio debe tener un teléfono";
-    } else if (form.phone.toString().length !== 11) {
-      errors.phone = "Teléfono inválido. Debe tener entre 10 y 11 dígitos.";
     }
+    // else if (form.phone.toString().length ) {
+    //   errors.phone = "Teléfono inválido. Debe tener entre 10 y 11 dígitos.";
+    // }
 
     if (!form.email) {
       errors.email = "El socio debe tener un correo electrónico";
@@ -123,10 +124,11 @@ const FormPartners: React.FC<FormProps> = ({
 
     if (!form.phoneEmergency) {
       errors.phoneEmergency = "El socio debe tener un teléfono de emergencia";
-    } else if (form.phoneEmergency.toString().length !== 11) {
-      errors.phoneEmergency =
-        "Teléfono de emergencia inválido. Debe tener entre 10 y 11 dígitos.";
-    }
+    } 
+    // else if (form.phoneEmergency.toString().length !== 11) {
+    //   errors.phoneEmergency =
+    //     "Teléfono de emergencia inválido. Debe tener entre 10 y 11 dígitos.";
+    // }
 
     if (!form.phoneEmergencyName) {
       errors.phoneEmergencyName =

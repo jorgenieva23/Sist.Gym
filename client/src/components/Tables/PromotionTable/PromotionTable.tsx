@@ -48,9 +48,10 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
   const [search, setSearch] = useState("");
 
   const itemsPerPage = 8;
+  const reversedPromotions = [...currentPromotions].reverse();
   const indexOfLastItems = currentPage * itemsPerPage;
   const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
-  const currentItems = currentPromotions.slice(
+  const currentItems = reversedPromotions.slice(
     indexOfFirstCourse,
     indexOfLastItems
   );
@@ -89,7 +90,7 @@ export const PromotionTable: React.FC<{ currentPromotions: IPromotion[] }> = ({
           name="search"
           className="px-4 py-2 border border-blue-400 rounded-md focus:outline-none focus:border-blue-800 "
           type="text"
-          placeholder="Search for Partners..."
+          placeholder="Buscador"
           onChange={handleSearchChange}
         />
       </form>

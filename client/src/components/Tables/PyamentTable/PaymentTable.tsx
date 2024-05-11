@@ -43,9 +43,10 @@ export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
   const [search, setSearch] = useState("");
 
   const itemsPerPage = 8;
+  const reversedUsers = [...currentPayments].reverse();
   const indexOfLastItems = currentPage * itemsPerPage;
   const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
-  const currentItems = currentPayments.slice(
+  const currentItems = reversedUsers.slice(
     indexOfFirstCourse,
     indexOfLastItems
   );
@@ -72,7 +73,7 @@ export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
           name="search"
           className="px-4 py-2 border border-blue-400 rounded-md focus:outline-none focus:border-blue-800 "
           type="text"
-          placeholder="Search for Partners..."
+          placeholder="Buscador"
           onChange={handleSearchChange}
         />
       </form>
@@ -199,7 +200,6 @@ export const PaymentTable: React.FC<{ currentPayments: IPayments[] }> = ({
                           console.error("Error: part._id is undefined");
                         }
                       }}
-                      
                       userRole={userRole}
                       requiredPermission="eliminarSocio"
                     />

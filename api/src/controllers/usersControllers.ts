@@ -81,35 +81,45 @@ export const createdUser = async (user: IUser) => {
   }
 };
 
-export const upDateUserControllers = async (
-  _id: any,
-  updatedData: Partial<IUser>
-) => {
+export const upDateUserControllers = async ({
+  req,
+  id,
+  updatedData,
+}: {
+  req: Request;
+  id: any;
+  updatedData: Partial<IUser>;
+}) => {
   try {
-    const user = await Users.findById(_id);
+    const user = await Users.findById(id);
     if (!user) {
-      console.log(`No se encontró ningún usuario con ID ${_id}`);
+      console.log(`No se encontró ningún usuario con ID ${id}`);
       return null;
     }
     const { name, email } = updatedData;
 
     if (name) {
       const existingUserByName = await Users.findOne({ name });
-      if (existingUserByName && existingUserByName._id != _id) {
+      if (existingUserByName && existingUserByName._id != id) {
         throw new Error("Ya existe un usuario con el mismo nickname");
       }
     }
     if (email) {
       const existingUserByEmail = await Users.findOne({ email });
-      if (existingUserByEmail && existingUserByEmail._id != _id) {
+      if (existingUserByEmail && existingUserByEmail._id != id) {
         throw new Error("Ya existe un usuario con el mismo email");
       }
     }
-    const updatedUser = await Users.findByIdAndUpdate(
-      _id,
-      { $set: updatedData },
-      { new: true }
-    );
+
+    await Movement.create({
+      movementType: "UPDATE_USER",
+      creatorId: user?._id,
+      ip: req.ip,
+    });
+
+    const updatedUser = await Users.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
     return updatedUser;
   } catch (error: any) {
     throw new Error(

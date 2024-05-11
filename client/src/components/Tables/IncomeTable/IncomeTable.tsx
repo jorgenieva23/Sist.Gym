@@ -26,11 +26,13 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
   const [search, setSearch] = useState("");
 
   const itemsPerPage = 8;
+  const reversedUsers = [...currentIncome].reverse();
   const indexOfLastItems = currentPage * itemsPerPage;
   const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
-  const currentItems = [...currentIncome]
-    .reverse()
-    .slice(indexOfFirstCourse, indexOfLastItems);
+  const currentItems = reversedUsers.slice(
+    indexOfFirstCourse,
+    indexOfLastItems
+  );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -55,7 +57,7 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
           name="search"
           className="px-4 py-2 border border-blue-400 rounded-md focus:outline-none focus:border-blue-800 "
           type="text"
-          placeholder="Search for Partners..."
+          placeholder="Buscador..."
           onChange={handleSearchChange}
         />
       </form>
@@ -132,7 +134,6 @@ export const IncomeTable: React.FC<{ currentIncome: IIncome[] }> = ({
                           console.error("Error: part._id is undefined");
                         }
                       }}
-                    
                       userRole={userRole}
                       requiredPermission="EliminarIngresos"
                     />

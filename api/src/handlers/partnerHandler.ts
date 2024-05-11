@@ -81,16 +81,16 @@ export const postPartner = async (
     const isPhysicalAttitudeFit = new Date(datePhysicalAttitude) > currentDate;
     const condition = isPhysicalAttitudeFit ? "fit" : "unfit";
 
-    const newPartner = new Partner({
+    const partner: IPartner = {
       ...req.body,
       condition,
       rol: role?.name || null,
       stateId: state?.name || null,
       creatorId: admin?.name || null,
-    });
+    };
 
-    await newPartner.save();
-    res.status(201).json(newPartner);
+    const createPartners = await createPartner(partner);
+    res.status(201).json(createPartners);
   } catch (error: any) {
     console.log(error);
     res.status(400).json(error.message);

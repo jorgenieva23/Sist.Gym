@@ -34,10 +34,16 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState("");
 
-  const itemsPerPage = 4;
+  const itemsPerPage = 5;
+
+  const reversedUsers = [...currentUser].reverse();
+
   const indexOfLastItems = currentPage * itemsPerPage;
   const indexOfFirstCourse = indexOfLastItems - itemsPerPage;
-  const currentItems = currentUser.slice(indexOfFirstCourse, indexOfLastItems);
+  const currentItems = reversedUsers.slice(
+    indexOfFirstCourse,
+    indexOfLastItems
+  );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -61,7 +67,7 @@ export const UserTable: React.FC<{ currentUser: IUser[] }> = ({
           name="search"
           className="px-4 py-2 border border-blue-400 rounded-md focus:outline-none focus:border-blue-800"
           type="text"
-          placeholder="Search for Partners..."
+          placeholder="Buscador"
           onChange={handleSearchChange}
         />
       </form>
