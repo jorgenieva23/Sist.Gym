@@ -4,7 +4,7 @@ import { RootState } from "../../../redux/store";
 import { registerUser } from "../../../redux/Actions/authActions";
 import { IUser } from "../../../utils/types";
 import { toast, Toaster } from "sonner";
-// import Modal2 from "../../../components/Modal/Modal2";
+import { ClipLoader } from "react-spinners";
 import { useNavigate, Link } from "react-router-dom";
 import {
   PiEyeSlash,
@@ -23,10 +23,10 @@ export const Signup: React.FC = () => {
   const navigate = useNavigate();
 
   const users = useAppSelector((state) => state.user.users);
-
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors] = useState<{ [key: string]: string }>({});
   const [user, setUser] = useState<IUser>({
     name: "",
     email: "",
@@ -64,6 +64,9 @@ export const Signup: React.FC = () => {
           errors.email = "Formato de correo electrónico inválido";
         }
       }
+    }
+    if (!user.password) {
+      errors.email = "El socio debe tener una contraseña";
     }
     return errors;
   };
@@ -109,33 +112,38 @@ export const Signup: React.FC = () => {
 
     const errors = validate(user);
     if (Object.keys(errors).length > 0) {
-      setErrors(errors);
+      const errorMessages = Object.values(errors);
+      errorMessages.forEach((errorMessage) => toast.error(errorMessage));
+      setLoadingSubmit(false);
       return;
     }
 
     try {
       dispatch(registerUser(user)).then(() => {
-        navigate("/");
-        setIsAuthenticated(true);
+        if (Object.keys(errors).length > 0) {
+          toast.error(error);
+        } else {
+          navigate("/");
+          setIsAuthenticated(true);
+        }
       });
     } catch (error: any) {
       console.error(error.message);
+      alert("Ocurrió un error");
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
   return (
     <div className="justify-center h-screen flex items-center bg-gray-200">
       <div className="bg-white p-8 rounded-lg w-full md:w-96">
-        <div className="mb-2">
+        <div className="mb-5">
           <div className="sm:text-sm md:text-2xl lg:text-4xl xl:text-4xl text-center text-slate-900 font-bold transition-all duration-300">
             Registrate
           </div>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {!!error && (
-            <div className="text-slate-100 errorMessage">{error}</div>
-          )}
-
           <div className="flex flex-col mt-4">
             <div className="flex">
               <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
@@ -151,7 +159,7 @@ export const Signup: React.FC = () => {
                 required
               />
             </div>
-            {/* {errors.name && toast.info(errors.name)} */}
+            {errors.name && toast.info(errors.name)}
           </div>
 
           <div className="relative mt-2">
@@ -201,6 +209,7 @@ export const Signup: React.FC = () => {
             </div>
             {errors.password && toast.info(errors.password)}
           </div>
+
           <ol className="mt-2 text-sm">
             <li className="mb-1 text-gray-600">
               Debe tener al menos{" "}
@@ -237,16 +246,24 @@ export const Signup: React.FC = () => {
             </li>
           </ol>
           <div>
-            <button
-              className="mt-5 bg-sky-600 text-white w-full py-2 px-6 rounded-lg hover:scale-105 transition-all"
-              type="submit"
-            >
-              Registrarte
-            </button>
+            {!loadingSubmit ? (
+              <button
+                className="mt-2 bg-sky-600 text-white w-full py-2 px-6 rounded-lg hover:scale-105 transition-all"
+                type="submit"
+              >
+                Registrarte
+              </button>
+            ) : (
+              <button
+                className="mt-5 bg-sky-600 text-white w-full py-2 px-6 rounded-lg hover:scale-105 transition-all"
+                type="submit"
+              >
+                <ClipLoader className="block mx-auto mt-1" size={20} />
+              </button>
+            )}
           </div>
         </form>
         {loading && <p>Loading...</p>}
-        {error && <p>Error: {error}</p>}
         {success && <p>Registration successful!</p>}
         <div className="text-center mt-2">
           ¿ya tenes cuenta?{" "}

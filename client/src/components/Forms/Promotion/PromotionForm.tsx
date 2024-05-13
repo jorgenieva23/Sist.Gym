@@ -28,8 +28,8 @@ const FormPromotion: React.FC<FormProps> = ({
 
   const [form, setForm] = useState<IPromotion>({
     name: isEditing ? promotionToEdit?.name : "",
-    percentage: isEditing ? promotionToEdit?.percentage : 0,
-    referredDate: isEditing ? promotionToEdit?.referredDate : 0,
+    percentage: isEditing ? promotionToEdit?.percentage : "",
+    referredDate: isEditing ? promotionToEdit?.referredDate : "",
     description: isEditing ? promotionToEdit?.description : "",
     stateId: "active",
     creatorId: creator || "",
@@ -88,8 +88,8 @@ const FormPromotion: React.FC<FormProps> = ({
         });
         setForm({
           name: "",
-          percentage: 0,
-          referredDate: 0,
+          percentage: "",
+          referredDate: "",
           description: "",
         });
       }
@@ -136,7 +136,7 @@ const FormPromotion: React.FC<FormProps> = ({
             </span>
             <input
               className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-              type="number"
+              type="text"
               name="percentage"
               placeholder="0 a 100"
               value={form.percentage}
@@ -156,7 +156,7 @@ const FormPromotion: React.FC<FormProps> = ({
             </span>
             <input
               className="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 block flex-1 min-w-0 w-full text-sm p-2.5 "
-              type="number"
+              type="text"
               name="referredDate"
               placeholder="1 a 12 Meses / 15 a 45 Dias"
               value={form.referredDate}

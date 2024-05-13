@@ -96,8 +96,8 @@ export interface IPayments {
 export interface IPromotion {
   _id?: string;
   name: string;
-  percentage: number;
-  referredDate: number;
+  percentage: string | number;
+  referredDate: string | number;
   description: string;
   deleted?: boolean;
   stateId?: string | null;
