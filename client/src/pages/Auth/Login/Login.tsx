@@ -59,9 +59,7 @@ export const Login: React.FC = (): JSX.Element => {
           </h1>
         </div>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          {!!error && (
-            <div className="text-black errorMessage">{error}</div>
-          )}
+          {!!error && <div className="text-black errorMessage">{error}</div>}
 
           <div className="flex flex-col mt-2">
             <div className="flex">

@@ -29,7 +29,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      localStorage.removeItem("accessToken"); // deletes token from storage
+      localStorage.removeItem("accessToken");
       state.loading = false;
       // state.userInfo = [];
       state.userInfo = {} as IUser;
@@ -57,7 +57,7 @@ const authSlice = createSlice({
       userLogin.fulfilled,
       (state, action: PayloadAction<{ accessToken: string; user: IUser }>) => {
         state.loading = false;
-        state.userInfo = action.payload.user; // Asigna el usuario directamente
+        state.userInfo = action.payload.user;
         state.accessToken = action.payload.accessToken;
       }
     );

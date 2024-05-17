@@ -24,6 +24,7 @@ export const loginUser = async (req: Request, res: Response) => {
     const accessToken = createAccessToken(user);
     user.token = accessToken;
     user.active = true;
+
     // res.cookie("token", accessToken, {
     //   httpOnly: process.env.NODE_ENV !== "development",
     //   secure: true,

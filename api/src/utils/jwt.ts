@@ -17,7 +17,6 @@ const createAccessToken = (user: IUser) => {
     iat: Date.now(),
     exp: expToken.getTime(),
   };
-  console.log(payload);
 
   return jwt.sign(payload, JWT_SECRET_KEY);
 };
