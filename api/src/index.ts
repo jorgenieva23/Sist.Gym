@@ -4,7 +4,7 @@ import app from "./app";
 import { cronJobs } from "./cronJob";
 dotenv.config();
 
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3001;
 
 mongoose
   .connect(process.env.MONGODB_URI!, {})
