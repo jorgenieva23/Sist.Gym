@@ -14,7 +14,7 @@ import ToggleButton from "../../Buttons/ToggleButton";
 import DeleteButton from "../../Buttons/DeleteButton";
 import { useAppSelector } from "../../../redux/hooks";
 import { usePartnerAction } from "../../../redux/Actions/partnerAction";
-import { Toaster } from "sonner";
+import { toast, Toaster } from "sonner";
 
 const TABLE_HEAD = [
   // "#",
@@ -275,6 +275,9 @@ export const PartnerTable: React.FC<{ currentPartner: IPartner[] }> = ({
                         onDelete={() => {
                           if (part._id) {
                             removePartner(part._id);
+                            toast("Promocion Borrada", {
+                              description: `El socio fue borrado del sistema`,
+                            });
                           } else {
                             console.error("Error: part._id is undefined");
                           }

@@ -36,7 +36,7 @@ function App() {
     const userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       dispatch(setCredentials(JSON.parse(userInfo)));
-      getAllRoles();
+      getAllRoles()
     }
   }, [dispatch]);
 

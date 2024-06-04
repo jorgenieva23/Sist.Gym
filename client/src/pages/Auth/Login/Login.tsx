@@ -1,66 +1,56 @@
 import React, { useState, useEffect } from "react";
+import { toast, Toaster } from "sonner";
+import { ClipLoader } from "react-spinners";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { userLogin } from "../../../redux/Actions/authActions";
 import { PiEyeSlash, PiEye, PiPasswordBold, PiEnvelope } from "react-icons/pi";
-// import backgroundImage from "../../../assets/trueno2.png";
 
 export const Login: React.FC = (): JSX.Element => {
-  const { userInfo, error } = useAppSelector((state) => state.auth);
-
+  const { loading } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
-  useEffect(() => {
-    if (isAuthenticated && userInfo) {
-      localStorage.setItem("userInfo", JSON.stringify(userInfo));
-      navigate("/home");
-    }
-  }, [isAuthenticated, userInfo, navigate]);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoadingSubmit(true);
+
     try {
-      await dispatch(userLogin({ email, password }));
+      await dispatch(userLogin({ email, password })).unwrap();
+      setLoadingSubmit(false);
       window.location.reload();
-      setIsAuthenticated(true);
+      navigate("/home");
     } catch (error: any) {
-      console.error(error.message);
+      toast.error("Email y/o contraseña incorrectos");
+      setLoadingSubmit(false);
     }
   };
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem("userInfo");
-    if (storedUserInfo || isAuthenticated) {
+    if (storedUserInfo && !loading) {
       navigate("/home");
     }
-  }, [isAuthenticated, navigate]);
+  }, [navigate, loading]);
 
   return (
     <div className="justify-center h-screen flex items-center bg-gray-200">
-      <div
-        className="bg-white p-8 rounded-lg md:w-96"
-        // style={{
-        //   backgroundImage: `url(${backgroundImage})`,
-        // }}
-      >
+      <Toaster />
+      <div className="bg-white p-8 rounded-lg md:w-96">
         <div className="mb-5">
           <h1 className="sm:text-sm md:text-2xl lg:text-4xl xl:text-4xl text-center text-slate-900 font-bold mb-7 transition-all duration-300">
             Iniciar sesion
           </h1>
         </div>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          {!!error && <div className="text-black errorMessage">{error}</div>}
-
           <div className="flex flex-col mt-2">
             <div className="flex">
               <span className="inline-flex items-center px-2 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md">
@@ -114,9 +104,18 @@ export const Login: React.FC = (): JSX.Element => {
           </div>
 
           <div>
-            <button className="mt-2 bg-sky-600 text-white w-full py-2 px-6 rounded-lg hover:scale-105 transition-all">
-              Login
-            </button>
+            {!loadingSubmit ? (
+              <button className="mt-2 bg-sky-600 text-white w-full py-2 px-6 rounded-lg hover:scale-105 transition-all">
+                Login
+              </button>
+            ) : (
+              <button
+                className="mt-2 bg-sky-600 text-white w-full py-2 px-6 rounded-lg hover:scale-105 transition-all"
+                type="submit"
+              >
+                <ClipLoader className="block" size={20} />
+              </button>
+            )}
           </div>
         </form>
         <div className="text-center mt-3">

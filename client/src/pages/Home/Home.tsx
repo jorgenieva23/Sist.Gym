@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Footer, Navbar, Sidebar } from "../../components";
 import { usePartnerAction } from "../../redux/Actions/partnerAction";
 import { useAppSelector } from "../../redux/hooks";
@@ -13,10 +14,13 @@ import { useRolesAction } from "../../redux/Actions/rolesAction";
 export const Home: React.FC = (): JSX.Element => {
   const { getAllPartner } = usePartnerAction();
   const { getAllRoles } = useRolesAction();
+  const navigate = useNavigate();
+
   const partners = useAppSelector((state) => state.partner.partners);
   const roles = useAppSelector((state) => state.roles.roles);
   const user = useAppSelector((state) => state.auth.userInfo);
-
+  const { userInfo } = useAppSelector((state) => state.auth);
+  
   const userRole = roles.find((role) => role.name === user.rol);
 
   const [selectedButton, setSelectedButton] = useState("usuarios");
@@ -34,6 +38,12 @@ export const Home: React.FC = (): JSX.Element => {
     getAllPartner();
     getAllRoles();
   }, []);
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/");
+    }
+  }, [userInfo, navigate]);
 
   return (
     <div className="flex flex-col h-screen">
