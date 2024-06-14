@@ -31,6 +31,7 @@ const CardPartner: React.FC<CardPartnerProps> = ({ partner }) => {
           .filter((partner) => Birthday(new Date(partner.date)))
           .map((partner) => (
             <NavLink
+              key={partner._id}
               to={`/partner/${partner._id}`}
               style={{
                 color: "inherit",
