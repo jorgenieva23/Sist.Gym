@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Footer, Navbar, Sidebar } from "../../components";
 import { usePartnerAction } from "../../redux/Actions/partnerAction";
 import { useAppSelector } from "../../redux/hooks";
+import { usePromotionAction } from "../../redux/Actions/promotionAction";
 import ButtonRegister from "../../components/Buttons/ButtonRegisterP";
 import FormPartners from "../../components/Forms/Partners/FormPartners";
 import FormPayment from "../../components/Forms/Payment/FormPayment";
@@ -13,6 +14,7 @@ import { useRolesAction } from "../../redux/Actions/rolesAction";
 
 export const Home: React.FC = (): JSX.Element => {
   const { getAllPartner } = usePartnerAction();
+  const { getAllPromotion } = usePromotionAction();
   const { getAllRoles } = useRolesAction();
   const navigate = useNavigate();
 
@@ -20,7 +22,7 @@ export const Home: React.FC = (): JSX.Element => {
   const roles = useAppSelector((state) => state.roles.roles);
   const user = useAppSelector((state) => state.auth.userInfo);
   const { userInfo } = useAppSelector((state) => state.auth);
-  
+
   const userRole = roles.find((role) => role.name === user.rol);
 
   const [selectedButton, setSelectedButton] = useState("usuarios");
@@ -36,6 +38,7 @@ export const Home: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     getAllPartner();
+    getAllPromotion();
     getAllRoles();
   }, []);
 

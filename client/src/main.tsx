@@ -11,6 +11,7 @@ axios.defaults.baseURL = "http://localhost:3001";
 
 // axios.defaults.baseURL = "https://sistgym-production.up.railway.app";
 
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <Provider store={store}>
     <BrowserRouter>

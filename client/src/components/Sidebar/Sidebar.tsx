@@ -37,6 +37,8 @@ const Sidebar = () => {
   const handleLogout = () => {
     if (user && user?._id) {
       dispatch(logout(user?._id));
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("accessToken");
       setTimeout(() => {
         navigate("/");
         window.location.reload();
