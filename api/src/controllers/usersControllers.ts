@@ -76,7 +76,7 @@ export const createdUser = async (user: IUser) => {
       active,
     });
   } catch (error) {
-    console.error("ERROR createdUser controllers controller: ", error);
+    console.error("ERROR createdUser controllers : ", error);
     throw error;
   }
 };

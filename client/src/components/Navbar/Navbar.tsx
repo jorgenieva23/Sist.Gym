@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import logoGym from "../../assets/JNG.png";
+// import logoGym from "../../assets/JNG.png";
 
 const Navbar: React.FC = () => {
   return (
@@ -10,8 +10,8 @@ const Navbar: React.FC = () => {
         style={{ color: "inherit", textDecoration: "inherit", zIndex: "0" }}
       >
         <div className="flex items-center">
-          <img src={logoGym} alt="Logo" className="w-10 h-10 rounded-md" />
-          <p className="ml-3 text-white font-bold px-2">JerjesGym</p>
+          {/* <img src={logoGym} alt="Logo" className="w-10 h-10 rounded-md" /> */}
+          <p className="ml-3 text-[23px] text-white font-bold px-2">JerjesGym</p>
         </div>
       </NavLink>
       <p className="px-2 py-1 font-bold bg-green-500 text-zinc-900 rounded-md">

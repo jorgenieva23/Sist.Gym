@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate, useLocation } from "react-router-dom";
-import controlImage from "../../assets/control.png";
-import logoImage from "../../assets/logo.png";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+
 import { logout } from "../../redux/Actions/authActions";
-import {
-  FaUsers,
-  FaHome,
-  FaRegStar,
-  FaFileInvoiceDollar,
-  FaDoorOpen,
-  FaHandHoldingUsd,
-  FaAddressCard,
-  FaClipboardList,
-  FaMoneyBillAlt,
-  FaUserCog,
-} from "react-icons/fa";
-import { FiLogOut } from "react-icons/fi";
 import { useRolesAction } from "../../redux/Actions/rolesAction";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import { Menu } from "./Menu";
+import logoGym from "../../assets/JNG.png";
+
+import { FiLogOut } from "react-icons/fi";
+import controlImage from "../../assets/control.png";
+// import logoImage from "../../assets/logo.png";
 
 const Sidebar = () => {
   const { getAllRoles } = useRolesAction();
@@ -50,66 +41,6 @@ const Sidebar = () => {
     getAllRoles();
   }, []);
 
-  const Menu = [
-    {
-      name: "Panel",
-      link: "/home",
-      icon: FaHome,
-      permission: "index_panel",
-    },
-    {
-      name: "Socios",
-      link: "/Partner",
-      icon: FaUsers,
-      permission: "indeSocio",
-    },
-    {
-      name: "Pagos",
-      link: "/payment",
-      icon: FaFileInvoiceDollar,
-      permission: "indexCuota",
-    },
-    {
-      name: "Promociones",
-      link: "/promotions",
-      icon: FaRegStar,
-      permission: "indexPromocion",
-    },
-    {
-      name: "Ingresos",
-      link: "/Income",
-      icon: FaDoorOpen,
-      permission: "indexIngresos",
-    },
-    {
-      name: "Usuarios",
-      link: "/user",
-      icon: FaAddressCard,
-      margin: true,
-      permission: "indexUsuario",
-    },
-    {
-      name: "Balance",
-      link: "/balance",
-      icon: FaHandHoldingUsd,
-      permission: "indexBalande",
-    },
-    {
-      name: "Movimientos",
-      link: "/movements",
-      icon: FaClipboardList,
-      margin: true,
-      permission: "indexMovimiento",
-    },
-    {
-      name: "Mensualidad",
-      link: "/monthlyPayment",
-      icon: FaMoneyBillAlt,
-      permission: "indexMensualidad",
-    },
-    { name: "Roles", link: "/roles", icon: FaUserCog, permission: "indexRol" },
-  ];
-
   return (
     <div className="flex border-r-2 border-gray-600">
       <div
@@ -125,7 +56,7 @@ const Sidebar = () => {
           onClick={() => setOpen(!open)}
         />
         <div className="flex gap-x-4 items-center">
-          <img src={logoImage} className={`duration-500`} />
+          <img src={logoGym} className={`duration-500  rounded-md h-14 w-14`} />
 
           <h1
             className={`text-white font-medium text-xl duration-200 ${
@@ -143,14 +74,14 @@ const Sidebar = () => {
             <FiLogOut className="" size="20" />
           </button>
         </div>
-        <div className="mt-4 flex flex-col gap-4 relative">
+        <div className="mt-4 flex flex-col gap-1 relative">
           {Menu?.map((menu, i) => (
             <Link
               to={menu?.link}
               key={i}
               className={`${menu?.margin && "mt-5"} ${
                 pathname === menu?.link ? "bg-gray-600" : ""
-              } group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-600 rounded-md text-white ${
+              } group flex items-center text-[19px] gap-3.5 font-normal p-2 hover:bg-gray-600 rounded-md text-white ${
                 userRole &&
                 userRole.permissions &&
                 userRole.permissions.includes(menu.permission)

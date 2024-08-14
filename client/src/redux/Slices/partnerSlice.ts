@@ -69,6 +69,12 @@ export const partnerSlice = createSlice({
         (part) => part._id !== action.payload
       );
     },
+    // deletePartners: (state, action: PayloadAction<string>) => {
+    //   return {
+    //     ...state,
+    //     partners: state.partners.filter((part) => part._id !== action.payload),
+    //   };
+    // },
   },
 });
 

@@ -62,7 +62,7 @@ export const ExpiredPayment: React.FC<ExpiredPaymentProps> = ({
             {TABLE_HEAD.map((head) => (
               <th key={head} className="border-b border border-slate-300 p-4">
                 <Typography
-                  variant="small"
+                  // variant="small"
                   color="blue-gray"
                   className="font-semibold"
                 >

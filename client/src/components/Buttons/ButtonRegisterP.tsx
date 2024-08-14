@@ -23,7 +23,7 @@ const ButtonRegister: React.FC<ButtonRegisterProps> = ({
         disabled={disabled}
         className={`${
           disabled ? "opacity-50 cursor-not-allowed" : ""
-        }border border-neutral-300 rounded-lg py-2 px-3 bg-green-500 text-white flex items-center`}
+        }border border-neutral-300 rounded-lg py-2 px-2 bg-green-500 text-white flex items-center`}
         onClick={() => setOpenModal(true)}
       >
         <FaPlus className="mr-2" />
