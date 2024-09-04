@@ -56,7 +56,7 @@ const Sidebar = () => {
           onClick={() => setOpen(!open)}
         />
         <div className="flex gap-x-4 items-center">
-          <img src={logoGym} className={`duration-500  rounded-md h-14 w-14`} />
+          <img src={logoGym} className={`duration-500  rounded-md h-12 w-12`} />
 
           <h1
             className={`text-white font-medium text-xl duration-200 ${
