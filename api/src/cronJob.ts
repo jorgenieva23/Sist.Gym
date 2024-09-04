@@ -48,3 +48,4 @@ export function cronJobs() {
 
   console.log("Tareas cron leídas.");
 }
+cronJobs() 
