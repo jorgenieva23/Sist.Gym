@@ -16,6 +16,16 @@ export const EnConstruccion: FC<EnConstruccionProps> = ({
   mb,
 }) => {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("accessToken");
+    setTimeout(() => {
+      navigate("/home");
+      window.location.reload();
+    }, 1000);
+  };
+
   return (
     <div
       className={
@@ -31,9 +41,7 @@ export const EnConstruccion: FC<EnConstruccionProps> = ({
       {showVolver && (
         <button
           className="bg-gradient-to-r from-yellow-500 from-10% via-orange-500 via-50% to-amber-500 px-4 py-2 rounded-md mt-4"
-          onClick={() => {
-            navigate("/home");
-          }}
+          onClick={handleLogout}
         >
           Volver
         </button>
