@@ -21,7 +21,7 @@ interface IusersHandler {
   (req: Request, res: Response): void;
 }
 
-usersRouter.get("/all", getUserHandler as IusersHandler);
+usersRouter.get("/all", getUserHandler );
 usersRouter.get("/getUserId/:id", getUserId as IusersHandler);
 usersRouter.post("/create", postUserHandler as IusersHandler);
 usersRouter.put("/update/:id", upDateUserById as IusersHandler);

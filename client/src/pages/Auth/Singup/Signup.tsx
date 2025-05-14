@@ -66,7 +66,7 @@ export const Signup: React.FC = () => {
       }
     }
     if (!user.password) {
-      errors.email = "El socio debe tener una contraseña";
+      errors.password = "El socio debe tener una contraseña";
     }
     return errors;
   };

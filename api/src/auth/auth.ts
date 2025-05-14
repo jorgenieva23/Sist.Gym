@@ -15,15 +15,31 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     const user = await Users.findOne({ email });
     if (!user) {
-      return res.status(400).json({ error: "User incorrect" });
+      return res.status(401).json({ 
+        error: "Credenciales inválidas",
+        code: "INVALID_CREDENTIALS" 
+      });
     }
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
       return res.status(400).json({ error: "password incorrect" });
     }
     const accessToken = createAccessToken(user);
-    user.token = accessToken;
-    user.active = true;
+    const refreshToken = createRefreshToken(user);
+    
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000 // 15 minutos
+    });
+    
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 días
+    });
 
     // res.cookie("token", accessToken, {
     //   httpOnly: process.env.NODE_ENV !== "development",
